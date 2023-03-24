@@ -13,6 +13,19 @@ using namespace std;
 const int MAX_CLIENTS = 10;
 const int BUFFER_SIZE = 1024;
 
+//Pour se connecter au serveur : 
+
+// Install IRSSI
+// sudo apt-get install irssi
+
+// Lancer IRSSI
+// irssi
+
+// Se connecter au serveur en local
+// /connect ::1 12345
+// CMD      LOCAL -> 1    PORT -> 12345
+//          Sinon ip
+
 int main()
 {
     // Créer le socket serveur
@@ -54,7 +67,7 @@ int main()
 
         // Attente des événements
         int ret = poll(poll_set, nfds, -1);
-        
+
         if (ret < 0) {
             cerr << "Erreur lors de la récupération des événements" << endl;
             break;
