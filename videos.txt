@@ -1,0 +1,5 @@
+
+Je mets de cote au cas ou.
+
+Creating a TCP Server in C++ [Linux / Code Blocks]
+	https://www.youtube.com/watch?v=cNdlrbZSkyQ&list=PLUJCSGGiox1Q-QvHfMMydtoyEa1IEzeLe&index=2

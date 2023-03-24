@@ -1,0 +1,23 @@
+
+~~~~~~~~~~~~ I R C ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Internet Relay Chat Protocol
+	https://datatracker.ietf.org/doc/html/rfc1459
+
+Internet Relay Chat: Architecture
+	https://datatracker.ietf.org/doc/html/rfc2810
+
+Internet Relay Chat: Channel Management
+	https://datatracker.ietf.org/doc/html/rfc2811
+
+Internet Relay Chat: Client Protocol
+	https://datatracker.ietf.org/doc/html/rfc2812
+
+Internet Relay Chat: Server Protocol
+	https://datatracker.ietf.org/doc/html/rfc2813
+
+
+~~~~~~~~~~~~ Conseils pour le projet ~~~~~~~~~~~~~~~~~~~~~~
+
+ircgod
+	https://ircgod.com/docs/irc/to_know/
