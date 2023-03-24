@@ -13,6 +13,9 @@ using namespace std;
 const int MAX_CLIENTS = 10;
 const int BUFFER_SIZE = 1024;
 
+//doc irc : https://modern.ircdocs.horse/#errneedmoreparams-461
+//doc irssi : https://irssi.org/documentation/
+
 //Pour se connecter au serveur : 
 
 // Install IRSSI
