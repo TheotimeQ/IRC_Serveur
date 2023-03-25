@@ -1,6 +1,6 @@
 .PHONY:		fclean, all, clear, re
 
-NAME					=	IRC
+NAME					=	ircerv
 
 CMP						=	c++
 FLG						=	-Wall -Wextra -Werror -std=c++98

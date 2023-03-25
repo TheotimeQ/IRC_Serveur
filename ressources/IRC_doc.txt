@@ -21,3 +21,16 @@ Internet Relay Chat: Server Protocol
 
 ircgod
 	https://ircgod.com/docs/irc/to_know/
+
+fiche eval
+
+ poll()
+	must be only one.
+	Verify that the poll() (or equivalent) is called every time before each
+	accept, read/recv, write/send. After these calls, errno should not be
+	used to trigger specific action (e.g. like reading again after errno
+	== EAGAIN).
+
+ fnctl()
+	Verify that each call to fnctl() is done as follows: fcntl(fd, F_SETFL, O_NONBLOCK);
+	Any other use of fcntl() is forbidden.
