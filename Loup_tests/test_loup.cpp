@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 06:51:40 by loumarti          #+#    #+#             */
-/*   Updated: 2023/03/25 10:18:50 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/03/27 08:46:14 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,11 @@ server_addr.sin6_family = AF_INET6; // toujours !
 // To bind an AF_INET6 socket to any process, the local address
 // should be copied from the in6addr_any variable
 server_addr.sin6_addr = in6addr_any;
+// NADDR_ANY value for IP address means 
+// the server's IP address will be assigned automatically
 
-// port, 12345 c'est coolish
+// port reserve IRC : 6667 (6697 for tls)
+// 
 // The htons() function translates a short integer 
 // from host byte order to network byte order
 // Network byte order is big endian, or most significant byte first
@@ -134,18 +137,11 @@ while (1) {
 					cout << "from " << poll_set[i].fd << " : " << buffer << endl;
 				}
 			}
-
-
-
-
-
-
 		}
 	}
-
 }
 
-
+	close(server_socket);
 
 	return (0);
 }

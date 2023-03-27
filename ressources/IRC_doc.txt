@@ -33,7 +33,7 @@ Beej's Guide to Network Programming
 
 ~~~~~~~~~~~~ Conseils pour le projet ~~~~~~~~~~~~~~~~~~~~~~
 
-ircgod
+ircgod : Before starting the project please at least read this :
 	https://ircgod.com/docs/irc/to_know/
 
 fiche eval
