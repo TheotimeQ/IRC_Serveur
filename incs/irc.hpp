@@ -33,4 +33,11 @@
 
 
 
+//TO DO :
+
+//test authentification
+//tester join channel 
+
+
+
 #endif

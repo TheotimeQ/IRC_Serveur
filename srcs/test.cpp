@@ -7,6 +7,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <poll.h>
+#include <cerrno>
 
 using namespace std;
 
@@ -29,6 +30,15 @@ const int BUFFER_SIZE = 1024;
 // CMD      LOCAL -> 1    PORT -> 12345
 //          Sinon ip
 
+void send_message(int client_sock, const string& message) {
+    int bytes_sent = send(client_sock, message.c_str(), message.size(), 0);
+    if (bytes_sent == -1) {
+        cerr << "Erreur d'envoi du message : \n" << strerror(errno) << endl;
+    } else {
+        cout << "Message envoyé au client : \n" << message << endl;
+    }
+}
+
 int main()
 {
     // Créer le socket serveur
@@ -45,7 +55,14 @@ int main()
     server_addr.sin6_addr = in6addr_any;
 
     //port 12345 pour le moment .. à choisir mieux ? 
-    server_addr.sin6_port = htons(12345);
+    server_addr.sin6_port = htons(6667);
+
+    // Activer la réutilisation de l'adresse et du port
+    int yes = 1;
+    if (setsockopt(server_sock, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) == -1) {
+        cerr << "Erreur lors de la configuration du socket : " << strerror(errno) << endl;
+        return 1;
+    }
 
     // Lier le socket serveur à l'adresse
     if (bind(server_sock, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
@@ -65,6 +82,7 @@ int main()
     poll_set[0].fd = server_sock;
     poll_set[0].events = POLLIN;
     int nfds = 1;
+
 
     while (true) {
 
@@ -127,7 +145,16 @@ int main()
                     // Données reçues avec succès
                     else 
                     {
-                        cout << "Données reçues : " << buffer << endl;
+                        cout << "Données reçues : \n" << buffer << endl;
+                        if (strncmp(buffer, "JOIN",4) == 0)
+                        {
+                            send_message(client_sock,":IRC 332 Zel test :cannal_de_test\n");
+                            send_message(client_sock,":IRC 353 Zel = test :Zel Jerem Tristan\n");
+                            send_message(client_sock,":IRC 356 Zel test :cannal_de_test\n");                            
+                        }
+                        else
+                            send_message(client_sock,":IRC 001 Zel :BIENVENU SUR LE SERVEUR IRC\n ");
+                        
                     }
                 } 
             }
@@ -139,4 +166,22 @@ int main()
     return 0;
 }
 
+//Connection :
 
+//Si SSL 6697 -> .
+
+//Si pas SSL 6667 -> 
+// Client -> PASS password
+// Client -> NICK nickname
+// Client -> USER username hostname servername :realname
+// Serveur -> :servername 001 nickname :Welcome to the Internet Relay Network nickname!user@host
+
+// Données reçues : 
+// CAP LS 302
+
+// Données reçues : 
+// PASS coucou
+
+// Données reçues : 
+// NICK Zel
+// USER Zelinsta_User 0 * :realname
