@@ -1,7 +1,6 @@
 #include "../incs/Irc.hpp"
 #include "../incs/Serveur.hpp"
 #include "../incs/Client.hpp"
-// #include "../incs/Client.hpp"
 
 Serveur::Serveur(const std::string& name, int port) : 
     _Name(name), 

@@ -14,8 +14,6 @@
 #include <poll.h>
 #include <cerrno>
 
-#include "../incs/Client.hpp"
-
 const int MAX_CLIENTS = 10;
 const int BUFFER_SIZE = 1024;
 
@@ -35,7 +33,7 @@ const int BUFFER_SIZE = 1024;
 #define EVENT_NEW_DATA 		"Log: Data received : \n"
 #define EVENT_NEW_MSG 		"Log: Message sent : \n"
 
-// class Client;
+class Client;
 
 class Serveur
 {
