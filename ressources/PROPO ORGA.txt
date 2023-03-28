@@ -9,7 +9,7 @@ CLASSES :
         port            : port d'ecoute
         User            : liste des clients connectés
 
-        start_serveur()     : demare le serveur et gere les erreurs
+        Start_Serveur()     : demare le serveur et gere les erreurs
         run()               : ecoute en boucle sur les socket des clients ( while 1 )
         get_message()       : decrypte le message recu par le serveur et le stock dans une instance de message_received 
         response()          : repond au message / fait le necessaire pour avoir le bon comportement
@@ -53,3 +53,28 @@ CLASSES :
         Gen_str()   : genere le message à envoyer, genere le bon message en se basant sur le channel et le client le code et les donnée serveur
         Send()      : envoi un message au client
 
+
+
+
+
+
+
+//Connection :
+
+//Si SSL 6697 -> .
+
+//Si pas SSL 6667 -> 
+// Client -> PASS password
+// Client -> NICK nickname
+// Client -> USER username hostname servername :realname
+// Serveur -> :servername 001 nickname :Welcome to the Internet Relay Network nickname!user@host
+
+// Données reçues : 
+// CAP LS 302
+
+// Données reçues : 
+// PASS coucou
+
+// Données reçues : 
+// NICK Zel
+// USER Zelinsta_User 0 * :realname
