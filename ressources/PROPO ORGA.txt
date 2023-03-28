@@ -1,0 +1,55 @@
+
+
+
+
+CLASSES :
+
+    Serveur 
+
+        port            : port d'ecoute
+        User            : liste des clients connectés
+
+        start_serveur()     : demare le serveur et gere les erreurs
+        run()               : ecoute en boucle sur les socket des clients ( while 1 )
+        get_message()       : decrypte le message recu par le serveur et le stock dans une instance de message_received 
+        response()          : repond au message / fait le necessaire pour avoir le bon comportement
+                                Ex : 
+                                        JOIN -> rejoin la bonne channel
+
+
+        stop_server()       : arrete le serveur proprement
+
+
+    Client 
+        Username        :
+        Nickname        :
+        Password        :
+        type            :  admin ? default ? 
+        Autres ?
+
+    Channel
+        Users               : Liste des client dans le channel
+        Name                : Nom de la channel
+        Autres ?
+
+        Add_client()        : ajoute le client à la channel
+        Remove_client()     : supprime le client de la channel
+        Send_Msg()          : envoi un message à tout les client connecte
+
+    Message_received
+        Client      : qui à envoyer le message
+        Channel     : dans quel channel
+        Code        : type de message ( authent ? join ? ...)
+        str         : stock le message recu
+        Autres ? 
+
+    Message_to_send
+        Client      : a qui envoyer le message
+        Channel     : channel dans lequel envoyer un message
+        Code        : code du message
+        str         : stock le message à envoyer
+        Autres ? 
+
+        Gen_str()   : genere le message à envoyer, genere le bon message en se basant sur le channel et le client le code et les donnée serveur
+        Send()      : envoi un message au client
+
