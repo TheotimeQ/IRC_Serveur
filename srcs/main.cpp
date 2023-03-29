@@ -1,20 +1,20 @@
 #include "../incs/Irc.hpp"
-#include "../incs/Serveur.hpp"
+#include "../incs/Server.hpp"
 #include "../incs/Client.hpp"
 
-#define SERVEUR_NAME "IRC"
-#define SERVEUR_PORT 6667
+#define SERVER_NAME "IRC"
+#define SERVER_PORT 6667
 
 int main(){
 
-    Serveur Serv = Serveur(SERVEUR_NAME, SERVEUR_PORT);
-    if (Serv.Start_Serveur())
+    Server Serv = Server(SERVER_NAME, SERVER_PORT);
+    if (Serv.Start_Server())
         return ERROR;
 
     if (Serv.Run())
         return ERROR;
 
-    Serv.stop_server();
+    Serv.Stop_Server();
 
     return (GOOD);
 }

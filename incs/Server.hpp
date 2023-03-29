@@ -1,5 +1,5 @@
-#ifndef SERVEUR_HPP
-#define SERVEUR_HPP
+#ifndef Server_HPP
+#define Server_HPP
 
 #include <string>
 #include <iostream>
@@ -14,6 +14,8 @@
 #include <poll.h>
 #include <cerrno>
 
+#include "../incs/Client.hpp"
+
 const int MAX_CLIENTS = 10;
 const int BUFFER_SIZE = 1024;
 
@@ -24,18 +26,16 @@ const int BUFFER_SIZE = 1024;
 #define ERROR_POLL 			"Error: Can't get poll event"
 #define ERROR_CONNECTION 	"Error: Can't while accept new client"
 #define ERROR_DATA 			"Error: Can't while getting data from client"
-
+#define ERROR_MAX_CLIENT	"Error: Can't add new client , max reached"
 #define ERROR_SEND_MSG 		"Error: Can't send message : \n"
 #define ERROR_DATA 			"Error: Can't while getting data from client"
 
 #define EVENT_NEW_CLIENT 	"Log: New connection"
-#define EVENT_DECONNECTED 	"Log: Client deconnected"
+#define EVENT_DECONNECTED 	"Log: Client deconnected : "
 #define EVENT_NEW_DATA 		"Log: Data received : \n"
 #define EVENT_NEW_MSG 		"Log: Message sent : \n"
 
-class Client;
-
-class Serveur
+class Server
 {
 
 	private:
@@ -43,42 +43,48 @@ class Serveur
 		std::string 		_Name;
 		int 				_Port;
         Client              _Clients[MAX_CLIENTS];
+		int					_Nb_Clients;
 
-		int					_Serveur_Socket;
+		int					_Server_Socket;
 		struct sockaddr_in6 _Server_Address;
 		struct pollfd 		_Poll_Set[MAX_CLIENTS + 1];
-		int					_Last_Fd_index;
+
+		int		Setup_Client(Client Client);
+		void	Deconnect_Client(int index);
+
+		void	Get_Msg(char *buffer);
+		void	Interpret_Message(void);
+		void	Send_Response(void);
 
 		int 	Send_Message(int client_sock, const std::string& message);
 		int		New_Client();
-        int		get_message();
-        int		response();
+        int		Get_Message();
+        int		Response();
 	
 	public:
 
-		Serveur(const std::string& name, int port); 
-		Serveur(const Serveur& other);
-		~Serveur();
-		Serveur& operator=(const Serveur& other);
+		Server(const std::string& name, int port); 
+		~Server();
 
-		std::string Get_Name(void)  		const;
-        int			Get_Port(void)  		const;
-		Client 		Get_Clients(int index) 	const;
-
-	    int		Start_Serveur();     //CONST ? 
+	    int		Start_Server();     //CONST ? 
         int		Run(); 
-        int		stop_server();
+        int		Stop_Server();
 
 		// class Error : public std::exception
 		// {
 		// 	public:
 		// 		const char* what() const throw()
 		// 		{
-		// 			return "Error: Serveur";
+		// 			return "Error: Server";
 		// 		}
 		// };
+
+		std::string Get_Name(void)  			const;
+        int			Get_Port(void)  			const;
+		Client 		Get_Clients(int index) 		const;
+		int 		Get_Nb_Client()			 	const;
 };
 
-std::ostream& operator<<(std::ostream& out, const Serveur& Serveur);
+std::ostream& operator<<(std::ostream& out, const Server& Server);
 
 #endif

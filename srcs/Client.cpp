@@ -1,43 +1,68 @@
 #include "../incs/Client.hpp"
 
-Client::Client(void) : 
+Client::Client(): 
     _UserName("Undefined"), 
     _NickName("Undefined"),
     _Password("Undefined"),
     _Type(-1)
 {
+	_Client_Address_Len = sizeof(_Client_Address);
+	_Client_Socket = -1;
 	return;
 }
 
-Client::Client(std::string& UserName, std::string& NickName, std::string& Password, int Type) : 
-    _UserName(UserName), 
-    _NickName(NickName),
-    _Password(Password),
-    _Type(Type)
+Client::Client(int Serveur_Socket): 
+    _UserName("Undefined"), 
+    _NickName("Undefined"),
+    _Password("Undefined"),
+    _Type(-1)
 {
+	_Client_Address_Len = sizeof(_Client_Address);
+	_Client_Socket = accept(Serveur_Socket, (struct sockaddr *)&_Client_Address, &_Client_Address_Len);
 	return;
 }
 
-Client::Client(const Client &other)
-{
-	*this = other;
-}
-
-Client& Client::operator=(const Client& other)
-{
-	if (this != &other) 
-    {
-		this->_UserName = other._UserName;
-		this->_NickName = other._NickName;
-        this->_Password = other._Password;
-        this->_Type     = other._Type;
-	}
-	return *this;
-}
+// Client& Client::operator=(const Client& other)
+// {
+// 	if (this != &other) 
+//     {
+// 		this->_UserName = other._UserName;
+// 		this->_NickName = other._NickName;
+//         this->_Password = other._Password;
+//         this->_Type     = other._Type;
+// 		this->_Client_Address_Len = other._Client_Address_Len;
+// 		this->_Client_Socket = other._Client_Socket;
+// 	}
+// 	return *this;
+// }
 
 Client::~Client()
 {
 	return;
+}
+
+//--------------------Setters--------------------
+
+void Client::Set_UserName(std::string UserName)
+{
+	this->_UserName = UserName;
+}
+
+void Client::Set_NickName(std::string NickeName)
+{
+	this->_NickName = NickeName;
+}
+
+//Set channel
+
+void Client::Set_Password(std::string Password)
+{
+	this->_Password = Password;
+}
+
+void Client::Set_Type(int Type)
+{
+	this->_Type = Type;
 }
 
 //--------------------Getters--------------------
