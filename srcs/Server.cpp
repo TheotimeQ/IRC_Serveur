@@ -2,6 +2,25 @@
 #include "../incs/Server.hpp"
 #include "../incs/Client.hpp"
 
+
+
+// void Print_Data(const std::vector<std::string>& lignes) {
+//     for (std::vector<std::string>::const_iterator it = lignes.begin(); it != lignes.end(); ++it) 
+//     {
+//         std::cout << EVENT_NEW_DATA << *it << std::endl;
+//     }
+// }
+
+
+
+
+
+
+
+
+
+
+
 Server::Server(const std::string& name, int port) : 
     _Name(name), 
     _Port(port),
@@ -75,28 +94,19 @@ int	Server::Run()
                 {   
                     if (this->Setup_Client(Client(_Server_Socket)))
                         break;
-                    _Clients[_Nb_Clients - 2].Set_UserName("ROBERT");
-                    std::cout << *this << std::endl;
+                    // _Clients[_Nb_Clients - 2].Set_UserName("ROBERT");
+                    // std::cout << *this << std::endl;
                 }
-                //FONCTION NEW DATA
+                //NEW DATA
                 else 
                 {
-                    //GET DATA
-                    int client_sock = _Poll_Set[i].fd;
-                    char buffer[BUFFER_SIZE];
-                    int nbytes = recv(client_sock, buffer, BUFFER_SIZE, 0);
-                    if (nbytes < 0) {
-                        std::cerr << ERROR_DATA << std::endl;
-                        break;
-                    } 
-                    //DECONECTE CLIENT
-                    else if (nbytes == 0) 
-                        this->Deconnect_Client(i);
+                    std::vector<std::string> Data;
 
-                    //INTERPRETE DATA
-                    else 
-                        this->Read_Buffer(buffer, nbytes);
-                } 
+                    if(this->Get_Data(_Poll_Set[i].fd, Data))
+                        this->Deconnect_Client(i);
+                    // else
+                    //     this->Interpret_Data(Data);
+                }
             }
         }
     }
@@ -149,88 +159,33 @@ void Server::Deconnect_Client(int index)
     --_Nb_Clients;
 }
 
-void Server::Read_Buffer(char *buffer, int bytes)
+int Server::Get_Data(int socket_fd, std::vector<std::string>& lignes) 
 {
-    std::string line; 
+    char            Buffer[BUFFER_SIZE];
+    std::string     Data;
+    ssize_t         Bytes;
 
-    //Parcours le buffer
-    for (int i = 0; i < bytes; i++) 
+    // Lecture du socket tant qu'il y a des données à lire
+    while ((Bytes = recv(socket_fd, Buffer, BUFFER_SIZE, 0)) > 0) 
     {
-        //Si on a une nouvelle ligne
-        if (buffer[i] == '\n') 
-        {
-            std::cout << EVENT_NEW_DATA << line << std::endl;
-            //INTERPRETE LA LIGNE
-            line = "";
-        } 
-        else 
-            line += buffer[i];
+        Data.append(Buffer, Bytes);                              // Ajout des données lues dans la chaîne de caractères
+        size_t pos;
+
+        while ((pos = Data.find("\n")) != std::string::npos) {   // Recherche de la première occurrence de "\n"
+            std::string ligne = Data.substr(0, pos);             // Extraction de la ligne
+            lignes.push_back(ligne);  
+            Data.erase(0, pos + 1);                              // Suppression de la ligne lue de la chaîne de caractères
+            std::cout << EVENT_NEW_DATA << ligne << std::endl;   // Ajout de la ligne au tableau de lignes
+        }
     }
+
+    // Client deconnecté
+    if (Bytes == 0) {
+        return ERROR;
+    }
+
+    return GOOD;
 }
-
-// void Server::Interpret_Message(void)
-// {
-//     //QUIT
-
-//     //JOIN
-
-//     //....ETC
-// }
-
-// void Server::Send_Response(void)
-// {
-//     // SEND LE MESSAGE 
-//     // if (strncmp(buffer, "JOIN",4) == 0)
-//     // {
-//     //     this->Send_Message(client_sock,":IRC 332 Zel test :cannal_de_test\n");
-//     //     this->Send_Message(client_sock,":IRC 353 Zel = test :Zel Jerem Tristan\n");
-//     //     this->Send_Message(client_sock,":IRC 356 Zel test :cannal_de_test\n");                            
-//     // }
-//     // else
-//     //     this->Send_Message(client_sock,":IRC 001 Zel :BIENVENU SUR LE Server IRC\n ");
-// }
-
-
-
-
-
-
-
-
-
-//Recois le message du client
-
-//Fais les action necessaire (change de channel , change le nickanme , les droit..)
-
-//Envoi le message de reponse
-    //Si repond juste au client -> creer la reponse
-
-    //Si channel a toute une channel -> appel la methode send to all channel de la channel et lui passe le type de message 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// //Creer un objet message received
-// int	Server::Get_Message()
-// {
-//     return GOOD;
-// }
-
-// //En fonction du l'objet message received , creer un objet message to send et l'envoi
-// int	Server::Response()
-// {
-//     return GOOD;
-// }
 
 int	Server::Stop_Server()
 {
@@ -249,6 +204,19 @@ int	Server::Stop_Server()
 //     }
 //     std::cout << EVENT_NEW_MSG << message << std::endl;
 //     return GOOD;
+// }
+
+// void Server::Send_Response(void)
+// {
+//     // SEND LE MESSAGE 
+//     // if (strncmp(buffer, "JOIN",4) == 0)
+//     // {
+//     //     this->Send_Message(client_sock,":IRC 332 Zel test :cannal_de_test\n");
+//     //     this->Send_Message(client_sock,":IRC 353 Zel = test :Zel Jerem Tristan\n");
+//     //     this->Send_Message(client_sock,":IRC 356 Zel test :cannal_de_test\n");                            
+//     // }
+//     // else
+//     //     this->Send_Message(client_sock,":IRC 001 Zel :BIENVENU SUR LE Server IRC\n ");
 // }
 
 
@@ -297,4 +265,3 @@ std::ostream& operator<<(std::ostream &out, const Server &Server)
     }
 	return (out);
 }
-

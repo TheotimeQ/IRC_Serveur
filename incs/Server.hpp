@@ -14,6 +14,16 @@
 #include <poll.h>
 #include <cerrno>
 
+#include <iostream>
+#include <vector>
+#include <string>
+#include <cstring>
+#include <unistd.h>
+#include <sys/socket.h>
+
+
+#include <vector>
+
 #include "../incs/Client.hpp"
 
 const int MAX_CLIENTS = 10;
@@ -49,10 +59,17 @@ class Server
 		struct sockaddr_in6 _Server_Address;
 		struct pollfd 		_Poll_Set[MAX_CLIENTS + 1];
 
+		char				_Buffer[BUFFER_SIZE];
+
 		int		Setup_Client(Client Client);
 		void	Deconnect_Client(int index);
 
-		void	Read_Buffer(char *buffer, int bytes);
+		int 	Get_Data(int socket_fd, std::vector<std::string>& lignes);
+
+		// std::string Read_Next_Data(int sock_fd);
+
+		// void		Read_Buffer(char *buffer, int bytes);
+
 		// void	Interpret_Message(void);
 		// void	Send_Response(void);
 
