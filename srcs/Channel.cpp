@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 10:18:15 by loumarti          #+#    #+#             */
-/*   Updated: 2023/03/30 12:19:01 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/03/30 13:23:33 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ Channel::Channel(std::string const &name, Client &chop)
 : _name(name), _chop(chop) , _topic("")
 {
 	checkChanName(name);
-	bzero(&_mode, sizeof(t_chanmode)); // hum  sizeof une map dans struct ?
+	//bzero(&_mode, sizeof(t_chanmode)); // hum  sizeof une map dans struct ?
+	// interdit Segfault !
 	_mode.o[chop.Get_UserName()] = chop;
 	_users[chop.Get_UserName()] = chop;
 }
@@ -94,6 +95,7 @@ std::ostream	&operator<<(std::ostream &o, t_mapClient const &users) {
 		if (it != users.begin())
 			o << ", ";
 		o << it->second.Get_NickName();
+		it++;
 	}
 	return o;
 }
