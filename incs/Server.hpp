@@ -52,14 +52,14 @@ class Server
 		int		Setup_Client(Client Client);
 		void	Deconnect_Client(int index);
 
-		void	Get_Msg(char *buffer);
-		void	Interpret_Message(void);
-		void	Send_Response(void);
+		void	Read_Buffer(char *buffer, int bytes);
+		// void	Interpret_Message(void);
+		// void	Send_Response(void);
 
-		int 	Send_Message(int client_sock, const std::string& message);
-		int		New_Client();
-        int		Get_Message();
-        int		Response();
+		// int 	Send_Message(int client_sock, const std::string& message);
+		// int		New_Client();
+        // int		Get_Message();
+        // int		Response();
 	
 	public:
 
