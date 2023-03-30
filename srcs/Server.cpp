@@ -2,25 +2,6 @@
 #include "../incs/Server.hpp"
 #include "../incs/Client.hpp"
 
-
-
-// void Print_Data(const std::vector<std::string>& lignes) {
-//     for (std::vector<std::string>::const_iterator it = lignes.begin(); it != lignes.end(); ++it) 
-//     {
-//         std::cout << EVENT_NEW_DATA << *it << std::endl;
-//     }
-// }
-
-
-
-
-
-
-
-
-
-
-
 Server::Server(const std::string& name, int port) : 
     _Name(name), 
     _Port(port),
@@ -104,8 +85,8 @@ int	Server::Run()
 
                     if(this->Get_Data(_Poll_Set[i].fd, Data))
                         this->Deconnect_Client(i);
-                    // else
-                    //     this->Interpret_Data(Data);
+                    else
+                        this->Interpret_Data(Data);
                 }
             }
         }
@@ -192,6 +173,13 @@ int	Server::Stop_Server()
     close(_Server_Socket);
     return GOOD;
 }
+
+// void Print_Data(const std::vector<std::string>& lignes) {
+//     for (std::vector<std::string>::const_iterator it = lignes.begin(); it != lignes.end(); ++it) 
+//     {
+//         std::cout << EVENT_NEW_DATA << *it << std::endl;
+//     }
+// }
 
 //A modifier pour prendre un objet message en parametre
 // int Server::Send_Message(int client_sock, const std::string& message) 

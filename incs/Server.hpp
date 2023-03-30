@@ -3,7 +3,6 @@
 
 #include <string>
 #include <iostream>
-
 #include <cstring>
 #include <cstdio>
 #include <cstdlib>
@@ -13,15 +12,6 @@
 #include <arpa/inet.h>
 #include <poll.h>
 #include <cerrno>
-
-#include <iostream>
-#include <vector>
-#include <string>
-#include <cstring>
-#include <unistd.h>
-#include <sys/socket.h>
-
-
 #include <vector>
 
 #include "../incs/Client.hpp"
@@ -65,18 +55,7 @@ class Server
 		void	Deconnect_Client(int index);
 
 		int 	Get_Data(int socket_fd, std::vector<std::string>& lignes);
-
-		// std::string Read_Next_Data(int sock_fd);
-
-		// void		Read_Buffer(char *buffer, int bytes);
-
-		// void	Interpret_Message(void);
-		// void	Send_Response(void);
-
-		// int 	Send_Message(int client_sock, const std::string& message);
-		// int		New_Client();
-        // int		Get_Message();
-        // int		Response();
+		void	Interpret_Data(std::vector<std::string> Data);
 	
 	public:
 
