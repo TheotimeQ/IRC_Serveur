@@ -91,16 +91,11 @@ int	Server::Run()
                     } 
                     //DECONECTE CLIENT
                     else if (nbytes == 0) 
-                    {
                         this->Deconnect_Client(i);
-                    }
+
                     //INTERPRETE DATA
                     else 
-                    {
-                        this->Get_Msg(buffer);
-                        this->Interpret_Message();
-                        this->Send_Response();
-                    }
+                        this->Read_Buffer(buffer, nbytes);
                 } 
             }
         }
@@ -139,6 +134,8 @@ int Server::Setup_Client(Client Client)
 void Server::Deconnect_Client(int index)
 {
     std::cout << EVENT_DECONNECTED << _Clients[index - 1].Get_UserName() << std::endl;
+
+    //Ferme le socket
     close(_Clients[index - 1]._Client_Socket);
 
     //Vire le client du poll
@@ -152,35 +149,46 @@ void Server::Deconnect_Client(int index)
     --_Nb_Clients;
 }
 
-void Server::Get_Msg(char *buffer)
+void Server::Read_Buffer(char *buffer, int bytes)
 {
-    std::cout << EVENT_NEW_DATA << buffer << std::endl;
-    //CREER UN OBJET MESSAGE RECEIVED 
+    std::string line; 
 
-    // return Message_Received;
+    //Parcours le buffer
+    for (int i = 0; i < bytes; i++) 
+    {
+        //Si on a une nouvelle ligne
+        if (buffer[i] == '\n') 
+        {
+            std::cout << EVENT_NEW_DATA << line << std::endl;
+            //INTERPRETE LA LIGNE
+            line = "";
+        } 
+        else 
+            line += buffer[i];
+    }
 }
 
-void Server::Interpret_Message(void)
-{
-    //QUIT
+// void Server::Interpret_Message(void)
+// {
+//     //QUIT
 
-    //JOIN
+//     //JOIN
 
-    //....ETC
-}
+//     //....ETC
+// }
 
-void Server::Send_Response(void)
-{
-    // SEND LE MESSAGE 
-    // if (strncmp(buffer, "JOIN",4) == 0)
-    // {
-    //     this->Send_Message(client_sock,":IRC 332 Zel test :cannal_de_test\n");
-    //     this->Send_Message(client_sock,":IRC 353 Zel = test :Zel Jerem Tristan\n");
-    //     this->Send_Message(client_sock,":IRC 356 Zel test :cannal_de_test\n");                            
-    // }
-    // else
-    //     this->Send_Message(client_sock,":IRC 001 Zel :BIENVENU SUR LE Server IRC\n ");
-}
+// void Server::Send_Response(void)
+// {
+//     // SEND LE MESSAGE 
+//     // if (strncmp(buffer, "JOIN",4) == 0)
+//     // {
+//     //     this->Send_Message(client_sock,":IRC 332 Zel test :cannal_de_test\n");
+//     //     this->Send_Message(client_sock,":IRC 353 Zel = test :Zel Jerem Tristan\n");
+//     //     this->Send_Message(client_sock,":IRC 356 Zel test :cannal_de_test\n");                            
+//     // }
+//     // else
+//     //     this->Send_Message(client_sock,":IRC 001 Zel :BIENVENU SUR LE Server IRC\n ");
+// }
 
 
 
@@ -231,17 +239,17 @@ int	Server::Stop_Server()
 }
 
 //A modifier pour prendre un objet message en parametre
-int Server::Send_Message(int client_sock, const std::string& message) 
-{
-    int bytes_sent = send(client_sock, message.c_str(), message.size(), 0);
-    if (bytes_sent == -1) 
-    {
-        std::cerr << ERROR_SEND_MSG << strerror(errno) << std::endl;
-        return ERROR;
-    }
-    std::cout << EVENT_NEW_MSG << message << std::endl;
-    return GOOD;
-}
+// int Server::Send_Message(int client_sock, const std::string& message) 
+// {
+//     int bytes_sent = send(client_sock, message.c_str(), message.size(), 0);
+//     if (bytes_sent == -1) 
+//     {
+//         std::cerr << ERROR_SEND_MSG << strerror(errno) << std::endl;
+//         return ERROR;
+//     }
+//     std::cout << EVENT_NEW_MSG << message << std::endl;
+//     return GOOD;
+// }
 
 
 
