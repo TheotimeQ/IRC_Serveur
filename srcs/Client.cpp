@@ -22,19 +22,19 @@ Client::Client(int Serveur_Socket):
 	return;
 }
 
-// Client& Client::operator=(const Client& other)
-// {
-// 	if (this != &other) 
-//     {
-// 		this->_UserName = other._UserName;
-// 		this->_NickName = other._NickName;
-//         this->_Password = other._Password;
-//         this->_Type     = other._Type;
-// 		this->_Client_Address_Len = other._Client_Address_Len;
-// 		this->_Client_Socket = other._Client_Socket;
-// 	}
-// 	return *this;
-// }
+Client& Client::operator=(const Client& other)
+{
+	if (this != &other) 
+    {
+		this->_UserName = other._UserName;
+		this->_NickName = other._NickName;
+        this->_Password = other._Password;
+        this->_Type     = other._Type;
+		this->_Client_Address_Len = other._Client_Address_Len;
+		this->_Client_Socket = other._Client_Socket;
+	}
+	return *this;
+}
 
 Client::~Client()
 {
@@ -89,9 +89,9 @@ int Client::Get_Type(void) const
 //--------------------Operator--------------------
 std::ostream& operator<<(std::ostream &out, const Client &Client)
 {
-    std::cout << Client.Get_UserName()      << std::endl;
-	std::cout << Client.Get_NickName()      << std::endl;
-    std::cout << Client.Get_Password()      << std::endl;
-    std::cout << Client.Get_Type()          << std::endl;
+    out << Client.Get_UserName()      << std::endl;
+	out << Client.Get_NickName()      << std::endl;
+    out << Client.Get_Password()      << std::endl;
+    out << Client.Get_Type()          << std::endl;
 	return (out);
 }

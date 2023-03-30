@@ -35,6 +35,7 @@ class Client
 
 		Client(); 
         Client(int Serveur_Socket); 
+		Client& operator=(const Client& other);
 		~Client();
 
         void Set_UserName(std::string UserName);

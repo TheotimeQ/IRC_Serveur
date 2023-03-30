@@ -57,6 +57,7 @@ int	Server::Run()
 {
     while (true) 
     {
+        //Update le pollset
         int ret = poll(_Poll_Set, _Nb_Clients, -1);
         if (ret < 0) 
         {
@@ -64,6 +65,7 @@ int	Server::Run()
             break;
         }
 
+        //Pour chaque client dans le poll, regarde si on a un nouvell event
         for (int i = 0; i < _Nb_Clients; ++i) 
         {
             if (_Poll_Set[i].revents & POLLIN) 
@@ -76,7 +78,6 @@ int	Server::Run()
                     _Clients[_Nb_Clients - 2].Set_UserName("ROBERT");
                     std::cout << *this << std::endl;
                 }
-
                 //FONCTION NEW DATA
                 else 
                 {
@@ -88,14 +89,12 @@ int	Server::Run()
                         std::cerr << ERROR_DATA << std::endl;
                         break;
                     } 
-
                     //DECONECTE CLIENT
                     else if (nbytes == 0) 
                     {
                         this->Deconnect_Client(i);
                     }
-
-                    //INTERPRETE MSG
+                    //INTERPRETE DATA
                     else 
                     {
                         this->Get_Msg(buffer);
@@ -148,8 +147,9 @@ void Server::Deconnect_Client(int index)
 
     //Vire le client de la liste des client
     _Clients[index - 1] = _Clients[_Nb_Clients - 2];
+    // memset(&_Clients[_Nb_Clients - 2], 0, sizeof(Client));
 
-    --_Nb_Clients;   
+    --_Nb_Clients;
 }
 
 void Server::Get_Msg(char *buffer)
@@ -162,7 +162,11 @@ void Server::Get_Msg(char *buffer)
 
 void Server::Interpret_Message(void)
 {
+    //QUIT
 
+    //JOIN
+
+    //....ETC
 }
 
 void Server::Send_Response(void)
@@ -277,11 +281,11 @@ int Server::Get_Nb_Client() const
 //--------------------Operator--------------------
 std::ostream& operator<<(std::ostream &out, const Server &Server)
 {
-    std::cout << Server.Get_Name()      << std::endl;
-	std::cout << Server.Get_Port()      << std::endl;
+    out << Server.Get_Name()      << std::endl;
+	out << Server.Get_Port()      << std::endl;
     for (int i = 0; i < Server.Get_Nb_Client() - 1; i++)
     {
-        std::cout << Server.Get_Clients(i).Get_UserName() << " | " << Server.Get_Clients(i)._Client_Socket << std::endl;
+        out << Server.Get_Clients(i).Get_UserName() << " | " << Server.Get_Clients(i)._Client_Socket << std::endl;
     }
 	return (out);
 }
