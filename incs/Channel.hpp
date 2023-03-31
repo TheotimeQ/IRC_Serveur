@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 11:17:45 by loumarti          #+#    #+#             */
-/*   Updated: 2023/03/31 10:39:19 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/03/31 11:21:32 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ class Channel {
 	/* private methods */
 	void				checkChanName(std::string const &name) const;
 	void				initChanmode();
-	std::string const	logIntro() const;
+	void				log(std::string const &logMsg)	const;
 	
 
  public :
@@ -114,12 +114,12 @@ class Channel {
 
 	/* getters setters */
 
-	std::string const	&getName() const;
-	t_mapClient const	&getUsers() const;
-	Client const		&getChop() const;
-	std::string const	&getTopic() const;
+	std::string const	&getName()		const;
+	t_mapClient const	&getUsers()		const;
+	Client const		&getChop()		const;
+	std::string const	&getTopic()		const;
+	t_chanmode const	&getChanmode()	const;
 	void				setTopic(std::string const &newTopic);
-	t_chanmode const	&getChanmode() const;
 	// setter du chanmode un par un ?? a voir ...
 
 

@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 10:18:15 by loumarti          #+#    #+#             */
-/*   Updated: 2023/03/31 10:32:37 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/03/31 11:25:47 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,14 @@
 Channel::Channel() {} //private
 
 Channel::~Channel() {
-	std::cout << logIntro() << " is destroyed" << std::endl; // checking - log
+	log(" is destroyed");
 }
 
 // Utiliser un try-catch pour creer un channel -> throw exceptions
 Channel::Channel(std::string const &name, Client &chop) 
 : _name(name), _chop(chop) , _topic("")
 {
+	log(" creation in progress");
 	checkChanName(name);
 	initChanmode();
 	_mode.o[chop.Get_UserName()] = chop;
@@ -55,7 +56,7 @@ void				Channel::announce(std::string msg) const {
 	t_mapClient::const_iterator	it = _users.begin();
 
 	while (it != _users.end()) {
-		std::cout << logIntro() << "sending message : " << msg << " to : " << it->first << std::endl; // checking - log
+		log("sending message : " + msg + " to : " + it->first);
 		// ici utiliser la vrai classe message lorsqu'elle sera prete
 		it++;
 	}
@@ -117,12 +118,11 @@ void				Channel::initChanmode() {
 	_mode.l = 0;
 }
 
-// Used to introduce a log message with channel name
-std::string const	Channel::logIntro() const {
-	std::string logIntro;
-	
-	logIntro = "Channel : " + _name + " : ";
-	return logIntro;
+// to print log message from Channel class
+void	Channel::log(std::string const &logMsg)	const {
+	std::cout << "\033[38;5;24m";
+	std::cout << "Channel : " + _name + " : " << logMsg << std::endl;
+	std::cout << "\033[m";
 }
 
 //////////////////////////////////////////////////////////////////
