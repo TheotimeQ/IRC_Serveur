@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   MessageRecv.cpp                                    :+:      :+:    :+:   */
+/*   Message.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,84 +10,35 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incs/MessageRecv.hpp"
+#include "../incs/Message.hpp"
 
-//MessageRecv::MessageRecv() {} // private
+//Message::Message() {} // private
 
-MessageRecv::~MessageRecv() { log("is destroyed"); }
+Message::~Message() { log("is destroyed"); }
 
 // code a 0 pour le moment
-MessageRecv::MessageRecv(Client const &sender, Channel const &channel, std::string content)
-: _sender(sender), _channel(channel), _code(0), _content(content)
+Message::Message(Client const &autor, Channel const &channel, std::string content)
+: _autor(autor), _chanSrc(channel), _chanDst(channel), _code(0), _content(content)
 {
 	log(" creation");
 }
 
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~ getters setters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-Client const		&MessageRecv::getSender()	const { return _sender; }
-Channel const		&MessageRecv::getChannel()	const { return _channel; }
-int					MessageRecv::getCode()		const { return _code; }
-std::string const	&MessageRecv::getContent()	const { return _content; }
+Client const		&Message::getAutor()	const { return _autor; }
+Channel const		&Message::getChanSrc()	const { return _chanSrc; }
+Channel const		&Message::getChanDst()	const { return _chanDst; }
+int					Message::getCode()		const { return _code; }
+std::string const	&Message::getContent()	const { return _content; }
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-////////////////////////* private methods *////////////////////////
-
+/* ~~~~~~~~~~~~~~~~~~~~~~~ private methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 // to print log message from MessageRecv class
-void	MessageRecv::log(std::string const &logMsg)	const {
+void	Message::log(std::string const &logMsg)	const {
 	std::cout << "\033[38;5;66m";
 	std::cout << "MessageRecv : [\"" + _content + "\"] : ";
 	std::cout << logMsg << std::endl;
 	std::cout << "\033[m";
 }
 
-///////////////////////////////////////////////////////////////////

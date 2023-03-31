@@ -49,7 +49,7 @@ class Server
 		struct sockaddr_in6 _Server_Address;
 		struct pollfd 		_Poll_Set[MAX_CLIENTS + 1];
 
-		char				_Buffer[BUFFER_SIZE];
+		//char				_Buffer[BUFFER_SIZE];
 
 		int		Setup_Client(Client Client);
 		void	Deconnect_Client(int index);

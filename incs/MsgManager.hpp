@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   MessageRecv.hpp                                    :+:      :+:    :+:   */
+/*   MsgManager.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,44 +10,38 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MESSAGERECV_HPP
-# define MESSAGERECV_HPP
+#ifndef MSGMANAGER_HPP
+# define MSGMANAGER_HPP
 
 # include <iostream>
 # include "Client.hpp"
 # include "Channel.hpp"
+# include "Server.hpp"
+# include "Message.hpp"
 // # include <vector>
 // # include <map>
 // # include <exception>
 // # include <cstring>
 
-class MessageRecv {
+class MsgManager {
  private :
-	MessageRecv();
-//	MessageRecv(MessageRecv const &ori);
-//	MessageRecv &operator=(MessageRecv const &righty);
+	MsgManager();
 	
-
-	Client			_sender;
-	Channel			_channel; // channel where it comes from
-	int				_code; // type de message ( authent ? join ? ...)
-	std::string		_content;
-	/* more attributes ? */
-
+	
+	Server			_server; // l'objet server passe en reference -> recup ses data
+	/* autres besoins ? */
+	
 	/* private methods */
 	void				log(std::string const &logMsg)	const;
-
+	
  public :
-	~MessageRecv();
-	MessageRecv(Client const &sender, Channel const &channel, std::string content);
-
-	/* getters setters */
-	Client const		&getSender()	const;
-	Channel const		&getChannel()	const;
-	int					getCode()		const;
-	std::string const	&getContent()	const;
-
+	~MsgManager();
+	
+	void	sendMsg(Message const &msg);
+	
+	
+	
+	
 };
-
 
 #endif

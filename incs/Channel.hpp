@@ -139,7 +139,7 @@ class Channel {
 			char const	*_msg;
 		public :
 			ErrorMsgException(char const *msg) : _msg(msg) {}
-			char	*what() { return const_cast<char *>(_msg); }
+			char const	*what() const throw() { return const_cast<char *>(_msg); }
 	};
 	
 };

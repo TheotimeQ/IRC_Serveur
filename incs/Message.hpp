@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   MessageRecv.hpp                                    :+:      :+:    :+:   */
+/*   Message.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MESSAGERECV_HPP
-# define MESSAGERECV_HPP
+#ifndef MESSAGE_HPP
+# define MESSAGE_HPP
 
 # include <iostream>
 # include "Client.hpp"
@@ -21,15 +21,16 @@
 // # include <exception>
 // # include <cstring>
 
-class MessageRecv {
+class Message {
  private :
-	MessageRecv();
-//	MessageRecv(MessageRecv const &ori);
-//	MessageRecv &operator=(MessageRecv const &righty);
+	Message();
+//	Message(Message const &ori);
+//	Message &operator=(Message const &righty);
 	
 
-	Client			_sender;
-	Channel			_channel; // channel where it comes from
+	Client			_autor;
+	Channel			_chanSrc; // channel source (toujours un des que co)
+	Channel			_chanDst; // channel dest (par defaut le meme)
 	int				_code; // type de message ( authent ? join ? ...)
 	std::string		_content;
 	/* more attributes ? */
@@ -38,12 +39,15 @@ class MessageRecv {
 	void				log(std::string const &logMsg)	const;
 
  public :
-	~MessageRecv();
-	MessageRecv(Client const &sender, Channel const &channel, std::string content);
+	~Message();
+	
+	// Constructeur ou channel src == channel dest
+	Message(Client const &autor, Channel const &channel, std::string content);
 
 	/* getters setters */
-	Client const		&getSender()	const;
-	Channel const		&getChannel()	const;
+	Client const		&getAutor()		const;
+	Channel const		&getChanSrc()	const;
+	Channel const		&getChanDst()	const;
 	int					getCode()		const;
 	std::string const	&getContent()	const;
 

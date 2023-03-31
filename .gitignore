@@ -1,1 +1,10 @@
-*.o
+.gitignore
+
+**/*.o
+**/*.dSYM
+
+**/*a.out
+**/ircserv
+**/irc_test_loup
+
+**/*.DS_STORE
