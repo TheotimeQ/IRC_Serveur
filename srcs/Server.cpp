@@ -140,7 +140,7 @@ void Server::Deconnect_Client(int index)
     --_Nb_Clients;
 }
 
-int Server::Get_Data(int socket_fd, std::vector<std::string>& lignes) 
+int Server::Get_Data(int socket_fd, std::vector<std::string>& All_Data) 
 {
     char            Buffer[BUFFER_SIZE];
     std::string     Data;
@@ -152,19 +152,31 @@ int Server::Get_Data(int socket_fd, std::vector<std::string>& lignes)
         Data.append(Buffer, Bytes);                              // Ajout des données lues dans la chaîne de caractères
         size_t pos;
 
-        while ((pos = Data.find("\n")) != std::string::npos) {   // Recherche de la première occurrence de "\n"
+        while ((pos = Data.find("\n")) != std::string::npos && Data.length() != 0) {   // Recherche de la première occurrence de "\n"
             std::string ligne = Data.substr(0, pos);             // Extraction de la ligne
-            lignes.push_back(ligne);  
+            All_Data.push_back(ligne);  
             Data.erase(0, pos + 1);                              // Suppression de la ligne lue de la chaîne de caractères
-            std::cout << EVENT_NEW_DATA << ligne << std::endl;   // Ajout de la ligne au tableau de lignes
         }
+
+        if (Bytes < BUFFER_SIZE)
+            break;
     }
 
     // Client deconnecté
     if (Bytes == 0) {
         return ERROR;
     }
+    
+    return GOOD;
+}
 
+int	Server::Interpret_Data(std::vector<std::string>& Data)
+{
+    for (std::vector<std::string>::const_iterator it = Data.begin(); it != Data.end(); ++it) 
+    {
+        std::cout << "->" << *it << std::endl;
+        //Interpretation des données
+    }
     return GOOD;
 }
 
@@ -207,12 +219,6 @@ int	Server::Stop_Server()
 //     //     this->Send_Message(client_sock,":IRC 001 Zel :BIENVENU SUR LE Server IRC\n ");
 // }
 
-
-
-
-
-
-
 //--------------------Getters--------------------
 std::string Server::Get_Name(void) const
 {
@@ -235,12 +241,6 @@ int Server::Get_Nb_Client() const
 {   
 	return (this->_Nb_Clients);
 }
-
-
-
-
-
-
 
 //--------------------Operator--------------------
 std::ostream& operator<<(std::ostream &out, const Server &Server)

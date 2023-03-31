@@ -54,8 +54,8 @@ class Server
 		int		Setup_Client(Client Client);
 		void	Deconnect_Client(int index);
 
-		int 	Get_Data(int socket_fd, std::vector<std::string>& lignes);
-		void	Interpret_Data(std::vector<std::string> Data);
+		int 	Get_Data(int socket_fd, std::vector<std::string>& Data);
+		int		Interpret_Data(std::vector<std::string>& Data);
 	
 	public:
 
