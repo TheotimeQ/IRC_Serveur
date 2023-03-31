@@ -93,7 +93,7 @@ typedef struct s_chanmode {
 
 class Channel {
  private :
- 	Channel();
+ 	
 	
 	std::string			_name;
 	Client				_chop; // channel operator
@@ -108,6 +108,7 @@ class Channel {
 	
 
  public :
+	Channel(); // besoin pour utiliser en map avec []
 	~Channel();
 	// creation d'un channel basique => UTILISER UN TRY CATCH
 	Channel(std::string const &name, Client &chop);

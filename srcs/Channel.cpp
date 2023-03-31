@@ -12,7 +12,12 @@
 
 #include "../incs/Channel.hpp"
 
-Channel::Channel() {} //private
+// public pour faire une liste de map
+Channel::Channel()
+: _name("#default"), _chop(Client())
+{
+	initChanmode();
+}
 
 Channel::~Channel() {
 	log(" is destroyed");

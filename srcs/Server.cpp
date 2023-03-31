@@ -55,6 +55,28 @@ int	Server::Start_Server()
 
 int	Server::Run()
 {
+	// [ajout de mes tests channel ici]
+	Client clientTest = Client();
+	log("channel list : ");
+	std::cout << _Chan_List << std::endl;
+	
+	Try_Add_New_Channel("#SuperGenialChannel", clientTest);
+	Try_Add_New_Channel("#SuperGenialChannel", clientTest);
+	Try_Add_New_Channel("#SuperGenia:lChannel", clientTest);
+	Try_Add_New_Channel("#SuperGenialChannelEncorePlus", clientTest);
+	Try_Add_New_Channel("#CeChannelSpouerk", clientTest);
+	Try_Add_New_Channel("#ChannelLouche", clientTest);
+	Try_Add_New_Channel("#ChannelPourPervers", clientTest);
+	Try_Add_New_Channel("#Channel_musique_classique", clientTest);
+	
+	std::cout << _Chan_List << std::endl;
+	
+	Rm_Channel("#channel_inexistant");
+	Rm_Channel("#CeChannelSpouerk");
+	
+	std::cout << _Chan_List << std::endl;
+	// [fin de mes tests channel]
+	
     while (true) 
     {
         //Update le pollset
@@ -221,6 +243,39 @@ int	Server::Stop_Server()
     return GOOD;
 }
 
+/* Channel deal with methods */ // private for now
+
+void	Server::Try_Add_New_Channel(std::string const &name, Client &chop) {
+	try {
+		t_mapChannel::iterator	it;
+		it = _Chan_List.find(name);
+		if (it != _Chan_List.end())
+			throw Channel::ErrorMsgException("this Channel already exists");
+		_Chan_List[name] = Channel(name, chop);
+	} catch(Channel::ErrorMsgException &e) {
+		log(std::string(EVENT_CHANNEL_CREATION_FAILED) + e.what());
+		//std::cout << EVENT_CHANNEL_CREATION_FAILED << e.what() << std::endl;
+		// [+] envoyer un message retour au client qui a mal fait son /join
+	}
+}
+
+void	Server::Rm_Channel(std::string const &name) {
+	t_mapChannel::iterator	it;
+	
+	it = _Chan_List.find(name);
+	if (it != _Chan_List.end()) {
+		_Chan_List.erase(it);
+		log("Deleting channel : " + name);
+	}
+}
+
+// to print log message from Server class
+void	Server::log(std::string const &logMsg)	const {
+	std::cout << "\033[38;5;102m";
+	std::cout << "Server : " + _Name + " : " << logMsg << std::endl;
+	std::cout << "\033[m";
+}
+
 // void Print_Data(const std::vector<std::string>& lignes) {
 //     for (std::vector<std::string>::const_iterator it = lignes.begin(); it != lignes.end(); ++it) 
 //     {
@@ -286,5 +341,18 @@ std::ostream& operator<<(std::ostream &out, const Server &Server)
     {
         out << Server.Get_Clients(i).Get_UserName() << " | " << Server.Get_Clients(i)._Client_Socket << std::endl;
     }
+	return (out);
+}
+
+std::ostream& operator<<(std::ostream &out, const t_mapChannel &ChanList) {
+	t_mapChannel::const_iterator	it;
+	
+	it = ChanList.begin();
+	while (it != ChanList.end()) {
+		if (it != ChanList.begin())
+			out << ", ";
+		out << it->first;
+		++it;
+	}
 	return (out);
 }

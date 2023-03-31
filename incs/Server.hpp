@@ -13,9 +13,11 @@
 #include <poll.h>
 #include <cerrno>
 #include <vector>
+#include <map>
 #include <sstream>
 
 #include "../incs/Client.hpp"
+#include "../incs/Channel.hpp"
 
 const int MAX_CLIENTS = 10;
 const int BUFFER_SIZE = 1024;
@@ -36,6 +38,10 @@ const int BUFFER_SIZE = 1024;
 #define EVENT_NEW_DATA 		"Log: Data received : \n"
 #define EVENT_NEW_MSG 		"Log: Message sent : \n"
 
+#define EVENT_CHANNEL_CREATION_FAILED 	"Channel creation error : "
+
+typedef std::map<std::string, Channel> t_mapChannel;
+
 class Server
 {
 
@@ -49,6 +55,7 @@ class Server
 		int					_Server_Socket;
 		struct sockaddr_in6 _Server_Address;
 		struct pollfd 		_Poll_Set[MAX_CLIENTS + 1];
+		t_mapChannel 		_Chan_List;
 
 
 		int		Setup_Client(Client Client);
@@ -56,15 +63,23 @@ class Server
 
 		int 	Get_Data(int socket_fd, std::vector<std::string>& Data);
 		int		Interpret_Data(std::vector<std::string>& Data, Client &Client);
-	
+		
+		/* Channel deal with methods */ // private for now
+		void	Try_Add_New_Channel(std::string const &name, Client &chop);
+		void	Rm_Channel(std::string const &name);
+		void	log(std::string const &logMsg)	const;
+		
 	public:
-
+		
+	
 		Server(const std::string& name, int port); 
 		~Server();
 
 	    int		Start_Server();     //CONST ? 
         int		Run(); 
         int		Stop_Server();
+	
+		
 
 		// class Error : public std::exception
 		// {
@@ -82,5 +97,6 @@ class Server
 };
 
 std::ostream& operator<<(std::ostream& out, const Server& Server);
+std::ostream& operator<<(std::ostream& out, const t_mapChannel& ChanList);
 
 #endif
