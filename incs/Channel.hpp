@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 11:17:45 by loumarti          #+#    #+#             */
-/*   Updated: 2023/03/30 12:10:22 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/03/31 10:39:19 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,13 +62,17 @@ Parameters: <channel> {[+|-]|o|p|s|i|t|n|b|v} [<limit>] [<user>]
            l - set the user limit to channel;
 
 */
+# define CHERR_FORMAT			"channel name format : <#name>"
+# define CHERR_FORMAT_TOOLONG	"channel name can't exceed 200 character long"
+# define CHERR_FORMAT_FCHAR		"channel name can't have spaces, coma or semicolon"
 
-#include <iostream>
-#include "Client.hpp"
-#include <vector>
-#include <map>
-#include <exception>
-#include <cstring>
+
+# include <iostream>
+# include "Client.hpp"
+# include <vector>
+# include <map>
+# include <exception>
+# include <cstring>
 
 // Des qu'on veut lister des client : une map <Username, Client>
 // Client passe par reference & ?
@@ -84,7 +88,7 @@ typedef struct s_chanmode {
 	bool			m;	// moderated channel;
 	int				l;	// set the user limit to channel; -> 0 == pas de limite ?
 }	t_chanmode; 
-// ==> integer ces deux typedef a la class en private ?
+// ==> integer ces deux typedef a la class en private~public ?
 
 
 class Channel {
@@ -99,6 +103,8 @@ class Channel {
 
 	/* private methods */
 	void				checkChanName(std::string const &name) const;
+	void				initChanmode();
+	std::string const	logIntro() const;
 	
 
  public :
@@ -118,10 +124,13 @@ class Channel {
 
 
 	/* public methods */
+		// bases
 	void				announce(std::string msg) const;
 	void				addUser(Client const &newUser);
 	void				delUser(Client const &userToDel);
-
+	
+		// mode management
+	void				rmOpPrivilege(std::string const &username);
 
 	/* exception */
 	// lors du catch de l'exception -> envoi message retour d'erreur au client
@@ -137,18 +146,8 @@ class Channel {
 
 
 
-
 std::ostream	&operator<<(std::ostream &o, Channel const &channel);
 std::ostream	&operator<<(std::ostream &o, t_mapClient const &users);
-
-
-
-
-
-
-
-
-
 
 
 
