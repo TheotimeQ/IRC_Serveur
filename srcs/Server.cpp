@@ -75,8 +75,6 @@ int	Server::Run()
                 {   
                     if (this->Setup_Client(Client(_Server_Socket)))
                         break;
-                    // _Clients[_Nb_Clients - 2].Set_UserName("ROBERT");
-                    // std::cout << *this << std::endl;
                 }
                 //NEW DATA
                 else 
@@ -86,7 +84,8 @@ int	Server::Run()
                     if(this->Get_Data(_Poll_Set[i].fd, Data))
                         this->Deconnect_Client(i);
                     else
-                        this->Interpret_Data(Data);
+                        this->Interpret_Data(Data, this->_Clients[i - 1]);
+                    std::cout << _Clients[i - 1] << std::endl;
                 }
             }
         }
@@ -170,12 +169,48 @@ int Server::Get_Data(int socket_fd, std::vector<std::string>& All_Data)
     return GOOD;
 }
 
-int	Server::Interpret_Data(std::vector<std::string>& Data)
+void tokenize(std::string const &str, const char delim, std::vector<std::string> &out) 
+{ 
+    // construct a stream from the string 
+    std::stringstream ss(str); 
+ 
+    std::string s; 
+    while (std::getline(ss, s, delim)) { 
+        out.push_back(s); 
+    } 
+} 
+
+int	Server::Interpret_Data(std::vector<std::string>& Data, Client &Client)
 {
     for (std::vector<std::string>::const_iterator it = Data.begin(); it != Data.end(); ++it) 
     {
-        std::cout << "->" << *it << std::endl;
+        std::cout << Client.Get_UserName() << " -> " << *it << std::endl;
+        
         //Interpretation des données
+        std::vector<std::string> arg; 
+        tokenize(*it, ' ', arg); 
+
+        //POUR CHAQUE COMMANDE , VERIFIER QUE ON A ASSEZ D'ARGUMENT
+
+        // CAP
+        // PASS
+
+        // NICK
+        if (strncmp(arg[0].c_str(),"NICK",4) == 0)
+        {
+            Client.Set_NickName(arg[1]);
+        }
+        // USER
+        if (strncmp(arg[0].c_str(),"USER",4) == 0)
+        {
+            Client.Set_UserName(arg[1]);
+        }
+        if (strncmp(arg[0].c_str(),"PASS",4) == 0)
+        {
+            Client.Set_Password(arg[1]);
+        }
+        // QUIT
+        // JOIN
     }
     return GOOD;
 }
