@@ -89,9 +89,11 @@ int Client::Get_Type(void) const
 //--------------------Operator--------------------
 std::ostream& operator<<(std::ostream &out, const Client &Client)
 {
-    out << Client.Get_UserName()      << std::endl;
-	out << Client.Get_NickName()      << std::endl;
-    out << Client.Get_Password()      << std::endl;
-    out << Client.Get_Type()          << std::endl;
+	out << "\nPrinting client data :"      << std::endl;
+    out << "USER : " << Client.Get_UserName()      << std::endl;
+	out << "NICK : " << Client.Get_NickName()      << std::endl;
+    out << "PASS : " << Client.Get_Password()      << std::endl;
+	out << "SOCK : " << Client._Client_Socket      << std::endl;
+    out << "TYPE : " << Client.Get_Type()          << std::endl;
 	return (out);
 }

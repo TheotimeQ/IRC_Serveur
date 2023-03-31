@@ -13,6 +13,7 @@
 #include <poll.h>
 #include <cerrno>
 #include <vector>
+#include <sstream>
 
 #include "../incs/Client.hpp"
 
@@ -49,13 +50,12 @@ class Server
 		struct sockaddr_in6 _Server_Address;
 		struct pollfd 		_Poll_Set[MAX_CLIENTS + 1];
 
-		//char				_Buffer[BUFFER_SIZE];
 
 		int		Setup_Client(Client Client);
 		void	Deconnect_Client(int index);
 
 		int 	Get_Data(int socket_fd, std::vector<std::string>& Data);
-		int		Interpret_Data(std::vector<std::string>& Data);
+		int		Interpret_Data(std::vector<std::string>& Data, Client &Client);
 	
 	public:
 
