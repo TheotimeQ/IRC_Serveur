@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:32:08 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/01 13:12:05 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/01 15:22:18 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,38 +14,46 @@
 
 Command_Manager::Command_Manager()
 {
-    //Authentification
+    //TEST
+    Cmd_List["TEST"]    = new TEST_Command();
+    
+    //Connection Registration
+    Cmd_List["PASS"]    = new PASS_Command();
     Cmd_List["NICK"]    = new NICK_Command(); 
     Cmd_List["USER"]    = new USER_Command();
-    Cmd_List["PASS"]    = new PASS_Command();
     Cmd_List["OPER"]    = new OPER_Command();
-    Cmd_List["MODE"]    = new MODE_Command();
-
-    //Nickname
-    Cmd_List["WHOIS"]   = new WHOIS_Command(); 
-    Cmd_List["NAMES"]   = new NAMES_Command(); 
-    Cmd_List["WHO"]     = new WHO_Command(); 
-
-    //Channel
-    Cmd_List["JOIN"]    = new JOIN_Command(); 
-    Cmd_List["INVITE"]  = new INVITE_Command(); 
-    Cmd_List["LIST"]    = new LIST_Command(); 
-    Cmd_List["PART"]    = new PART_Command();
     Cmd_List["QUIT"]    = new QUIT_Command();  
 
-    //Envoyer un message prive
-    Cmd_List["QUERY"]   = new QUERY_Command(); 
-    Cmd_List["MSG"]     = new MSG_Command();
-    Cmd_List["NOTICE"]  = new NOTICE_Command();  
-
-    //Operateur
-    Cmd_List["KICK"]    = new KICK_Command();
-    Cmd_List["BAN"]     = new BAN_Command();  
-    Cmd_List["UNBAN"]   = new UNBAN_Command(); 
+    //Channel operations
+    Cmd_List["JOIN"]    = new JOIN_Command();
+    Cmd_List["PART"]    = new PART_Command(); 
+    Cmd_List["MODE"]    = new MODE_Command(); 
     Cmd_List["TOPIC"]   = new TOPIC_Command(); 
-    Cmd_List["KILL"]    = new KILL_Command();  
-    Cmd_List["GLOBOPS"] = new GLOBOPS_Command();
-    Cmd_List["RESTART"] = new RESTART_Command();
+    Cmd_List["NAMES"]   = new NAMES_Command(); 
+    Cmd_List["LIST"]    = new LIST_Command(); 
+    Cmd_List["INVITE"]  = new INVITE_Command(); 
+    Cmd_List["KICK"]    = new KICK_Command(); 
+
+    //Server queries and commands 
+    Cmd_List["VERSION"]   = new VERSION_Command(); 
+    Cmd_List["STATS"]     = new STATS_Command(); 
+    Cmd_List["ADMIN"]     = new ADMIN_Command(); 
+    Cmd_List["INFO"]      = new INFO_Command();
+
+    //Sending messages
+    Cmd_List["PRIVMSG"]   = new PRIVMSG_Command(); 
+    Cmd_List["NOTICE"]    = new NOTICE_Command();
+
+    //User-based queries 
+    Cmd_List["WHO"]       = new WHO_Command();
+    Cmd_List["WHOIS"]     = new WHOIS_Command();  
+    Cmd_List["WHOWAS"]    = new WHOWAS_Command(); 
+
+    //Miscellaneous messages 
+    Cmd_List["KILL"]     = new KILL_Command();
+    Cmd_List["PING"]     = new PING_Command();  
+    Cmd_List["PONG"]     = new PONG_Command(); 
+    Cmd_List["ERROR"]    = new ERROR_Command(); 
 
     return;
 }
@@ -87,12 +95,15 @@ int Command_Manager::Interpret_Data(std::vector<std::string>& Data, Client &Clie
 {
     for (std::vector<std::string>::const_iterator it = Data.begin(); it != Data.end(); ++it) 
     {
-        std::vector<std::string> Args; 
-
+        std::vector<std::string> Args;
         Tokenize(*it, ' ', Args); 
         
+        //DEBUG
+        std::cout << "-> Received : "<< *it << std::endl;
+        
+        //PROBLEME SI JUSTE /TEST
         A_Command *Cmd = this->Get_Command(Args[0]);
-        if (Cmd)
+        if (Cmd != NULL)
             Cmd->Execute(Client, Args, Channels);
     }
     return GOOD;

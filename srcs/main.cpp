@@ -15,3 +15,6 @@ int main(){
 
     return (GOOD);
 }
+
+//http://chi.cs.uchicago.edu/chirc/irc_examples.html
+//https://dd.ircdocs.horse/refs/commands/join

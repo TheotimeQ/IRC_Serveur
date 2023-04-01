@@ -1,24 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Commands.cpp                                       :+:      :+:    :+:   */
+/*   Commands_Message.cpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:09:32 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/01 14:42:22 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/01 14:12:01 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../incs/Object/Commands.hpp"
 
-//=====================================TEST======================================
+//=====================================Sending messages======================================
 
-// https://www.rfc-editor.org/rfc/rfc1459#section-4.2.1
-void  TEST_Command::Execute(Client &Client, std::vector<std::string> Args, std::map<std::string, Channel>  Channels) 
+// https://www.rfc-editor.org/rfc/rfc1459#section-4.4.1
+void  PRIVMSG_Command::Execute(Client &Client, std::vector<std::string> Args, std::map<std::string, Channel>  Channels) 
 {
     (void )Args;
     (void )Channels;
+    (void )Client;
+}
 
-    std::cout << Client << std::endl;
+// https://www.rfc-editor.org/rfc/rfc1459#section-4.4.2
+void  NOTICE_Command::Execute(Client &Client, std::vector<std::string> Args, std::map<std::string, Channel>  Channels) 
+{
+    (void )Args;
+    (void )Channels;
+    (void )Client;
 }
