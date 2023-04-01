@@ -2,7 +2,7 @@
 #include "../incs/Server.hpp"
 #include "../incs/Client.hpp"
 #include "../incs/Message_Manager.hpp"
-#include "../incs/Channel_Manager.hpp"
+#include "../incs/ChannelManager.hpp"
 #include "../incs/Command_Manager.hpp"
 
 Server::Server(const std::string& name, int port) : 
@@ -55,7 +55,7 @@ int	Server::Start_Server()
 
     // Command_Manager _CmdMng = Command_Manager();
     // Message_Manager _MsgMng = Message_Manager();
-    // Channel_Manager _ChnMng = Channel_Manager();
+    // ChannelManager _ChnMng = ChannelManager();
 
     return GOOD;
 }

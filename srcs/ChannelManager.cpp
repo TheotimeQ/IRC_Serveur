@@ -6,12 +6,33 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/01 08:50:38 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/01 09:11:14 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../incs/ChannelManager.hpp"
 
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~ Coplien Stuff & co ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+ChannelManager::ChannelManager() { log("default constructor"); }
+
+ChannelManager::~ChannelManager() { log("destoyed"); }
+
+ChannelManager::ChannelManager(ChannelManager const &ori) {
+	log("copy constructor");
+	*this = ori;
+}
+
+ChannelManager	&ChannelManager::operator=(ChannelManager const &righty) {
+	if (this != &righty) {
+		log("copy assignement using \'=\' operator");
+		_chanList = righty._chanList;
+	}
+	return *this;
+}
+
+
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~ Coplien stuff ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 void	ChannelManager::tryAddNewChannel(std::string const &name, Client &chop) {
 	try {
 		t_mapChannel::iterator	it;

@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:10:11 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/01 08:57:11 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/01 09:03:56 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ class ChannelManager {
  public :
 	ChannelManager();
 	~ChannelManager();
+	ChannelManager(ChannelManager const &ori);
+	ChannelManager	&operator=(ChannelManager const &righty);
 
 	void	tryAddNewChannel(std::string const &name, Client &chop);
 	void	rmChannel(std::string const &name);

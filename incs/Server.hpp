@@ -19,7 +19,7 @@
 #include "../incs/Client.hpp"
 #include "../incs/Channel.hpp"
 #include "../incs/Message_Manager.hpp"
-#include "../incs/Channel_Manager.hpp"
+#include "../incs/ChannelManager.hpp"
 #include "../incs/Command_Manager.hpp"
 
 const int MAX_CLIENTS = 10;
@@ -62,7 +62,7 @@ class Server
 		
 		// t_mapChannel 		_Chan_List;
 
-		// Channel_Manager		_ChnMng;
+		ChannelManager		_ChnMng;
 		Message_Manager		_MsgMng;
 		Command_Manager		_CmdMng;
 
