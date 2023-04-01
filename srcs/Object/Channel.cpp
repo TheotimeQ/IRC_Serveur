@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 10:18:15 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/01 13:11:34 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/01 13:16:46 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ void				Channel::delUser(Client const &userToDel) {
 }
 
 // remove an user from channel operator map -> nothing happens if not in map
+// aura surment besoin de 
 void				Channel::rmOpPrivilege(std::string const &username) {
 	t_mapClient::iterator	it;
 
