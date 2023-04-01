@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/01 09:20:01 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/01 09:54:00 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ ChannelManager	&ChannelManager::operator=(ChannelManager const &righty) {
 
 
 
-/* ~~~~~~~~~~~~~~~~~~~~~~~ Coplien stuff ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ public methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 void	ChannelManager::tryAddNewChannel(std::string const &name, Client &chop) {
 	try {
 		t_mapChannel::iterator	it;
@@ -56,14 +56,35 @@ void	ChannelManager::rmChannel(std::string const &name) {
 	}
 }
 
+void	ChannelManager::addClientToChannel(Client &user, std::string const &channelName) {
+	if (!isChannelExists(channelName))
+		tryAddNewChannel(channelName, user);
+	if (isChannelExists(channelName)) {
+		_chanList[channelName].addUser(user);
+	}
+
+}
 
 
 
 
 
-/* ~~~~~~~~~~~~~~~~~~~~~~~ private methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ private methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+bool	ChannelManager::isChannelExists(std::string const &channelName) const {
+	t_mapChannel::const_iterator	it;
+
+	it = _chanList.find(channelName);
+	return (it != _chanList.end() ? true : false);
+}
+
+
+
+
+
 // to print log message from  ChannelManager class
-void	Server::log(std::string const &logMsg)	const {
+void	ChannelManager::log(std::string const &logMsg)	const {
 	std::cout << "\033[38;5;102m";
 	std::cout << "ChannelManager : " << logMsg << std::endl;
 	std::cout << "\033[m";
