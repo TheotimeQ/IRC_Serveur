@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 09:03:06 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/01 10:52:21 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/01 11:24:29 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,11 @@ A_Command::~A_Command()
 	return;
 }
 
-void  A_Command::Execute(Client &Client, std::vector<std::string> Args)
+void  A_Command::Execute(Client &Client, std::vector<std::string> Args, std::map<std::string, Channel>  Channels)
 {
 	(void)Client;
 	(void)Args;
+	(void)Channels;
 }
 
 int A_Command::Send_Cmd(int client_sock, const std::string& message) 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 10:18:15 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/01 09:58:23 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/01 11:59:12 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ Channel::Channel(std::string const &name, Client &chop)
 	log(" creation in progress");
 	checkChanName(name);
 	initChanmode();
-	_mode.o[chop.Get_UserName()] = chop;
-	_users[chop.Get_UserName()] = chop;
+	_mode.o[chop._UserName] = chop;
+	_users[chop._UserName] = chop;
 }
 
 
@@ -68,7 +68,7 @@ void				Channel::announce(std::string msg) const {
 
 // if user is already in channel, nothing happens
 void				Channel::addUser(Client const &newUser) {
-	_users[newUser.Get_UserName()] = newUser;
+	_users[newUser._UserName] = newUser;
 }
 
 
@@ -77,7 +77,7 @@ void				Channel::addUser(Client const &newUser) {
 void				Channel::delUser(Client const &userToDel) {
 	t_mapClient::iterator	it;
 
-	it = _users.find(userToDel.Get_UserName());
+	it = _users.find(userToDel._UserName);
 	if (it != _users.end()) {
 		rmOpPrivilege(it->first);
 		_users.erase(it);
@@ -138,7 +138,7 @@ std::ostream	&operator<<(std::ostream &o, t_mapClient const &users) {
 	while (it != users.end()) {
 		if (it != users.begin())
 			o << ", ";
-		o << it->second.Get_NickName();
+		o << it->second._UserName;
 		it++;
 	}
 	return o;

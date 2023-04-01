@@ -16,7 +16,7 @@
 #define ERROR_CMDNOTFOUND 	"Error: Command not found : "
 #define ERROR_SEND_MSG 		"Error: Can't send message : \n"
 
-#define EVENT_CMDFOUND		"Log: Command found : "
+#define EVENT_CMDFOUND		"Log: Executing : "
 #define EVENT_NEW_MSG 		"Log: Message sent : \n"
 
 class Command_Manager
@@ -34,7 +34,7 @@ class Command_Manager
 		Command_Manager(); 
 		~Command_Manager();
 		
-		int		Interpret_Data(std::vector<std::string>& Data, Client &Client);
+		int		Interpret_Data(std::vector<std::string>& Data, Client &Client, std::map<std::string, Channel> Channels);
 
 };
 
