@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
+/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 10:18:15 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/01 09:15:02 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/01 09:58:23 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ void				Channel::setTopic(std::string const &newTopic) {
 
 t_chanmode const	&Channel::getChanmode() const { return _mode; }
 
-//////////////////////////////////////////////////////////////////
 
 //////////////////////* public methods *//////////////////////////
 
@@ -67,6 +66,7 @@ void				Channel::announce(std::string msg) const {
 	}
 }
 
+// if user is already in channel, nothing happens
 void				Channel::addUser(Client const &newUser) {
 	_users[newUser.Get_UserName()] = newUser;
 }
@@ -94,7 +94,6 @@ void				Channel::rmOpPrivilege(std::string const &username) {
 	}
 }
 
-///////////////////////////////////////////////////////////////////
 
 ////////////////////////* private methods *////////////////////////
 
@@ -129,8 +128,6 @@ void	Channel::log(std::string const &logMsg)	const {
 	std::cout << "Channel : " + _name + " : " << logMsg << std::endl;
 	std::cout << "\033[m";
 }
-
-//////////////////////////////////////////////////////////////////
 
 
 

@@ -62,27 +62,26 @@ int	Server::Start_Server()
 
 int	Server::Run()
 {
-	// // [ajout de mes tests channel ici]
+	// // // [ajout de mes tests channel ici]
 	// Client clientTest = Client();
-	// log("channel list : ");
-	// std::cout << _Chan_List << std::endl;
-	
-	// Try_Add_New_Channel("#SuperGenialChannel", clientTest);
-	// Try_Add_New_Channel("#SuperGenialChannel", clientTest);
-	// Try_Add_New_Channel("#SuperGenia:lChannel", clientTest);
-	// Try_Add_New_Channel("#SuperGenialChannelEncorePlus", clientTest);
-	// Try_Add_New_Channel("#CeChannelSpouerk", clientTest);
-	// Try_Add_New_Channel("#ChannelLouche", clientTest);
-	// Try_Add_New_Channel("#ChannelPourPervers", clientTest);
-	// Try_Add_New_Channel("#Channel_musique_classique", clientTest);
-	
-	// std::cout << _Chan_List << std::endl;
-	
-	// Rm_Channel("#channel_inexistant");
-	// Rm_Channel("#CeChannelSpouerk");
-	
-	// std::cout << _Chan_List << std::endl;
-	// // [fin de mes tests channel]
+	// std::cout << _ChnMng.getChanList() << std::endl;
+
+	// _ChnMng.addClientToChannel(clientTest, "#SuperGenialChannel");
+	// _ChnMng.addClientToChannel(clientTest, "#SuperGenialChannel");
+	// _ChnMng.addClientToChannel(clientTest, "#SuperGenia:lChannel");
+	// _ChnMng.addClientToChannel(clientTest, "#CeChannelSpouerk");
+	// _ChnMng.addClientToChannel(clientTest, "#ChannelLouche");
+	// _ChnMng.addClientToChannel(clientTest, "#ChannelPourPervers");
+	// _ChnMng.addClientToChannel(clientTest, "#Channel_musique_classique");
+
+	// std::cout << _ChnMng.getChanList() << std::endl;
+
+	// _ChnMng.rmClientToChannel(clientTest, "#ChannelInexistant");
+	// _ChnMng.rmClientToChannel(clientTest, "#CeChannelSpouerk");
+
+	// std::cout << _ChnMng.getChanList() << std::endl;
+
+	// // // [fin de mes tests channel]
 	
     while (true) 
     {
