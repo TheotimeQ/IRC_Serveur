@@ -11,19 +11,23 @@
 #include "../Irc.hpp"
 #include "../Object/A_Command.hpp"
 #include "../Object/Client.hpp"
-#include "../Manager/Message_Manager.hpp"
+#include "../Object/Commands.hpp"
 
-// #define ERROR_SOCKET 		"Error: Can't create socket"
-// #define EVENT_NEW_MSG 		"Log: Message sent : \n"
+#define ERROR_CMDNOTFOUND 	"Error: Command not found : "
+#define ERROR_SEND_MSG 		"Error: Can't send message : \n"
+
+#define EVENT_CMDFOUND		"Log: Command found : "
+#define EVENT_NEW_MSG 		"Log: Message sent : \n"
 
 class Command_Manager
 {
 
 	private:
 
-		std::map<std::string, A_Command> Cmd_List;
+		std::map<std::string, A_Command*> Cmd_List;
 
-		void 	Tokenize(std::string const &str, const char delim, std::vector<std::string> &out);
+		A_Command* 	Get_Command(std::string str);
+		void 		Tokenize(std::string const &str, const char delim, std::vector<std::string> &out);
 
 	public:
 		

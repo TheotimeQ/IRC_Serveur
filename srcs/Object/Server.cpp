@@ -1,7 +1,6 @@
 #include "../../incs/Irc.hpp"
 #include "../../incs/Object/Server.hpp"
 #include "../../incs/Object/Client.hpp"
-#include "../../incs/Manager/Message_Manager.hpp"
 #include "../../incs/Manager/ChannelManager.hpp"
 #include "../../incs/Manager/Command_Manager.hpp"
 
@@ -53,37 +52,11 @@ int	Server::Start_Server()
     _Poll_Set[0].events = POLLIN;
     _Nb_Clients = 1;
 
-    // Command_Manager _CmdMng = Command_Manager();
-    // Message_Manager _MsgMng = Message_Manager();
-    // ChannelManager _ChnMng = ChannelManager();
-
     return GOOD;
 }
 
 int	Server::Run()
 {
-	// // [ajout de mes tests channel ici]
-	// Client clientTest = Client();
-	// log("channel list : ");
-	// std::cout << _Chan_List << std::endl;
-	
-	// Try_Add_New_Channel("#SuperGenialChannel", clientTest);
-	// Try_Add_New_Channel("#SuperGenialChannel", clientTest);
-	// Try_Add_New_Channel("#SuperGenia:lChannel", clientTest);
-	// Try_Add_New_Channel("#SuperGenialChannelEncorePlus", clientTest);
-	// Try_Add_New_Channel("#CeChannelSpouerk", clientTest);
-	// Try_Add_New_Channel("#ChannelLouche", clientTest);
-	// Try_Add_New_Channel("#ChannelPourPervers", clientTest);
-	// Try_Add_New_Channel("#Channel_musique_classique", clientTest);
-	
-	// std::cout << _Chan_List << std::endl;
-	
-	// Rm_Channel("#channel_inexistant");
-	// Rm_Channel("#CeChannelSpouerk");
-	
-	// std::cout << _Chan_List << std::endl;
-	// // [fin de mes tests channel]
-	
     while (true) 
     {
         //Update le pollset
@@ -113,8 +86,7 @@ int	Server::Run()
                     if(this->Get_Data(_Poll_Set[i].fd, Data))
                         this->Deconnect_Client(i);
                     else
-                        this->_CmdMng.Interpret_Data(Data, this->_Clients[i - 1]);
-                    // std::cout << _Clients[i - 1] << std::endl;
+                        this->_CmdMng.Interpret_Data(Data, this->_Clients[i - 1]);//, _Chan_List);
                 }
             }
         }
