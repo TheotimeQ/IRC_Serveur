@@ -16,11 +16,11 @@
 #include <map>
 #include <sstream>
 
-#include "../incs/Client.hpp"
-#include "../incs/Channel.hpp"
-#include "../incs/Message_Manager.hpp"
-#include "../incs/ChannelManager.hpp"
-#include "../incs/Command_Manager.hpp"
+#include "../Object/Client.hpp"
+#include "../Object/Channel.hpp"
+#include "../Manager/Message_Manager.hpp"
+#include "../Manager/ChannelManager.hpp"
+#include "../Manager/Command_Manager.hpp"
 
 const int MAX_CLIENTS = 10;
 const int BUFFER_SIZE = 1024;

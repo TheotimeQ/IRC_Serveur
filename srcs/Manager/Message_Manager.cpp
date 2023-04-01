@@ -6,11 +6,11 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:31:18 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/01 08:49:37 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/01 09:02:43 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incs/Message_Manager.hpp"
+#include "../../incs/Manager/Message_Manager.hpp"
 
 Message_Manager::Message_Manager()
 {

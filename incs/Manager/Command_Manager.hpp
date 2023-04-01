@@ -5,9 +5,9 @@
 #include <vector>
 #include <sstream>
 
-#include "../incs/Irc.hpp"
-#include "../incs/Client.hpp"
-#include "../incs/Message_Manager.hpp"
+#include "../Irc.hpp"
+#include "../Object/Client.hpp"
+#include "../Manager/Message_Manager.hpp"
 
 // #define ERROR_SOCKET 		"Error: Can't create socket"
 // #define EVENT_NEW_MSG 		"Log: Message sent : \n"

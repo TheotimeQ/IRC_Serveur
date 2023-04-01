@@ -7,12 +7,24 @@ FLG						=	-Wall -Wextra -Werror -std=c++98
 RM						=	rm -rf
 BUILD_DIR				= 	build/
 
+OBJ_DIR					=	Object
+MANAGER_DIR				=	Manager
+
+OBJ_FILE				=   Server Client Channel Message Command
+MANAGER_FILE			=	Message_Manager Command_Manager ChannelManager
+
 INC_DIR					=	incs
-INC_FILE				= 	Irc Server Client Channel Message_Manager Command_Manager ChannelManager
+INC_FILE				=	$(OBJ_INC) $(MANAGER_INC) Irc
+
+MANAGER_INC				=  	$(addprefix $(MANAGER_DIR)/, $(MANAGER_FILE))
+OBJ_INC					=  	$(addprefix $(OBJ_DIR)/, $(OBJ_FILE))
 INC						= 	$(addsuffix .hpp, $(addprefix $(INC_DIR)/, $(INC_FILE)))
 
 SRCS_DIR				=	srcs
-SRCS_FILE				=	main Server Client Channel Message_Manager Command_Manager ChannelManager
+SRCS_FILE				=	$(OBJ_SRC) $(MANAGER_SRC) main 
+
+MANAGER_SRC				=  	$(addprefix $(MANAGER_DIR)/, $(MANAGER_FILE))
+OBJ_SRC					=  	$(addprefix $(OBJ_DIR)/, $(OBJ_FILE))
 SRCS					=  	$(addsuffix .cpp, $(addprefix $(SRCS_DIR)/, $(SRCS_FILE)))
 
 OBJS			    	= 	$(SRCS:%.cpp=$(BUILD_DIR)%.o)

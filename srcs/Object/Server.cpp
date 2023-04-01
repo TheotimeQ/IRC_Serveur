@@ -1,9 +1,9 @@
-#include "../incs/Irc.hpp"
-#include "../incs/Server.hpp"
-#include "../incs/Client.hpp"
-#include "../incs/Message_Manager.hpp"
-#include "../incs/ChannelManager.hpp"
-#include "../incs/Command_Manager.hpp"
+#include "../../incs/Irc.hpp"
+#include "../../incs/Object/Server.hpp"
+#include "../../incs/Object/Client.hpp"
+#include "../../incs/Manager/Message_Manager.hpp"
+#include "../../incs/Manager/ChannelManager.hpp"
+#include "../../incs/Manager/Command_Manager.hpp"
 
 Server::Server(const std::string& name, int port) : 
     _Name(name), 

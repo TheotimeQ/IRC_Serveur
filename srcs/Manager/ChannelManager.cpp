@@ -6,11 +6,11 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/01 09:11:14 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/01 09:20:01 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../incs/ChannelManager.hpp"
+# include "../../incs/Manager/ChannelManager.hpp"
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~ Coplien Stuff & co ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 ChannelManager::ChannelManager() { log("default constructor"); }
