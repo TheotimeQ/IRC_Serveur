@@ -1,6 +1,9 @@
 #include "../incs/Irc.hpp"
 #include "../incs/Server.hpp"
 #include "../incs/Client.hpp"
+#include "../incs/Message_Manager.hpp"
+#include "../incs/Channel_Manager.hpp"
+#include "../incs/Command_Manager.hpp"
 
 Server::Server(const std::string& name, int port) : 
     _Name(name), 
@@ -30,7 +33,7 @@ int	Server::Start_Server()
     _Server_Address.sin6_port = htons(_Port);
 
     int yes = 1;
-    if (setsockopt(_Server_Socket, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) == -1) {
+    if (setsockopt(_Server_Socket, SOL_SOCKET, SO_REUSEADDR, &(yes), sizeof(int)) == -1) {
         std::cerr << ERROR_CONF_SOCKET << strerror(errno) << std::endl;
         return ERROR;
     }
@@ -49,6 +52,10 @@ int	Server::Start_Server()
     _Poll_Set[0].fd = _Server_Socket;
     _Poll_Set[0].events = POLLIN;
     _Nb_Clients = 1;
+
+    // Command_Manager _CmdMng = Command_Manager();
+    // Message_Manager _MsgMng = Message_Manager();
+    // Channel_Manager _ChnMng = Channel_Manager();
 
     return GOOD;
 }
@@ -106,8 +113,8 @@ int	Server::Run()
                     if(this->Get_Data(_Poll_Set[i].fd, Data))
                         this->Deconnect_Client(i);
                     else
-                        this->Interpret_Data(Data, this->_Clients[i - 1]);
-                    std::cout << _Clients[i - 1] << std::endl;
+                        this->_CmdMng.Interpret_Data(Data, this->_Clients[i - 1]);
+                    // std::cout << _Clients[i - 1] << std::endl;
                 }
             }
         }
@@ -170,13 +177,13 @@ int Server::Get_Data(int socket_fd, std::vector<std::string>& All_Data)
     // Lecture du socket tant qu'il y a des données à lire
     while ((Bytes = recv(socket_fd, Buffer, BUFFER_SIZE, 0)) > 0) 
     {
-        Data.append(Buffer, Bytes);                              // Ajout des données lues dans la chaîne de caractères
+        Data.append(Buffer, Bytes);                                                     // Ajout des données lues dans la chaîne de caractères
         size_t pos;
 
-        while ((pos = Data.find("\n")) != std::string::npos && Data.length() != 0) {   // Recherche de la première occurrence de "\n"
-            std::string ligne = Data.substr(0, pos);             // Extraction de la ligne
+        while ((pos = Data.find("\n")) != std::string::npos && Data.length() != 0) {    // Recherche de la première occurrence de "\n"
+            std::string ligne = Data.substr(0, pos);                                    // Extraction de la ligne
             All_Data.push_back(ligne);  
-            Data.erase(0, pos + 1);                              // Suppression de la ligne lue de la chaîne de caractères
+            Data.erase(0, pos + 1);                                                     // Suppression de la ligne lue de la chaîne de caractères
         }
 
         if (Bytes < BUFFER_SIZE)
@@ -198,11 +205,52 @@ int	Server::Stop_Server()
 }
 
 // to print log message from Server class
-void	Server::log(std::string const &logMsg)	const {
+void	Server::log(std::string const &logMsg)	const 
+{
 	std::cout << "\033[38;5;102m";
 	std::cout << "Server : " + _Name + " : " << logMsg << std::endl;
 	std::cout << "\033[m";
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //--------------------Getters--------------------
 std::string Server::Get_Name(void) const
