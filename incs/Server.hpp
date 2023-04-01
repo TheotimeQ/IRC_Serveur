@@ -38,9 +38,9 @@ const int BUFFER_SIZE = 1024;
 #define EVENT_NEW_DATA 		"Log: Data received : \n"
 #define EVENT_NEW_MSG 		"Log: Message sent : \n"
 
-#define EVENT_CHANNEL_CREATION_FAILED 	"Channel creation error : "
+// #define EVENT_CHANNEL_CREATION_FAILED 	"Channel creation error : "
 
-typedef std::map<std::string, Channel> t_mapChannel;
+// typedef std::map<std::string, Channel> t_mapChannel;
 
 class Server
 {
@@ -56,7 +56,7 @@ class Server
 		struct sockaddr_in6 _Server_Address;
 		struct pollfd 		_Poll_Set[MAX_CLIENTS + 1];
 		
-		t_mapChannel 		_Chan_List;
+		// t_mapChannel 		_Chan_List;
 
 
 		int		Setup_Client(Client Client);
@@ -100,6 +100,6 @@ class Server
 };
 
 std::ostream& operator<<(std::ostream& out, const Server& Server);
-std::ostream& operator<<(std::ostream& out, const t_mapChannel& ChanList);
+// std::ostream& operator<<(std::ostream& out, const t_mapChannel& ChanList);
 
 #endif

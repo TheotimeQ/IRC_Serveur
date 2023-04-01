@@ -198,11 +198,11 @@ int	Server::Stop_Server()
 }
 
 // to print log message from Server class
-void	Server::log(std::string const &logMsg)	const {
-	std::cout << "\033[38;5;102m";
-	std::cout << "Server : " + _Name + " : " << logMsg << std::endl;
-	std::cout << "\033[m";
-}
+// void	Server::log(std::string const &logMsg)	const {
+// 	std::cout << "\033[38;5;102m";
+// 	std::cout << "Server : " + _Name + " : " << logMsg << std::endl;
+// 	std::cout << "\033[m";
+// }
 
 //--------------------Getters--------------------
 std::string Server::Get_Name(void) const
@@ -239,15 +239,15 @@ std::ostream& operator<<(std::ostream &out, const Server &Server)
 	return (out);
 }
 
-std::ostream& operator<<(std::ostream &out, const t_mapChannel &ChanList) {
-	t_mapChannel::const_iterator	it;
+// std::ostream& operator<<(std::ostream &out, const t_mapChannel &ChanList) {
+// 	t_mapChannel::const_iterator	it;
 	
-	it = ChanList.begin();
-	while (it != ChanList.end()) {
-		if (it != ChanList.begin())
-			out << ", ";
-		out << it->first;
-		++it;
-	}
-	return (out);
-}
+// 	it = ChanList.begin();
+// 	while (it != ChanList.end()) {
+// 		if (it != ChanList.begin())
+// 			out << ", ";
+// 		out << it->first;
+// 		++it;
+// 	}
+// 	return (out);
+// }

@@ -54,7 +54,18 @@ CLASSES :
         Send()      : envoi un message au client
 
 
+// Principales commandes IRC lie :
 
+/join : Rejoindre un canal spécifique
+/part : Quitter un canal spécifique
+/topic : Modifier le sujet du canal
+/kick : Exclure un utilisateur du canal
+/mode : Modifier le mode du canal (public/privé, invite-seulement, etc.)
+/whois : Obtenir des informations sur un utilisateur du canal
+/list : Obtenir une liste des canaux disponibles sur le serveur
+/invite : Inviter un utilisateur à rejoindre le canal
+/msg #channel : Envoyer un message à tous les utilisateurs du canal
+/me : Envoyer un message d'action dans le canal
 
 
 
