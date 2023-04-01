@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelManager.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
+/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:10:11 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/01 09:56:41 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/01 10:43:47 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,20 +31,19 @@ class ChannelManager {
 	bool	isChannelExists(std::string const &channelName)	const;
 	void	log(std::string const &logMsg)					const;
 
+	void	tryAddNewChannel(std::string const &name, Client &chop);
+	void	rmChannel(std::string const &name);
+
  public :
 	ChannelManager();
 	~ChannelManager();
 	ChannelManager(ChannelManager const &ori);
 	ChannelManager	&operator=(ChannelManager const &righty);
 
-	void	tryAddNewChannel(std::string const &name, Client &chop);
-	void	rmChannel(std::string const &name);
+	t_mapChannel const	&getChanList() const;
 
 	void	addClientToChannel(Client &user, std::string const &channelName);
-	// [+] addclient to a channel
-	// remove client from a channel (check si channel est vide apres)
-
-
+	void	rmClientToChannel(Client &user, std::string const &channelName);
 
 };
 

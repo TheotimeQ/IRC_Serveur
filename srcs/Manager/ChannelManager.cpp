@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/01 09:54:00 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/01 10:26:20 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,27 @@ ChannelManager	&ChannelManager::operator=(ChannelManager const &righty) {
 
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ public methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+// if user is already in channel, nothing happens
+void	ChannelManager::addClientToChannel(Client &user, std::string const &channelName) {
+	if (!isChannelExists(channelName))
+		tryAddNewChannel(channelName, user);
+	if (isChannelExists(channelName)) {
+		_chanList[channelName].addUser(user);
+	}
+}
+
+// After removing a user, check if channel is empty to remove it
+void	ChannelManager::rmClientToChannel(Client &user, std::string const &channelName) {
+	if (!isChannelExists(channelName))
+		return; // [?] besoin de gerer erreure ici ?
+	_chanList[channelName].delUser(user);
+	if (_chanList[channelName].getUsers().size() < 1)
+		rmChannel(channelName);
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ private methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
 void	ChannelManager::tryAddNewChannel(std::string const &name, Client &chop) {
 	try {
 		t_mapChannel::iterator	it;
@@ -56,31 +77,12 @@ void	ChannelManager::rmChannel(std::string const &name) {
 	}
 }
 
-void	ChannelManager::addClientToChannel(Client &user, std::string const &channelName) {
-	if (!isChannelExists(channelName))
-		tryAddNewChannel(channelName, user);
-	if (isChannelExists(channelName)) {
-		_chanList[channelName].addUser(user);
-	}
-
-}
-
-
-
-
-
-
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ private methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-
 bool	ChannelManager::isChannelExists(std::string const &channelName) const {
 	t_mapChannel::const_iterator	it;
 
 	it = _chanList.find(channelName);
 	return (it != _chanList.end() ? true : false);
 }
-
-
-
 
 
 // to print log message from  ChannelManager class
@@ -90,7 +92,9 @@ void	ChannelManager::log(std::string const &logMsg)	const {
 	std::cout << "\033[m";
 }
 
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~ getter setters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
+t_mapChannel const	&ChannelManager::getChanList() const { return _chanList; }
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~ operator overload ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 std::ostream& operator<<(std::ostream &out, const t_mapChannel &ChanList) {
