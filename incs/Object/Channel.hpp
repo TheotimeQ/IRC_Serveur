@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 11:17:45 by loumarti          #+#    #+#             */
-/*   Updated: 2023/03/31 11:21:32 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/01 13:43:12 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ Parameters: <channel> {[+|-]|o|p|s|i|t|n|b|v} [<limit>] [<user>]
 
 */
 # define CHERR_FORMAT			"channel name format : <#name>"
+# define CHERR_FORMAT_PRE		"channel name must start with # or !"
 # define CHERR_FORMAT_TOOLONG	"channel name can't exceed 200 character long"
 # define CHERR_FORMAT_FCHAR		"channel name can't have spaces, coma or semicolon"
 
@@ -76,10 +77,18 @@ Parameters: <channel> {[+|-]|o|p|s|i|t|n|b|v} [<limit>] [<user>]
 
 // Des qu'on veut lister des client : une map <Username, Client>
 // Client passe par reference & ?
-typedef std::map<std::string, Client> t_mapClient;
+
+
+typedef struct s_clientData {
+	Client	him;
+	bool	creator;
+	bool	chop;
+
+}	t_clientData;
+
+typedef std::map<std::string, t_clientData> t_mapClient;
 
 typedef struct s_chanmode {
-	t_mapClient		o;	// liste des users avec mode chanop;
 	bool			p;	// private channel flag;
 	bool			s;	// secret channel flag;
 	bool			i;	// invite-only channel flag;
@@ -93,19 +102,17 @@ typedef struct s_chanmode {
 
 class Channel {
  private :
- 	
 	
 	std::string			_name;
-	Client				_chop; // channel operator
 	t_mapClient			_users;
 	std::string			_topic;
 	t_chanmode			_mode; // all mode data
 
 	/* private methods */
-	void				checkChanName(std::string const &name) const;
-	void				initChanmode();
+	void				checkChanName(std::string const &name);
+	void				dealUsersStatus(Client &chop);
+	void				initChannel();
 	void				log(std::string const &logMsg)	const;
-	
 
  public :
 	Channel(); // besoin pour utiliser en map avec []
@@ -117,7 +124,6 @@ class Channel {
 
 	std::string const	&getName()		const;
 	t_mapClient const	&getUsers()		const;
-	Client const		&getChop()		const;
 	std::string const	&getTopic()		const;
 	t_chanmode const	&getChanmode()	const;
 	void				setTopic(std::string const &newTopic);

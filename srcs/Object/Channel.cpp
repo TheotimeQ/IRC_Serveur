@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
+/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 10:18:15 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/01 11:59:12 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/01 13:48:54 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,32 +14,29 @@
 
 // public pour faire une liste de map
 Channel::Channel()
-: _name("#default"), _chop(Client())
+: _name("#default")
 {
-	initChanmode();
+	initChannel();
 }
 
 Channel::~Channel() {
-	log(" is destroyed");
+	//log(" is destroyed");
 }
 
 // Utiliser un try-catch pour creer un channel -> throw exceptions
 Channel::Channel(std::string const &name, Client &chop) 
-: _name(name), _chop(chop) , _topic("")
+: _topic("")
 {
-	log(" creation in progress");
+	//log(" creation in progress");
+	initChannel();
 	checkChanName(name);
-	initChanmode();
-	_mode.o[chop._UserName] = chop;
-	_users[chop._UserName] = chop;
+	dealUsersStatus(chop);
 }
 
 
 ///////////////////////* getters setters */////////////////////////
 
 std::string const	&Channel::getName() const { return _name; }
-
-Client const		&Channel::getChop() const { return _chop; }
 
 t_mapClient const	&Channel::getUsers() const { return _users; }
 
@@ -68,40 +65,50 @@ void				Channel::announce(std::string msg) const {
 
 // if user is already in channel, nothing happens
 void				Channel::addUser(Client const &newUser) {
-	_users[newUser._UserName] = newUser;
+	t_clientData newData;
+
+	newData.him = newUser;
+	newData.chop = false;
+	newData.creator = false;
+	_users[newUser._UserName] = newData;
 }
 
-
-// Si le chanop(1er createur) est del -> quelle gestion prevoir ? Rien pour le moment
 // delete an user from channel
 void				Channel::delUser(Client const &userToDel) {
 	t_mapClient::iterator	it;
 
 	it = _users.find(userToDel._UserName);
 	if (it != _users.end()) {
-		rmOpPrivilege(it->first);
 		_users.erase(it);
 	}
 }
 
 // remove an user from channel operator map -> nothing happens if not in map
+// aura surment besoin de 
 void				Channel::rmOpPrivilege(std::string const &username) {
 	t_mapClient::iterator	it;
 
-	it = _mode.o.find(username);
-	if (it != _mode.o.end()) {
-		_mode.o.erase(it);
+	it = _users.find(username);
+	if (it != _users.end()) {
+		if (it->second.chop == true) {
+			log("removing channel operatore privilege to " + it->first);
+			it->second.chop = false;
+		} else{
+			log(it->first + " is not channel operator, can't remove privilege");
+		}
 	}
 }
 
 
 ////////////////////////* private methods *////////////////////////
 
-// channel's name is [200]length prefixed by &, #, +, ! => on va garder que '#'
+// channel's name is [200]length prefixed by &, #, +, ! => gestion de '#' et '!'
 // forbidden characters : space, comma, semi-colon
-void				Channel::checkChanName(std::string const &name) const {
-	if (name.size() < 2 || name[0] != '#')
+void			Channel::checkChanName(std::string const &name) {
+	if (name.size() < 2)
 		throw ErrorMsgException(CHERR_FORMAT);
+	else if ((name[0] != '#' && name[0] != '!'))
+		throw ErrorMsgException(CHERR_FORMAT_PRE);
 	else if (name.size() > 200)
 		throw ErrorMsgException(CHERR_FORMAT_TOOLONG);
 	for (unsigned i = 0; i < name.size(); ++i) {
@@ -110,16 +117,22 @@ void				Channel::checkChanName(std::string const &name) const {
 	}
 }
 
+// manage status/privilege channel operator + channel creator
+void				Channel::dealUsersStatus(Client &chop) {
+	t_clientData	newData;
+	
+	if (_name[0] == '!') {
+		_name[0] = '#';
+		newData.creator = true;
+	}
+	newData.chop = true;
+	_users[chop._UserName] = newData;
+}
+
 // can't use memset or bzero because there is a std::map<> in t_chanmode struct
-void				Channel::initChanmode() {
-	_mode.o.clear(); // probably useless
-	_mode.p = false;
-	_mode.s = false;
-	_mode.i = false;
-	_mode.t = false;
-	_mode.n = false;
-	_mode.m = false;
-	_mode.l = 0;
+void				Channel::initChannel() {
+	bzero(&_mode, sizeof(t_chanmode));
+	_users.clear();
 }
 
 // to print log message from Channel class
@@ -136,9 +149,14 @@ std::ostream	&operator<<(std::ostream &o, t_mapClient const &users) {
 	t_mapClient::const_iterator	it = users.begin();
 
 	while (it != users.end()) {
+		if (it->second.creator == true) {
+			o << "!"; // channel creator tag (maybe it should be ~ instead)
+		} else if (it->second.chop == true) {
+			o << "@"; // channel operator tag
+		}
 		if (it != users.begin())
 			o << ", ";
-		o << it->second._UserName;
+		o << it->second.him._NickName;
 		it++;
 	}
 	return o;
@@ -147,8 +165,6 @@ std::ostream	&operator<<(std::ostream &o, t_mapClient const &users) {
 std::ostream	&operator<<(std::ostream &o, Channel const &channel) {
 	o << "channel : ";
 	o << channel.getName();
-	o << " -- operator : ";
-	o << channel.getChop();
 	o << " -- users : ";
 	o << channel.getUsers();
 	/* add here if need displaying chan modes*/
