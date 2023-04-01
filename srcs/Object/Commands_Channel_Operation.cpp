@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:09:32 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/01 16:11:18 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/01 16:12:58 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void  JOIN_Command::Execute(Client &Client, std::vector<std::string> Args, std::
     this->Send_Cmd(Client._Client_Socket,":IRC MODE #test +nt \n");
     this->Send_Cmd(Client._Client_Socket,":IRC 353 Zel = #test :@Zel Tristan\n");
     this->Send_Cmd(Client._Client_Socket,":IRC 366 Zel #test :End of /NAMES list \n");
-    this->Send_Cmd(Client._Client_Socket,":IRC 475 Zel #test :Cannot join channel (+k) - bad key \n");
+    // this->Send_Cmd(Client._Client_Socket,":IRC 475 Zel #test :Cannot join channel (+k) - bad key \n");
 }
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.2
