@@ -1,5 +1,5 @@
-#ifndef Server_HPP
-#define Server_HPP
+#ifndef SERVER_HPP
+#define SERVER_HPP
 
 #include <string>
 #include <iostream>
@@ -18,6 +18,9 @@
 
 #include "../incs/Client.hpp"
 #include "../incs/Channel.hpp"
+#include "../incs/Message_Manager.hpp"
+#include "../incs/Channel_Manager.hpp"
+#include "../incs/Command_Manager.hpp"
 
 const int MAX_CLIENTS = 10;
 const int BUFFER_SIZE = 1024;
@@ -30,13 +33,14 @@ const int BUFFER_SIZE = 1024;
 #define ERROR_CONNECTION 	"Error: Can't while accept new client"
 #define ERROR_DATA 			"Error: Can't while getting data from client"
 #define ERROR_MAX_CLIENT	"Error: Can't add new client , max reached"
-#define ERROR_SEND_MSG 		"Error: Can't send message : \n"
 #define ERROR_DATA 			"Error: Can't while getting data from client"
 
 #define EVENT_NEW_CLIENT 	"Log: New connection"
 #define EVENT_DECONNECTED 	"Log: Client deconnected : "
+
+
+
 #define EVENT_NEW_DATA 		"Log: Data received : \n"
-#define EVENT_NEW_MSG 		"Log: Message sent : \n"
 
 // #define EVENT_CHANNEL_CREATION_FAILED 	"Channel creation error : "
 
@@ -49,8 +53,8 @@ class Server
 
 		std::string 		_Name;
 		int 				_Port;
-        Client              _Clients[MAX_CLIENTS];
 		int					_Nb_Clients;
+        Client              _Clients[MAX_CLIENTS];
 
 		int					_Server_Socket;
 		struct sockaddr_in6 _Server_Address;
@@ -58,40 +62,28 @@ class Server
 		
 		// t_mapChannel 		_Chan_List;
 
+		// Channel_Manager		_ChnMng;
+		Message_Manager		_MsgMng;
+		Command_Manager		_CmdMng;
 
 		int		Setup_Client(Client Client);
 		void	Deconnect_Client(int index);
-
 		int 	Get_Data(int socket_fd, std::vector<std::string>& Data);
-		int		Interpret_Data(std::vector<std::string>& Data, Client &Client);
-
-		int		Send_Message(int client_sock, const std::string& message);
+		void	log(std::string const &logMsg)	const;
 		
 		/* Channel deal with methods */ // private for now
-		void	Try_Add_New_Channel(std::string const &name, Client &chop);
-		void	Rm_Channel(std::string const &name);
-		void	log(std::string const &logMsg)	const;
+		// void	Try_Add_New_Channel(std::string const &name, Client &chop);
+		// void	Rm_Channel(std::string const &name);
+		// void	log(std::string const &logMsg)	const;
 		
 	public:
 		
-	
 		Server(const std::string& name, int port); 
 		~Server();
 
-	    int		Start_Server();     //CONST ? 
+	    int		Start_Server();
         int		Run(); 
         int		Stop_Server();
-	
-		
-
-		// class Error : public std::exception
-		// {
-		// 	public:
-		// 		const char* what() const throw()
-		// 		{
-		// 			return "Error: Server";
-		// 		}
-		// };
 
 		std::string Get_Name(void)  			const;
         int			Get_Port(void)  			const;

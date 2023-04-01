@@ -1,8 +1,28 @@
-#include "../incs/Irc.hpp"
-#include "../incs/Server.hpp"
-#include "../incs/Client.hpp"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Command_Manager.cpp                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/01 08:32:08 by tquere            #+#    #+#             */
+/*   Updated: 2023/04/01 08:49:24 by tquere           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-void Tokenize(std::string const &str, const char delim, std::vector<std::string> &out) 
+#include "../incs/Command_Manager.hpp"
+
+Command_Manager::Command_Manager()
+{
+	return;
+}
+
+Command_Manager::~Command_Manager()
+{
+	return;
+}
+
+void Command_Manager::Tokenize(std::string const &str, const char delim, std::vector<std::string> &out) 
 { 
     // construct a stream from the string 
     std::stringstream ss(str); 
@@ -13,7 +33,7 @@ void Tokenize(std::string const &str, const char delim, std::vector<std::string>
     } 
 } 
 
-int	Server::Interpret_Data(std::vector<std::string>& Data, Client &Client)
+int	Command_Manager::Interpret_Data(std::vector<std::string>& Data, Client &Client)
 {
     for (std::vector<std::string>::const_iterator it = Data.begin(); it != Data.end(); ++it) 
     {
@@ -41,7 +61,7 @@ int	Server::Interpret_Data(std::vector<std::string>& Data, Client &Client)
         if (strncmp(arg[0].c_str(),"PASS",4) == 0)
         {
             Client.Set_Password(arg[1]);
-            this->Send_Message(Client._Client_Socket,":IRC 001 Zel :BIENVENU SUR LE Server IRC\n ");
+            // this->Send_Message(Client._Client_Socket,":IRC 001 Zel :BIENVENU SUR LE Server IRC\n ");
         }
         // QUIT
         // JOIN

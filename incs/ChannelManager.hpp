@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:10:11 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/01 08:50:05 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/01 08:57:11 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include "Server.hpp"
 
-#define ERRCHAN_CREATION 	"channel creation error : "
+# define ERRCHAN_CREATION 	"channel creation error : "
 
 typedef std::map<std::string, Channel>		t_mapChannel;
 
