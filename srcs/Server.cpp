@@ -55,27 +55,27 @@ int	Server::Start_Server()
 
 int	Server::Run()
 {
-	// [ajout de mes tests channel ici]
-	Client clientTest = Client();
-	log("channel list : ");
-	std::cout << _Chan_List << std::endl;
+	// // [ajout de mes tests channel ici]
+	// Client clientTest = Client();
+	// log("channel list : ");
+	// std::cout << _Chan_List << std::endl;
 	
-	Try_Add_New_Channel("#SuperGenialChannel", clientTest);
-	Try_Add_New_Channel("#SuperGenialChannel", clientTest);
-	Try_Add_New_Channel("#SuperGenia:lChannel", clientTest);
-	Try_Add_New_Channel("#SuperGenialChannelEncorePlus", clientTest);
-	Try_Add_New_Channel("#CeChannelSpouerk", clientTest);
-	Try_Add_New_Channel("#ChannelLouche", clientTest);
-	Try_Add_New_Channel("#ChannelPourPervers", clientTest);
-	Try_Add_New_Channel("#Channel_musique_classique", clientTest);
+	// Try_Add_New_Channel("#SuperGenialChannel", clientTest);
+	// Try_Add_New_Channel("#SuperGenialChannel", clientTest);
+	// Try_Add_New_Channel("#SuperGenia:lChannel", clientTest);
+	// Try_Add_New_Channel("#SuperGenialChannelEncorePlus", clientTest);
+	// Try_Add_New_Channel("#CeChannelSpouerk", clientTest);
+	// Try_Add_New_Channel("#ChannelLouche", clientTest);
+	// Try_Add_New_Channel("#ChannelPourPervers", clientTest);
+	// Try_Add_New_Channel("#Channel_musique_classique", clientTest);
 	
-	std::cout << _Chan_List << std::endl;
+	// std::cout << _Chan_List << std::endl;
 	
-	Rm_Channel("#channel_inexistant");
-	Rm_Channel("#CeChannelSpouerk");
+	// Rm_Channel("#channel_inexistant");
+	// Rm_Channel("#CeChannelSpouerk");
 	
-	std::cout << _Chan_List << std::endl;
-	// [fin de mes tests channel]
+	// std::cout << _Chan_List << std::endl;
+	// // [fin de mes tests channel]
 	
     while (true) 
     {
@@ -191,82 +191,10 @@ int Server::Get_Data(int socket_fd, std::vector<std::string>& All_Data)
     return GOOD;
 }
 
-void tokenize(std::string const &str, const char delim, std::vector<std::string> &out) 
-{ 
-    // construct a stream from the string 
-    std::stringstream ss(str); 
- 
-    std::string s; 
-    while (std::getline(ss, s, delim)) { 
-        out.push_back(s); 
-    } 
-} 
-
-int	Server::Interpret_Data(std::vector<std::string>& Data, Client &Client)
-{
-    for (std::vector<std::string>::const_iterator it = Data.begin(); it != Data.end(); ++it) 
-    {
-        std::cout << Client.Get_UserName() << " -> " << *it << std::endl;
-        
-        //Interpretation des données
-        std::vector<std::string> arg; 
-        tokenize(*it, ' ', arg); 
-
-        //POUR CHAQUE COMMANDE , VERIFIER QUE ON A ASSEZ D'ARGUMENT
-
-        // CAP
-        // PASS
-
-        // NICK
-        if (strncmp(arg[0].c_str(),"NICK",4) == 0)
-        {
-            Client.Set_NickName(arg[1]);
-        }
-        // USER
-        if (strncmp(arg[0].c_str(),"USER",4) == 0)
-        {
-            Client.Set_UserName(arg[1]);
-        }
-        if (strncmp(arg[0].c_str(),"PASS",4) == 0)
-        {
-            Client.Set_Password(arg[1]);
-        }
-        // QUIT
-        // JOIN
-    }
-    return GOOD;
-}
-
 int	Server::Stop_Server()
 {
     close(_Server_Socket);
     return GOOD;
-}
-
-/* Channel deal with methods */ // private for now
-
-void	Server::Try_Add_New_Channel(std::string const &name, Client &chop) {
-	try {
-		t_mapChannel::iterator	it;
-		it = _Chan_List.find(name);
-		if (it != _Chan_List.end())
-			throw Channel::ErrorMsgException("this Channel already exists");
-		_Chan_List[name] = Channel(name, chop);
-	} catch(Channel::ErrorMsgException &e) {
-		log(std::string(EVENT_CHANNEL_CREATION_FAILED) + e.what());
-		//std::cout << EVENT_CHANNEL_CREATION_FAILED << e.what() << std::endl;
-		// [+] envoyer un message retour au client qui a mal fait son /join
-	}
-}
-
-void	Server::Rm_Channel(std::string const &name) {
-	t_mapChannel::iterator	it;
-	
-	it = _Chan_List.find(name);
-	if (it != _Chan_List.end()) {
-		_Chan_List.erase(it);
-		log("Deleting channel : " + name);
-	}
 }
 
 // to print log message from Server class
@@ -275,39 +203,6 @@ void	Server::log(std::string const &logMsg)	const {
 	std::cout << "Server : " + _Name + " : " << logMsg << std::endl;
 	std::cout << "\033[m";
 }
-
-// void Print_Data(const std::vector<std::string>& lignes) {
-//     for (std::vector<std::string>::const_iterator it = lignes.begin(); it != lignes.end(); ++it) 
-//     {
-//         std::cout << EVENT_NEW_DATA << *it << std::endl;
-//     }
-// }
-
-//A modifier pour prendre un objet message en parametre
-// int Server::Send_Message(int client_sock, const std::string& message) 
-// {
-//     int bytes_sent = send(client_sock, message.c_str(), message.size(), 0);
-//     if (bytes_sent == -1) 
-//     {
-//         std::cerr << ERROR_SEND_MSG << strerror(errno) << std::endl;
-//         return ERROR;
-//     }
-//     std::cout << EVENT_NEW_MSG << message << std::endl;
-//     return GOOD;
-// }
-
-// void Server::Send_Response(void)
-// {
-//     // SEND LE MESSAGE 
-//     // if (strncmp(buffer, "JOIN",4) == 0)
-//     // {
-//     //     this->Send_Message(client_sock,":IRC 332 Zel test :cannal_de_test\n");
-//     //     this->Send_Message(client_sock,":IRC 353 Zel = test :Zel Jerem Tristan\n");
-//     //     this->Send_Message(client_sock,":IRC 356 Zel test :cannal_de_test\n");                            
-//     // }
-//     // else
-//     //     this->Send_Message(client_sock,":IRC 001 Zel :BIENVENU SUR LE Server IRC\n ");
-// }
 
 //--------------------Getters--------------------
 std::string Server::Get_Name(void) const

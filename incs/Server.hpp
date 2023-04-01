@@ -55,6 +55,7 @@ class Server
 		int					_Server_Socket;
 		struct sockaddr_in6 _Server_Address;
 		struct pollfd 		_Poll_Set[MAX_CLIENTS + 1];
+		
 		t_mapChannel 		_Chan_List;
 
 
@@ -63,6 +64,8 @@ class Server
 
 		int 	Get_Data(int socket_fd, std::vector<std::string>& Data);
 		int		Interpret_Data(std::vector<std::string>& Data, Client &Client);
+
+		int		Send_Message(int client_sock, const std::string& message);
 		
 		/* Channel deal with methods */ // private for now
 		void	Try_Add_New_Channel(std::string const &name, Client &chop);
