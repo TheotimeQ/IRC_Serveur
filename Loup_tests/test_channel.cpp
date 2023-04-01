@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 11:59:50 by loumarti          #+#    #+#             */
-/*   Updated: 2023/03/31 10:26:35 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/01 13:50:05 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,34 @@
 #include <exception>
 
 int main() {
+
+
+// /*	coucou je reviens degueulasser ta partie avec des test */
+// 	Client leChef = Client(); 
+// 	Client unPelo = Client();
+// 	Client unePelotte = Client();
+
+// 	leChef._NickName = "leChef_n";
+// 	leChef._UserName = "M. Boss_u";
+// 	unPelo._NickName = "unPelo_n";
+// 	unPelo._UserName = "pelo_u";
+// 	unePelotte._NickName = "unePelotte_n";
+// 	unePelotte._UserName = "pelotte_u";
+
+// 	_ChnMng.addClientToChannel(leChef, "#mauvaisCannal::");
+// 	_ChnMng.addClientToChannel(leChef, "MauvaisCannal2");
+// 	_ChnMng.addClientToChannel(leChef, "#GoodCannal");
+// 	_ChnMng.addClientToChannel(unePelotte, "#SuperCoolishCannal");
+
+// 	std::cout << "chanList : " << _ChnMng.getChanList() << std::endl;
+
+// 	_ChnMng.rmClientToChannel(unePelotte, "#SuperCoolishCannal");
+
+// 	std::cout << "chanList : " << _ChnMng.getChanList() << std::endl;
+
+// /*	end tests */
+
+
 
 	Client leChef = Client(); 
 	Client unPelo = Client();

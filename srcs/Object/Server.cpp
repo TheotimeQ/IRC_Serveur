@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
+/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:50:43 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/01 10:50:52 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/01 13:50:23 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,10 +95,10 @@ int	Server::Run()
                 {
                     std::vector<std::string> Data;
 
-                    if(this->Get_Data(_Poll_Set[i].fd, Data))
+                    if(this->Get_Data(this->_Clients[i - 1], Data))
                         this->Deconnect_Client(i);
                     else
-                        this->_CmdMng.Interpret_Data(Data, this->_Clients[i - 1]);//, _Chan_List);
+                        this->_CmdMng.Interpret_Data(Data, this->_Clients[i - 1], _ChnMng.getChanList());
                 }
             }
         }
@@ -136,7 +136,7 @@ int Server::Setup_Client(Client Client)
 
 void Server::Deconnect_Client(int index)
 {
-    std::cout << EVENT_DECONNECTED << _Clients[index - 1].Get_UserName() << std::endl;
+    std::cout << EVENT_DECONNECTED << _Clients[index - 1]._UserName << std::endl;
 
     //Ferme le socket
     close(_Clients[index - 1]._Client_Socket);
@@ -152,22 +152,21 @@ void Server::Deconnect_Client(int index)
     --_Nb_Clients;
 }
 
-int Server::Get_Data(int socket_fd, std::vector<std::string>& All_Data) 
+int Server::Get_Data(Client &Client, std::vector<std::string>& All_Data) 
 {
-    char            Buffer[BUFFER_SIZE];
-    std::string     Data;
+    char            Buffer[BUFFER_SIZE];  
     ssize_t         Bytes;
 
     // Lecture du socket tant qu'il y a des données à lire
-    while ((Bytes = recv(socket_fd, Buffer, BUFFER_SIZE, 0)) > 0) 
+    while ((Bytes = recv(Client._Client_Socket, Buffer, BUFFER_SIZE, 0)) > 0) 
     {
-        Data.append(Buffer, Bytes);                                                     // Ajout des données lues dans la chaîne de caractères
+        Client._Data.append(Buffer, Bytes);                                                             // Ajout des données lues dans la chaîne de caractères
         size_t pos;
 
-        while ((pos = Data.find("\n")) != std::string::npos && Data.length() != 0) {    // Recherche de la première occurrence de "\n"
-            std::string ligne = Data.substr(0, pos);                                    // Extraction de la ligne
+        while ((pos = Client._Data.find("\n")) != std::string::npos && Client._Data.length() != 0) {    // Recherche de la première occurrence de "\n"
+            std::string ligne = Client._Data.substr(0, pos);                                            // Extraction de la ligne
             All_Data.push_back(ligne);  
-            Data.erase(0, pos + 1);                                                     // Suppression de la ligne lue de la chaîne de caractères
+            Client._Data.erase(0, pos + 1);                                                             // Suppression de la ligne lue de la chaîne de caractères
         }
 
         if (Bytes < BUFFER_SIZE)
@@ -187,16 +186,6 @@ int	Server::Stop_Server()
     close(_Server_Socket);
     return GOOD;
 }
-
-// to print log message from Server class
-// void	Server::log(std::string const &logMsg)	const {
-// 	std::cout << "\033[38;5;102m";
-// 	std::cout << "Server : " + _Name + " : " << logMsg << std::endl;
-// 	std::cout << "\033[m";
-// }
-
-
-
 
 
 
@@ -265,20 +254,7 @@ std::ostream& operator<<(std::ostream &out, const Server &Server)
 	out << Server.Get_Port()      << std::endl;
     for (int i = 0; i < Server.Get_Nb_Client() - 1; i++)
     {
-        out << Server.Get_Clients(i).Get_UserName() << " | " << Server.Get_Clients(i)._Client_Socket << std::endl;
+        out << Server.Get_Clients(i)._UserName << " | " << Server.Get_Clients(i)._Client_Socket << std::endl;
     }
 	return (out);
 }
-
-// std::ostream& operator<<(std::ostream &out, const t_mapChannel &ChanList) {
-// 	t_mapChannel::const_iterator	it;
-	
-// 	it = ChanList.begin();
-// 	while (it != ChanList.end()) {
-// 		if (it != ChanList.begin())
-// 			out << ", ";
-// 		out << it->first;
-// 		++it;
-// 	}
-// 	return (out);
-// }

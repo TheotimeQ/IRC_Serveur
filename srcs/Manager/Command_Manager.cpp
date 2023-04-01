@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:32:08 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/01 10:51:48 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/01 13:12:05 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,38 @@
 
 Command_Manager::Command_Manager()
 {
-    Cmd_List["JOIN"] = new Join_Command();
-    Cmd_List["KICK"] = new Kick_Command();
-    Cmd_List["NICK"] = new Nick_Command();
-    Cmd_List["USER"] = new User_Command();
+    //Authentification
+    Cmd_List["NICK"]    = new NICK_Command(); 
+    Cmd_List["USER"]    = new USER_Command();
+    Cmd_List["PASS"]    = new PASS_Command();
+    Cmd_List["OPER"]    = new OPER_Command();
+    Cmd_List["MODE"]    = new MODE_Command();
+
+    //Nickname
+    Cmd_List["WHOIS"]   = new WHOIS_Command(); 
+    Cmd_List["NAMES"]   = new NAMES_Command(); 
+    Cmd_List["WHO"]     = new WHO_Command(); 
+
+    //Channel
+    Cmd_List["JOIN"]    = new JOIN_Command(); 
+    Cmd_List["INVITE"]  = new INVITE_Command(); 
+    Cmd_List["LIST"]    = new LIST_Command(); 
+    Cmd_List["PART"]    = new PART_Command();
+    Cmd_List["QUIT"]    = new QUIT_Command();  
+
+    //Envoyer un message prive
+    Cmd_List["QUERY"]   = new QUERY_Command(); 
+    Cmd_List["MSG"]     = new MSG_Command();
+    Cmd_List["NOTICE"]  = new NOTICE_Command();  
+
+    //Operateur
+    Cmd_List["KICK"]    = new KICK_Command();
+    Cmd_List["BAN"]     = new BAN_Command();  
+    Cmd_List["UNBAN"]   = new UNBAN_Command(); 
+    Cmd_List["TOPIC"]   = new TOPIC_Command(); 
+    Cmd_List["KILL"]    = new KILL_Command();  
+    Cmd_List["GLOBOPS"] = new GLOBOPS_Command();
+    Cmd_List["RESTART"] = new RESTART_Command();
 
     return;
 }
@@ -55,11 +83,10 @@ void Command_Manager::Tokenize(std::string const &str, const char delim, std::ve
     } 
 } 
 
-int Command_Manager::Interpret_Data(std::vector<std::string>& Data, Client &Client)
+int Command_Manager::Interpret_Data(std::vector<std::string>& Data, Client &Client, std::map<std::string, Channel>  Channels)
 {
     for (std::vector<std::string>::const_iterator it = Data.begin(); it != Data.end(); ++it) 
     {
-        // std::cout << Client.Get_UserName() << " -> " << *it << std::endl;
         std::vector<std::string> Args; 
 
         Tokenize(*it, ' ', Args); 

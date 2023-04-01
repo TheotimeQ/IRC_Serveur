@@ -36,18 +36,10 @@ const int BUFFER_SIZE = 1024;
 
 #define EVENT_NEW_CLIENT 	"Log: New connection"
 #define EVENT_DECONNECTED 	"Log: Client deconnected : "
-
-
-
 #define EVENT_NEW_DATA 		"Log: Data received : \n"
-
-// #define EVENT_CHANNEL_CREATION_FAILED 	"Channel creation error : "
-
-// typedef std::map<std::string, Channel> t_mapChannel;
 
 class Server
 {
-
 	private:
 
 		std::string 		_Name;
@@ -58,21 +50,15 @@ class Server
 		int					_Server_Socket;
 		struct sockaddr_in6 _Server_Address;
 		struct pollfd 		_Poll_Set[MAX_CLIENTS + 1];
-		
-		// t_mapChannel 		_Chan_List;
 
 		ChannelManager		_ChnMng;
 		Command_Manager		_CmdMng;
 
 		int		Setup_Client(Client Client);
 		void	Deconnect_Client(int index);
-		int 	Get_Data(int socket_fd, std::vector<std::string>& Data);
+		int 	Get_Data(Client &Client, std::vector<std::string>& Data);
 		void	log(std::string const &logMsg)	const;
-		
-		/* Channel deal with methods */ // private for now
-		// void	Try_Add_New_Channel(std::string const &name, Client &chop);
-		// void	Rm_Channel(std::string const &name);
-		// void	log(std::string const &logMsg)	const;
+
 		
 	public:
 		
@@ -90,6 +76,5 @@ class Server
 };
 
 std::ostream& operator<<(std::ostream& out, const Server& Server);
-// std::ostream& operator<<(std::ostream& out, const t_mapChannel& ChanList);
 
 #endif

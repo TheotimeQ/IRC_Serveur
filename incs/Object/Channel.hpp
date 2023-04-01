@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 11:17:45 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/01 13:11:47 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/01 13:43:12 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ Parameters: <channel> {[+|-]|o|p|s|i|t|n|b|v} [<limit>] [<user>]
 
 */
 # define CHERR_FORMAT			"channel name format : <#name>"
+# define CHERR_FORMAT_PRE		"channel name must start with # or !"
 # define CHERR_FORMAT_TOOLONG	"channel name can't exceed 200 character long"
 # define CHERR_FORMAT_FCHAR		"channel name can't have spaces, coma or semicolon"
 

@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 10:18:15 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/01 13:16:46 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/01 13:48:54 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@ Channel::Channel()
 }
 
 Channel::~Channel() {
-	log(" is destroyed");
+	//log(" is destroyed");
 }
 
 // Utiliser un try-catch pour creer un channel -> throw exceptions
 Channel::Channel(std::string const &name, Client &chop) 
 : _topic("")
 {
-	log(" creation in progress");
+	//log(" creation in progress");
 	initChannel();
 	checkChanName(name);
 	dealUsersStatus(chop);
@@ -70,14 +70,14 @@ void				Channel::addUser(Client const &newUser) {
 	newData.him = newUser;
 	newData.chop = false;
 	newData.creator = false;
-	_users[newUser.Get_UserName()] = newData;
+	_users[newUser._UserName] = newData;
 }
 
 // delete an user from channel
 void				Channel::delUser(Client const &userToDel) {
 	t_mapClient::iterator	it;
 
-	it = _users.find(userToDel.Get_UserName());
+	it = _users.find(userToDel._UserName);
 	if (it != _users.end()) {
 		_users.erase(it);
 	}
@@ -105,8 +105,10 @@ void				Channel::rmOpPrivilege(std::string const &username) {
 // channel's name is [200]length prefixed by &, #, +, ! => gestion de '#' et '!'
 // forbidden characters : space, comma, semi-colon
 void			Channel::checkChanName(std::string const &name) {
-	if (name.size() < 2 || name[0] != '#' || name[0] != '!')
+	if (name.size() < 2)
 		throw ErrorMsgException(CHERR_FORMAT);
+	else if ((name[0] != '#' && name[0] != '!'))
+		throw ErrorMsgException(CHERR_FORMAT_PRE);
 	else if (name.size() > 200)
 		throw ErrorMsgException(CHERR_FORMAT_TOOLONG);
 	for (unsigned i = 0; i < name.size(); ++i) {
@@ -124,7 +126,7 @@ void				Channel::dealUsersStatus(Client &chop) {
 		newData.creator = true;
 	}
 	newData.chop = true;
-	_users[chop.Get_UserName()] = newData;
+	_users[chop._UserName] = newData;
 }
 
 // can't use memset or bzero because there is a std::map<> in t_chanmode struct
@@ -154,7 +156,7 @@ std::ostream	&operator<<(std::ostream &o, t_mapClient const &users) {
 		}
 		if (it != users.begin())
 			o << ", ";
-		o << it->second.him.Get_NickName();
+		o << it->second.him._NickName;
 		it++;
 	}
 	return o;

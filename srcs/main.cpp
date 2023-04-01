@@ -2,9 +2,6 @@
 #include "../incs/Object/Server.hpp"
 #include "../incs/Object/Client.hpp"
 
-#define SERVER_NAME "IRC"
-#define SERVER_PORT 6667
-
 int main(){
 
     Server Serv = Server(SERVER_NAME, SERVER_PORT);

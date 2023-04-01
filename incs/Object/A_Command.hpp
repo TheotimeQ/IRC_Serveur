@@ -2,13 +2,18 @@
 #define A_COMMAND_HPP
 
 #include <iostream>
+#include <string>
 #include <cerrno>
 #include <vector>
+#include <map>
 #include <sstream>
+
+#include <string>
+#include <cstring>
 
 #include "../Irc.hpp"
 #include "../Object/Client.hpp"
-#include "../Object/Message.hpp"
+#include "../Object/Channel.hpp"
 
 #define ERROR_SEND_MSG 		"Error: Can't send message : \n"
 
@@ -25,7 +30,7 @@ class A_Command
 		A_Command(); 
 		virtual ~A_Command();
 
-		virtual void 	Execute(Client &Client, std::vector<std::string> Args);
+		virtual void 	Execute(Client &Client, std::vector<std::string> Args, std::map<std::string, Channel>  Channels);
 		int 			Send_Cmd(int client_sock, const std::string& Cmd);
 
 };
