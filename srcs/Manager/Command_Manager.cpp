@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:32:08 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/01 10:48:02 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/01 10:51:48 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int Command_Manager::Interpret_Data(std::vector<std::string>& Data, Client &Clie
         
         A_Command *Cmd = this->Get_Command(Args[0]);
         if (Cmd)
-            Cmd->Execute(Client, Args);
+            Cmd->Execute(Client, Args, Channels);
     }
     return GOOD;
 }

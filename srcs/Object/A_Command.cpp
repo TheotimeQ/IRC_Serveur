@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 09:03:06 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/01 10:46:49 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/01 10:52:21 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ void  A_Command::Execute(Client &Client, std::vector<std::string> Args)
 {
 	(void)Client;
 	(void)Args;
-    std::cout << "NO CMD" << std::endl; 
 }
 
 int A_Command::Send_Cmd(int client_sock, const std::string& message) 
