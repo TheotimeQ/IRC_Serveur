@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incs/Message.hpp"
+#include "../../incs/Object/Message.hpp"
 
 //Message::Message() {} // private
 

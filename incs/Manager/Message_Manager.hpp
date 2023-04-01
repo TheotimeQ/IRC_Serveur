@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 10:45:57 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/01 08:41:56 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/01 09:01:18 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include <sys/socket.h>
 #include <cstring>
 
-#include "../incs/Irc.hpp"
+#include "../Irc.hpp"
 
 #define ERROR_SEND_MSG 		"Error: Can't send message : \n"
 

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelManager.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/01 08:50:38 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/01 09:02:31 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../incs/ChannelManager.hpp"
+# include "../../incs/Manager/ChannelManager.hpp"
 
 void	ChannelManager::tryAddNewChannel(std::string const &name, Client &chop) {
 	try {

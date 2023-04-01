@@ -6,11 +6,11 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:32:08 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/01 08:49:24 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/01 09:02:38 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../incs/Command_Manager.hpp"
+#include "../../incs/Manager/Command_Manager.hpp"
 
 Command_Manager::Command_Manager()
 {

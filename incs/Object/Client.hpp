@@ -3,17 +3,9 @@
 
 #include <string>
 #include <iostream>
-
-// #include <iostream>
-// #include <cstring>
-// #include <cstdio>
-// #include <cstdlib>
 #include <unistd.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-// #include <arpa/inet.h>
-// #include <poll.h>
-// #include <cerrno>
 
 class Client
 {
