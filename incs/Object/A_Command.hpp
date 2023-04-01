@@ -1,5 +1,5 @@
-#ifndef COMMAND_HPP
-#define COMMAND_HPP
+#ifndef A_COMMAND_HPP
+#define A_COMMAND_HPP
 
 #include <iostream>
 #include <vector>
@@ -12,7 +12,7 @@
 // #define ERROR_SOCKET 		"Error: Can't create socket"
 // #define EVENT_NEW_MSG 		"Log: Message sent : \n"
 
-class Command
+class A_Command
 {
 
 	private:
@@ -20,8 +20,8 @@ class Command
 
 	public:
 		
-		Command(); 
-		~Command();
+		A_Command(); 
+		~A_Command();
 
 };
 

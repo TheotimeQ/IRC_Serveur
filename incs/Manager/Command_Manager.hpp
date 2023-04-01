@@ -3,9 +3,13 @@
 
 #include <iostream>
 #include <vector>
+#include <map>
+#include <string>
 #include <sstream>
+#include <functional>
 
 #include "../Irc.hpp"
+#include "../Object/A_Command.hpp"
 #include "../Object/Client.hpp"
 #include "../Manager/Message_Manager.hpp"
 
@@ -16,6 +20,8 @@ class Command_Manager
 {
 
 	private:
+
+		std::map<std::string, A_Command> Cmd_List;
 
 		void 	Tokenize(std::string const &str, const char delim, std::vector<std::string> &out);
 

@@ -3,17 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelManager.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:10:11 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/01 09:20:18 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/01 09:27:20 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CHANNELMANAGER_HPP
 # define CHANNELMANAGER_HPP
-
-# include "../Object/Server.hpp"
 
 # define ERRCHAN_CREATION 	"channel creation error : "
 
