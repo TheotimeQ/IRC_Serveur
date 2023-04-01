@@ -10,7 +10,7 @@ BUILD_DIR				= 	build/
 OBJ_DIR					=	Object
 MANAGER_DIR				=	Manager
 
-OBJ_FILE				=   Server Client Channel Message Command
+OBJ_FILE				=   Server Client Channel Message A_Command
 MANAGER_FILE			=	Message_Manager Command_Manager ChannelManager
 
 INC_DIR					=	incs

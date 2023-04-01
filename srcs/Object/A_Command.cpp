@@ -1,13 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Command.cpp                                        :+:      :+:    :+:   */
+/*   A_Command.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 09:03:06 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/01 09:03:18 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/01 09:52:58 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../incs/Object/Command.hpp"
+#include "../../incs/Object/A_Command.hpp"
+
+A_Command::A_Command()
+{
+
+	return;
+}
+
+A_Command::~A_Command()
+{
+	return;
+}

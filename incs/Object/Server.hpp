@@ -18,8 +18,8 @@
 
 #include "../Object/Client.hpp"
 #include "../Object/Channel.hpp"
-#include "../Manager/Message_Manager.hpp"
 #include "../Manager/ChannelManager.hpp"
+#include "../Manager/Message_Manager.hpp"
 #include "../Manager/Command_Manager.hpp"
 
 const int MAX_CLIENTS = 10;
