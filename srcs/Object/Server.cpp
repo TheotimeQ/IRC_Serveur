@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:50:43 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/01 13:50:23 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/02 14:48:20 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 #include "../../incs/Object/Client.hpp"
 #include "../../incs/Manager/ChannelManager.hpp"
 #include "../../incs/Manager/Command_Manager.hpp"
+#include "../../incs/Manager/Client_Manager.hpp"
 
 Server::Server(const std::string& name, int port) : 
     _Name(name), 
-    _Port(port),
-    _Nb_Clients(1)
+    _Port(port)
 {
 	return;
 }
@@ -62,7 +62,6 @@ int	Server::Start_Server()
     memset(_Poll_Set, 0, sizeof(_Poll_Set));
     _Poll_Set[0].fd = _Server_Socket;
     _Poll_Set[0].events = POLLIN;
-    _Nb_Clients = 1;
 
     return GOOD;
 }
@@ -72,7 +71,7 @@ int	Server::Run()
     while (true) 
     {
         //Update le pollset
-        int ret = poll(_Poll_Set, _Nb_Clients, -1);
+        int ret = poll(_Poll_Set, _CltMng.Nb_Clients, -1);
         if (ret < 0) 
         {
             std::cerr << ERROR_POLL << std::endl;
@@ -80,10 +79,10 @@ int	Server::Run()
         }
 
         //Pour chaque client dans le poll, regarde si on a un nouvell event
-        for (int i = 0; i < _Nb_Clients; ++i) 
+        for (int i = 0; i < _CltMng.Nb_Clients; ++i) 
         {
             if (_Poll_Set[i].revents & POLLIN) 
-            {
+            {   
                 //NEW CLIENT
                 if (i == 0) 
                 {   
@@ -95,10 +94,10 @@ int	Server::Run()
                 {
                     std::vector<std::string> Data;
 
-                    if(this->Get_Data(this->_Clients[i - 1], Data))
+                    if(this->Get_Data(_CltMng.Get_Client(i - 1), Data))
                         this->Deconnect_Client(i);
                     else
-                        this->_CmdMng.Interpret_Data(Data, this->_Clients[i - 1], _ChnMng.getChanList());
+                        this->_CmdMng.Interpret_Data(Data, _CltMng.Get_Client(i - 1), _ChnMng, _CltMng);
                 }
             }
         }
@@ -108,48 +107,39 @@ int	Server::Run()
 
 //Setup le client et l'ajoute au poll si la creation du socket fonctionne
 int Server::Setup_Client(Client Client)
-{
-    //Verifie qu'on a pas atteint le max de client
-    if (_Nb_Clients >= MAX_CLIENTS)
-    {
-        std::cerr << ERROR_MAX_CLIENT << std::endl;
-        return ERROR;
-    }       
-    
+{    
     //Ajoute le socket au poll set
     if (Client._Client_Socket < 0) 
     {
         std::cerr << ERROR_CONNECTION << std::endl;
         return ERROR;
     }
-    std::cout << EVENT_NEW_CLIENT << std::endl;
-    _Poll_Set[_Nb_Clients].fd = Client._Client_Socket;
-    _Poll_Set[_Nb_Clients].events = POLLIN;
 
     //Ajouter le client à la liste des client sur le Server 
-    _Clients[_Nb_Clients - 1] = Client;
-    
-    ++_Nb_Clients;
+    if (_CltMng.Add_Client(Client))
+        return ERROR;
+
+    std::cout << EVENT_NEW_CLIENT << std::endl;
+    _Poll_Set[_CltMng.Nb_Clients - 1].fd = Client._Client_Socket;
+    _Poll_Set[_CltMng.Nb_Clients - 1].events = POLLIN;
 
     return GOOD;
 }
 
 void Server::Deconnect_Client(int index)
 {
-    std::cout << EVENT_DECONNECTED << _Clients[index - 1]._UserName << std::endl;
+    std::cout << EVENT_DECONNECTED << _CltMng.Get_Client(index - 1)._UserName << std::endl;
 
     //Ferme le socket
-    close(_Clients[index - 1]._Client_Socket);
+    close(_CltMng.Get_Client(index - 1)._Client_Socket);
 
     //Vire le client du poll
-    _Poll_Set[index] = _Poll_Set[_Nb_Clients - 1];
-    memset(&_Poll_Set[_Nb_Clients - 1], 0, sizeof(_Poll_Set[_Nb_Clients - 1]));
+    _Poll_Set[index] = _Poll_Set[_CltMng.Nb_Clients - 1];
+    memset(&_Poll_Set[_CltMng.Nb_Clients - 1], 0, sizeof(_Poll_Set[_CltMng.Nb_Clients - 1]));
 
     //Vire le client de la liste des client
-    _Clients[index - 1] = _Clients[_Nb_Clients - 2];
-    // memset(&_Clients[_Nb_Clients - 2], 0, sizeof(Client));
+    _CltMng.Remove_Client(index - 1);
 
-    --_Nb_Clients;
 }
 
 int Server::Get_Data(Client &Client, std::vector<std::string>& All_Data) 
@@ -185,76 +175,4 @@ int	Server::Stop_Server()
 {
     close(_Server_Socket);
     return GOOD;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//--------------------Getters--------------------
-std::string Server::Get_Name(void) const
-{
-	return (this->_Name);
-}
-
-int Server::Get_Port(void) const
-{
-	return (this->_Port);
-}
-
-Client Server::Get_Clients(int index) const
-{   
-    // if (index < 0 || index > MAX_CLIENTS)
-    //     return Client();
-	return (this->_Clients[index]);
-}
-
-int Server::Get_Nb_Client() const
-{   
-	return (this->_Nb_Clients);
-}
-
-//--------------------Operator--------------------
-std::ostream& operator<<(std::ostream &out, const Server &Server)
-{
-    out << Server.Get_Name()      << std::endl;
-	out << Server.Get_Port()      << std::endl;
-    for (int i = 0; i < Server.Get_Nb_Client() - 1; i++)
-    {
-        out << Server.Get_Clients(i)._UserName << " | " << Server.Get_Clients(i)._Client_Socket << std::endl;
-    }
-	return (out);
 }

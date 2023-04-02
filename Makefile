@@ -11,7 +11,7 @@ OBJ_DIR					=	Object
 MANAGER_DIR				=	Manager
 
 OBJ_FILE				=   Server Client Channel A_Command Commands
-MANAGER_FILE			=   Command_Manager ChannelManager
+MANAGER_FILE			=   Command_Manager ChannelManager Client_Manager
 
 INC_DIR					=	incs
 INC_FILE				=	$(OBJ_INC) $(MANAGER_INC) Irc 
@@ -21,7 +21,7 @@ OBJ_INC					=  	$(addprefix $(OBJ_DIR)/, $(OBJ_FILE))
 INC						= 	$(addsuffix .hpp, $(addprefix $(INC_DIR)/, $(INC_FILE)))
 
 SRCS_DIR				=	srcs
-SRCS_FILE				=	$(OBJ_SRC) $(MANAGER_SRC) main Object/Commands_Channel_Operation Object/Commands_Registration Object/Commands_Message Object/Commands_Miscellaneous Object/Commands_Server_Query Object/Commands_User_Query
+SRCS_FILE				=	$(OBJ_SRC) $(MANAGER_SRC) main Object/Commands_Channel_Operation Object/Commands_Registration Object/Commands_Message
 
 MANAGER_SRC				=  	$(addprefix $(MANAGER_DIR)/, $(MANAGER_FILE))
 OBJ_SRC					=  	$(addprefix $(OBJ_DIR)/, $(OBJ_FILE))
