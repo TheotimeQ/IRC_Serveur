@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 10:18:15 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/01 13:48:54 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/02 11:57:59 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ Channel::~Channel() {
 
 // Utiliser un try-catch pour creer un channel -> throw exceptions
 Channel::Channel(std::string const &name, Client &chop) 
-: _topic("")
+: _topic(""), _key("")
 {
 	//log(" creation in progress");
 	initChannel();
@@ -38,7 +38,7 @@ Channel::Channel(std::string const &name, Client &chop)
 
 std::string const	&Channel::getName() const { return _name; }
 
-t_mapClient const	&Channel::getUsers() const { return _users; }
+t_mapClientStatus const	&Channel::getUsers() const { return _users; }
 
 std::string const	&Channel::getTopic() const { return _topic; }
 
@@ -48,13 +48,18 @@ void				Channel::setTopic(std::string const &newTopic) {
 
 t_chanmode const	&Channel::getChanmode() const { return _mode; }
 
+// check if channel users is empty or only with ban clients
+bool				Channel::isEmpty()	const {
+	return (_users.size() < 1 ? true : false);
+}
+
 
 //////////////////////* public methods *//////////////////////////
 
 // Envoi d' un objet message à tout les clients connecté
 // ( Faudra bien definir l'objet message ) -> string pour l'instant
 void				Channel::announce(std::string msg) const {
-	t_mapClient::const_iterator	it = _users.begin();
+	t_mapClientStatus::const_iterator	it = _users.begin();
 
 	while (it != _users.end()) {
 		log("sending message : " + msg + " to : " + it->first);
@@ -65,17 +70,17 @@ void				Channel::announce(std::string msg) const {
 
 // if user is already in channel, nothing happens
 void				Channel::addUser(Client const &newUser) {
-	t_clientData newData;
+	t_status status;
 
-	newData.him = newUser;
-	newData.chop = false;
-	newData.creator = false;
-	_users[newUser._UserName] = newData;
+	status.him = newUser;
+	status.chop = false;
+	status.creator = false;
+	_users[newUser._UserName] = status;
 }
 
 // delete an user from channel
 void				Channel::delUser(Client const &userToDel) {
-	t_mapClient::iterator	it;
+	t_mapClientStatus::iterator	it;
 
 	it = _users.find(userToDel._UserName);
 	if (it != _users.end()) {
@@ -86,7 +91,7 @@ void				Channel::delUser(Client const &userToDel) {
 // remove an user from channel operator map -> nothing happens if not in map
 // aura surment besoin de 
 void				Channel::rmOpPrivilege(std::string const &username) {
-	t_mapClient::iterator	it;
+	t_mapClientStatus::iterator	it;
 
 	it = _users.find(username);
 	if (it != _users.end()) {
@@ -119,14 +124,14 @@ void			Channel::checkChanName(std::string const &name) {
 
 // manage status/privilege channel operator + channel creator
 void				Channel::dealUsersStatus(Client &chop) {
-	t_clientData	newData;
+	t_status	status;
 	
 	if (_name[0] == '!') {
 		_name[0] = '#';
-		newData.creator = true;
+		status.creator = true;
 	}
-	newData.chop = true;
-	_users[chop._UserName] = newData;
+	status.chop = true;
+	_users[chop._UserName] = status;
 }
 
 // can't use memset or bzero because there is a std::map<> in t_chanmode struct
@@ -145,8 +150,8 @@ void	Channel::log(std::string const &logMsg)	const {
 
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~Operators~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-std::ostream	&operator<<(std::ostream &o, t_mapClient const &users) {
-	t_mapClient::const_iterator	it = users.begin();
+std::ostream	&operator<<(std::ostream &o, t_mapClientStatus const &users) {
+	t_mapClientStatus::const_iterator	it = users.begin();
 
 	while (it != users.end()) {
 		if (it->second.creator == true) {
