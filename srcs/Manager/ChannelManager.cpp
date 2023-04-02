@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/02 11:11:18 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/02 14:47:36 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,29 @@ void	ChannelManager::rmClientToChannel(Client &user, std::string const &channelN
 	_chanList[channelName].delUser(user);
 	if (_chanList[channelName].isEmpty())
 		rmChannel(channelName);
+}
+
+std::string	ChannelManager::getTopicOf(std::string const &channelName) const {
+	t_mapChannel::const_iterator	it;
+	
+	it = _chanList.find(channelName);
+	if (it != _chanList.end()) {
+		return it->second.getTopic();
+	} else {
+		return "";
+	}
+}
+
+// try to set a topic, return values : 0 on success | > 0 if errors
+int			ChannelManager::setTopicOf(std::string const &channelName, std::string const &newTopic) {
+	t_mapChannel::const_iterator	it;
+	
+	it = _chanList.find(channelName);
+	if (it != _chanList.end()) {
+		
+	} else {
+		return CM_NOCHANNEL;
+	}
 }
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ private methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */

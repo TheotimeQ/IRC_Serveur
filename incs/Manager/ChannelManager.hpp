@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:10:11 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/01 10:43:47 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/02 14:46:52 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@
 # include <iostream>
 
 # define ERRCHAN_CREATION 	"channel creation error : "
+
+// channel manager errors -> en faire une enum ?
+# define CM_NOCHANNEL 1
+
 
 typedef std::map<std::string, Channel>		t_mapChannel;
 
@@ -44,6 +48,10 @@ class ChannelManager {
 
 	void	addClientToChannel(Client &user, std::string const &channelName);
 	void	rmClientToChannel(Client &user, std::string const &channelName);
+
+	//TOPIC
+	std::string	getTopicOf(std::string const &channelName) const;
+	int			setTopicOf(std::string const &channelName, std::string const &newTopic);
 
 };
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands_Channel_Operation.cpp                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
+/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:09:32 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/01 16:12:58 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/02 14:37:38 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,17 @@
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.1
 void  JOIN_Command::Execute(Client &Client, std::vector<std::string> Args, std::map<std::string, Channel>  Channels) 
 {
-    (void )Args;
+    // (void )Args;
     (void )Channels;
+	(void)Client;
+
+	std::cerr << "Args : ";
+	for (unsigned i = 0; i < Args.size(); ++i) {
+		std::cerr << "[" + Args[i] + "]" << " ";
+	}
+	std::cerr << std::endl;
+	
+
 
     //Quelques test pour t'aider un peu a voir ou aller :D
 
@@ -55,9 +64,21 @@ void  MODE_Command::Execute(Client &Client, std::vector<std::string> Args, std::
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.4
 void  TOPIC_Command::Execute(Client &Client, std::vector<std::string> Args, std::map<std::string, Channel>  Channels) 
 {
+	int	ret;
+
     (void )Args;
     (void )Channels;
     (void )Client;
+	// [1] si nb Args == 2 (exemple Topic #test) --> demande le topic
+	if (Args.size() == 2) {
+		this->Send_Cmd(Client._Client_Socket, ":IRC 332 " + Client._NickName + " " + Args[1] + " :" + "demande du channel topic" + " \n");
+	}
+
+	// sinon c'est une tentative pour changer le Topic
+	
+
+
+	
 }
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.5
