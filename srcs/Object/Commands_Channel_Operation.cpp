@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   Commands_Channel_Operation.cpp                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
+/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:09:32 by tquere            #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2023/04/02 15:54:43 by tquere           ###   ########.fr       */
+=======
+/*   Updated: 2023/04/02 14:55:42 by loumarti         ###   ########lyon.fr   */
+>>>>>>> d5f67b5f15860024358e69203a105a647d5c3137
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +68,22 @@ void  MODE_Command::Execute(Client &Client, std::vector<std::string> Args, Chann
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.4
 void  TOPIC_Command::Execute(Client &Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
+	int	ret;
+
     (void )Args;
     (void )Channel_Manager;
     (void )Client_Manager;
     (void )Client;
+	// [1] si nb Args == 2 (exemple Topic #test) --> demande le topic
+	if (Args.size() == 2) {
+		this->Send_Cmd(Client._Client_Socket, ":IRC 332 " + Client._NickName + " " + Args[1] + " :" + "demande du channel topic" + " \n");
+	}
+
+	// sinon c'est une tentative pour changer le Topic
+	
+
+
+	
 }
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.5
