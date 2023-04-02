@@ -14,6 +14,7 @@
 #include "../Irc.hpp"
 #include "../Object/Client.hpp"
 #include "../Object/Channel.hpp"
+#include "../Manager/ChannelManager.hpp"
 
 #define ERROR_SEND_MSG 		"Error: Can't send message : \n"
 
@@ -30,7 +31,7 @@ class A_Command
 		A_Command(); 
 		virtual ~A_Command();
 
-		virtual void 	Execute(Client &Client, std::vector<std::string> Args, std::map<std::string, Channel>  Channels);
+		virtual void 	Execute(Client &Client, std::vector<std::string> Args, ChannelManager Channels_Manager);
 		int 			Send_Cmd(int client_sock, const std::string& Cmd);
 
 };

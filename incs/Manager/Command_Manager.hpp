@@ -34,7 +34,7 @@ class Command_Manager
 		Command_Manager(); 
 		~Command_Manager();
 		
-		int		Interpret_Data(std::vector<std::string>& Data, Client &Client, std::map<std::string, Channel> Channels);
+		int		Interpret_Data(std::vector<std::string>& Data, Client &Client, ChannelManager Channels_Manager);
 
 };
 

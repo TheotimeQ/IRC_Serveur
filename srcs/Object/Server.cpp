@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:50:43 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/01 13:50:23 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/02 11:56:13 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int	Server::Run()
                     if(this->Get_Data(this->_Clients[i - 1], Data))
                         this->Deconnect_Client(i);
                     else
-                        this->_CmdMng.Interpret_Data(Data, this->_Clients[i - 1], _ChnMng.getChanList());
+                        this->_CmdMng.Interpret_Data(Data, this->_Clients[i - 1], _ChnMng);
                 }
             }
         }

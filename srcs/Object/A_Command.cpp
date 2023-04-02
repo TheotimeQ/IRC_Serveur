@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   A_Command.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
+/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 09:03:06 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/01 11:24:29 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/02 12:00:05 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@ A_Command::~A_Command()
 	return;
 }
 
-void  A_Command::Execute(Client &Client, std::vector<std::string> Args, std::map<std::string, Channel>  Channels)
+void  A_Command::Execute(Client &Client, std::vector<std::string> Args, ChannelManager Channels_Manager)
 {
 	(void)Client;
 	(void)Args;
-	(void)Channels;
+	(void)Channels_Manager;
 }
 
 int A_Command::Send_Cmd(int client_sock, const std::string& message) 

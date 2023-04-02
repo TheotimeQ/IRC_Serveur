@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands_Channel_Operation.cpp                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
+/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:09:32 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/01 16:12:58 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/02 12:02:32 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@
 //=====================================Channel operations======================================
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.1
-void  JOIN_Command::Execute(Client &Client, std::vector<std::string> Args, std::map<std::string, Channel>  Channels) 
+void  JOIN_Command::Execute(Client &Client, std::vector<std::string> Args, ChannelManager Channel_Manager) 
 {
     (void )Args;
-    (void )Channels;
+    (void )Channel_Manager;
 
     //Quelques test pour t'aider un peu a voir ou aller :D
 
@@ -37,57 +37,57 @@ void  JOIN_Command::Execute(Client &Client, std::vector<std::string> Args, std::
 }
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.2
-void  PART_Command::Execute(Client &Client, std::vector<std::string> Args, std::map<std::string, Channel>  Channels) 
+void  PART_Command::Execute(Client &Client, std::vector<std::string> Args, ChannelManager Channel_Manager) 
 {
     (void )Args;
-    (void )Channels;
+    (void )Channel_Manager;
     (void )Client;
 }
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.3
-void  MODE_Command::Execute(Client &Client, std::vector<std::string> Args, std::map<std::string, Channel>  Channels) 
+void  MODE_Command::Execute(Client &Client, std::vector<std::string> Args, ChannelManager Channel_Manager) 
 {
     (void )Args;
-    (void )Channels;
+    (void )Channel_Manager;
     (void )Client;
 }
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.4
-void  TOPIC_Command::Execute(Client &Client, std::vector<std::string> Args, std::map<std::string, Channel>  Channels) 
+void  TOPIC_Command::Execute(Client &Client, std::vector<std::string> Args, ChannelManager Channel_Manager) 
 {
     (void )Args;
-    (void )Channels;
+    (void )Channel_Manager;
     (void )Client;
 }
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.5
-void  NAMES_Command::Execute(Client &Client, std::vector<std::string> Args, std::map<std::string, Channel>  Channels) 
+void  NAMES_Command::Execute(Client &Client, std::vector<std::string> Args, ChannelManager Channel_Manager) 
 {
     (void )Args;
-    (void )Channels;
+    (void )Channel_Manager;
     (void )Client;
 }
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.6
-void  LIST_Command::Execute(Client &Client, std::vector<std::string> Args, std::map<std::string, Channel>  Channels) 
+void  LIST_Command::Execute(Client &Client, std::vector<std::string> Args, ChannelManager Channel_Manager) 
 {
     (void )Args;
-    (void )Channels;
+    (void )Channel_Manager;
     (void )Client;
 }
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.7
-void  INVITE_Command::Execute(Client &Client, std::vector<std::string> Args, std::map<std::string, Channel>  Channels) 
+void  INVITE_Command::Execute(Client &Client, std::vector<std::string> Args, ChannelManager Channel_Manager) 
 {
     (void )Args;
-    (void )Channels;
+    (void )Channel_Manager;
     (void )Client;
 }
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.8
-void  KICK_Command::Execute(Client &Client, std::vector<std::string> Args, std::map<std::string, Channel>  Channels) 
+void  KICK_Command::Execute(Client &Client, std::vector<std::string> Args, ChannelManager Channel_Manager) 
 {
     (void )Args;
-    (void )Channels;
+    (void )Channel_Manager;
     (void )Client;
 }
