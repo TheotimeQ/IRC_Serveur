@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:32:08 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/01 15:22:18 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/02 14:53:06 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,26 +34,26 @@ Command_Manager::Command_Manager()
     Cmd_List["INVITE"]  = new INVITE_Command(); 
     Cmd_List["KICK"]    = new KICK_Command(); 
 
-    //Server queries and commands 
-    Cmd_List["VERSION"]   = new VERSION_Command(); 
-    Cmd_List["STATS"]     = new STATS_Command(); 
-    Cmd_List["ADMIN"]     = new ADMIN_Command(); 
-    Cmd_List["INFO"]      = new INFO_Command();
+    // //Server queries and commands 
+    // Cmd_List["VERSION"]   = new VERSION_Command(); 
+    // Cmd_List["STATS"]     = new STATS_Command(); 
+    // Cmd_List["ADMIN"]     = new ADMIN_Command(); 
+    // Cmd_List["INFO"]      = new INFO_Command();
 
     //Sending messages
     Cmd_List["PRIVMSG"]   = new PRIVMSG_Command(); 
     Cmd_List["NOTICE"]    = new NOTICE_Command();
 
-    //User-based queries 
-    Cmd_List["WHO"]       = new WHO_Command();
-    Cmd_List["WHOIS"]     = new WHOIS_Command();  
-    Cmd_List["WHOWAS"]    = new WHOWAS_Command(); 
+    // //User-based queries 
+    // Cmd_List["WHO"]       = new WHO_Command();
+    // Cmd_List["WHOIS"]     = new WHOIS_Command();  
+    // Cmd_List["WHOWAS"]    = new WHOWAS_Command(); 
 
-    //Miscellaneous messages 
-    Cmd_List["KILL"]     = new KILL_Command();
-    Cmd_List["PING"]     = new PING_Command();  
-    Cmd_List["PONG"]     = new PONG_Command(); 
-    Cmd_List["ERROR"]    = new ERROR_Command(); 
+    // //Miscellaneous messages 
+    // Cmd_List["KILL"]     = new KILL_Command();
+    // Cmd_List["PING"]     = new PING_Command();  
+    // Cmd_List["PONG"]     = new PONG_Command(); 
+    // Cmd_List["ERROR"]    = new ERROR_Command(); 
 
     return;
 }
@@ -91,7 +91,7 @@ void Command_Manager::Tokenize(std::string const &str, const char delim, std::ve
     } 
 } 
 
-int Command_Manager::Interpret_Data(std::vector<std::string>& Data, Client &Client, std::map<std::string, Channel>  Channels)
+int Command_Manager::Interpret_Data(std::vector<std::string>& Data, Client &Client, ChannelManager &Channel_Manager, Client_Manager &Client_Manager)
 {
     for (std::vector<std::string>::const_iterator it = Data.begin(); it != Data.end(); ++it) 
     {
@@ -104,7 +104,7 @@ int Command_Manager::Interpret_Data(std::vector<std::string>& Data, Client &Clie
         //PROBLEME SI JUSTE /TEST
         A_Command *Cmd = this->Get_Command(Args[0]);
         if (Cmd != NULL)
-            Cmd->Execute(Client, Args, Channels);
+            Cmd->Execute(Client, Args, Channel_Manager, Client_Manager);
     }
     return GOOD;
 }

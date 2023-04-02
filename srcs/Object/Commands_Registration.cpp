@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:09:32 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/01 14:51:42 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/02 14:52:21 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,22 @@
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.1.1
 //PASS 
-void  PASS_Command::Execute(Client &Client, std::vector<std::string> Args, std::map<std::string, Channel>  Channels) 
+void  PASS_Command::Execute(Client &Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
     (void )Args;
-    (void )Channels;
+    (void )Channel_Manager;
+    (void )Client_Manager;
 
     Client._Password = Args[1];
 }
 
 //https://www.rfc-editor.org/rfc/rfc1459#section-4.1.2
 //NICK
-void  NICK_Command::Execute(Client &Client, std::vector<std::string> Args, std::map<std::string, Channel>  Channels) 
+void  NICK_Command::Execute(Client &Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
     (void )Args;
-    (void )Channels;
+    (void )Channel_Manager;
+    (void )Client_Manager;
 
     //Verifier pas nick name en doucle
 
@@ -43,10 +45,11 @@ void  NICK_Command::Execute(Client &Client, std::vector<std::string> Args, std::
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.1.3
 //USER
-void  USER_Command::Execute(Client &Client, std::vector<std::string> Args, std::map<std::string, Channel>  Channels) 
+void  USER_Command::Execute(Client &Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
     (void )Args;
-    (void )Channels;
+    (void )Channel_Manager;
+    (void )Client_Manager;
 
     //Verifier qu'on a un argument 1
     
@@ -55,19 +58,21 @@ void  USER_Command::Execute(Client &Client, std::vector<std::string> Args, std::
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.1.5
 //OPER
-void  OPER_Command::Execute(Client &Client, std::vector<std::string> Args, std::map<std::string, Channel>  Channels) 
+void  OPER_Command::Execute(Client &Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
     (void )Args;
-    (void )Channels;
+    (void )Channel_Manager;
+    (void )Client_Manager;
     (void )Client;
 }
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.1.6
 //QUIT
-void  QUIT_Command::Execute(Client &Client, std::vector<std::string> Args, std::map<std::string, Channel>  Channels) 
+void  QUIT_Command::Execute(Client &Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
     (void )Args;
-    (void )Channels;
+    (void )Channel_Manager;
+    (void )Client_Manager;
     (void )Client;
 }
 

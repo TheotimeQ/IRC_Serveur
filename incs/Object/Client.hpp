@@ -24,6 +24,7 @@ class Client
         int             _Type;
 		std::string		_Data;
 		int 			_Client_Socket;  
+		int 			_Poll_Set_Index;  
 
 		Client(); 
         Client(int Serveur_Socket); 
