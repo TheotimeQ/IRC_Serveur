@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test_channel.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 11:59:50 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/01 13:50:05 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/02 15:36:45 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,12 @@ int main() {
 // 	Client unPelo = Client();
 // 	Client unePelotte = Client();
 
-// 	leChef._NickName = "leChef_n";
-// 	leChef._UserName = "M. Boss_u";
-// 	unPelo._NickName = "unPelo_n";
-// 	unPelo._UserName = "pelo_u";
-// 	unePelotte._NickName = "unePelotte_n";
-// 	unePelotte._UserName = "pelotte_u";
+// 	leChef.NickName = "leChef_n";
+// 	leChef.UserName = "M. Boss_u";
+// 	unPelo.NickName = "unPelo_n";
+// 	unPelo.UserName = "pelo_u";
+// 	unePelotte.NickName = "unePelotte_n";
+// 	unePelotte.UserName = "pelotte_u";
 
 // 	_ChnMng.addClientToChannel(leChef, "#mauvaisCannal::");
 // 	_ChnMng.addClientToChannel(leChef, "MauvaisCannal2");
@@ -51,12 +51,12 @@ int main() {
 	Client unPelo = Client();
 	Client unePelotte = Client();
 
-	leChef.Set_NickName("leChef_n");
-	leChef.Set_UserName("M. Boss_u");
-	unPelo.Set_NickName("unPelo_n");
-	unPelo.Set_UserName("pelo_u");
-	unePelotte.Set_NickName("unePelotte_n");
-	unePelotte.Set_UserName("pelotte_u");
+	leChef.SetNickName("leChef_n");
+	leChef.SetUserName("M. Boss_u");
+	unPelo.SetNickName("unPelo_n");
+	unPelo.SetUserName("pelo_u");
+	unePelotte.SetNickName("unePelotte_n");
+	unePelotte.SetUserName("pelotte_u");
 
 	//std::cout << leChef << std::endl;
 

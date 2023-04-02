@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:32:08 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/02 14:53:06 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/02 17:01:32 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,20 +91,43 @@ void Command_Manager::Tokenize(std::string const &str, const char delim, std::ve
     } 
 } 
 
-int Command_Manager::Interpret_Data(std::vector<std::string>& Data, Client &Client, ChannelManager &Channel_Manager, Client_Manager &Client_Manager)
+int Command_Manager::Interpret_Data(Client &Client, ChannelManager &Channel_Manager, Client_Manager &Client_Manager)
 {
-    for (std::vector<std::string>::const_iterator it = Data.begin(); it != Data.end(); ++it) 
+    for (std::vector<std::string>::const_iterator it = Client.All_Cmd.begin(); it != Client.All_Cmd.end(); ++it) 
     {
         std::vector<std::string> Args;
         Tokenize(*it, ' ', Args); 
         
         //DEBUG
-        std::cout << "-> Received : "<< *it << std::endl;
+        std::cout << "-> Received   : "<< *it << std::endl;
+        std::cout << "-> log_status : "<< Client.Logged << std::endl;
         
-        //PROBLEME SI JUSTE /TEST
+        //Test si le client est pas log
+        // if (Client.Logged == 0)
+        // {
+        //     if (Args[0] == "USER" || Args[0] == "PASS" || Args[0] == "NICK")
+        //     {
+        //         A_Command *Cmd = this->Get_Command(Args[0]);
+        //         if (Cmd != NULL)
+        //             Cmd->Execute(Client, Args, Channel_Manager, Client_Manager);
+        //     }
+        //     else
+        //         std::cout << "Can't , not logged yet" << std::endl;
+        // }
+        // else
+        // {
+        //     A_Command *Cmd = this->Get_Command(Args[0]);
+        //     if (Cmd != NULL)
+        //         Cmd->Execute(Client, Args, Channel_Manager, Client_Manager);
+        // }
+
         A_Command *Cmd = this->Get_Command(Args[0]);
         if (Cmd != NULL)
             Cmd->Execute(Client, Args, Channel_Manager, Client_Manager);
+
     }
+
+    Client.All_Cmd.clear();
+
     return GOOD;
 }
