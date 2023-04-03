@@ -7,6 +7,9 @@
 #define SERVER_NAME "IRC"
 #define SERVER_PORT 6667
 
+const int MAX_CLIENTS = 10;
+const int BUFFER_SIZE = 1024;
+
 // LISTE DES REPONSE SERVEUR:
 // https://modern.ircdocs.horse/#errneedmoreparams-461
 

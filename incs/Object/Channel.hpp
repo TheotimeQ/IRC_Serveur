@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 11:17:45 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/02 11:57:22 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/02 12:33:11 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ typedef struct s_status {
 	Client	him;
 	bool	creator;
 	bool	chop;
-					//bool	voice;	//a le droit de parler ou non sur chan modere
+	bool	voice;	//a le droit de parler ou non sur chan modere
 
 }	t_status;
 
@@ -95,8 +95,8 @@ typedef struct s_chanmode {
 	bool			s;	// secret channel flag;
 	bool			i;	// invite-only channel flag; ---> a garder ?
 	bool			t;	// topic settable by channel operator only flag;
-					//	bool			n;	// n - no messages to channel from clients on the outside;
-					//	bool			m;	// moderated channel;
+	bool			n;	// n - no messages to channel from clients on the outside;
+	bool			m;	// moderated channel;
 	int				l;	// set the user limit to channel; -> 0 == pas de limite ?
 	bool			k;	// set a channel key (password).
 			//	std::string		b;	// pattern pour refuser un nom de connection (hostname ...)
@@ -111,7 +111,7 @@ class Channel {
 	t_mapClientStatus			_users;
 	t_mapClient					_banlist;	//garde ne memoire les utilisateurs bans
 	std::string					_topic;
-	std::string					_key; // password to join (-> private server ?)
+	std::string					_key; // password to join (-> if +k mode is on)
 	
 
 	/* private methods */
@@ -122,7 +122,7 @@ class Channel {
 
  public :
 	/* public attribute */
-	t_chanmode			_mode; // all mode data
+	t_chanmode			mode; // all mode data
 	
 	Channel(); // besoin pour utiliser en map avec []
 	~Channel();

@@ -20,9 +20,7 @@
 #include "../Object/Channel.hpp"
 #include "../Manager/ChannelManager.hpp"
 #include "../Manager/Command_Manager.hpp"
-
-const int MAX_CLIENTS = 10;
-const int BUFFER_SIZE = 1024;
+#include "../Manager/Client_Manager.hpp"
 
 #define ERROR_SOCKET 		"Error: Can't create socket"
 #define ERROR_CONF_SOCKET 	"Error: Can't configure socket "
@@ -31,7 +29,6 @@ const int BUFFER_SIZE = 1024;
 #define ERROR_POLL 			"Error: Can't get poll event"
 #define ERROR_CONNECTION 	"Error: Can't while accept new client"
 #define ERROR_DATA 			"Error: Can't while getting data from client"
-#define ERROR_MAX_CLIENT	"Error: Can't add new client , max reached"
 #define ERROR_DATA 			"Error: Can't while getting data from client"
 
 #define EVENT_NEW_CLIENT 	"Log: New connection"
@@ -44,8 +41,6 @@ class Server
 
 		std::string 		_Name;
 		int 				_Port;
-		int					_Nb_Clients;
-        Client              _Clients[MAX_CLIENTS];
 
 		int					_Server_Socket;
 		struct sockaddr_in6 _Server_Address;
@@ -53,13 +48,12 @@ class Server
 
 		ChannelManager		_ChnMng;
 		Command_Manager		_CmdMng;
+		Client_Manager		_CltMng;
 
-		int		Setup_Client(Client Client);
-		void	Deconnect_Client(int index);
-		int 	Get_Data(Client &Client, std::vector<std::string>& Data);
-		void	log(std::string const &logMsg)	const;
+		int		Setup_Client(const Client& Client);
+		void	Deconnect_Client(const Client& Client, int index);
+		int 	Get_Data(Client &Client);
 
-		
 	public:
 		
 		Server(const std::string& name, int port); 
@@ -68,13 +62,6 @@ class Server
 	    int		Start_Server();
         int		Run(); 
         int		Stop_Server();
-
-		std::string Get_Name(void)  			const;
-        int			Get_Port(void)  			const;
-		Client 		Get_Clients(int index) 		const;
-		int 		Get_Nb_Client()			 	const;
 };
-
-std::ostream& operator<<(std::ostream& out, const Server& Server);
 
 #endif

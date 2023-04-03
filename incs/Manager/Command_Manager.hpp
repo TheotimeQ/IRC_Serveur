@@ -21,7 +21,6 @@
 
 class Command_Manager
 {
-
 	private:
 
 		std::map<std::string, A_Command*> Cmd_List;
@@ -34,7 +33,7 @@ class Command_Manager
 		Command_Manager(); 
 		~Command_Manager();
 		
-		int		Interpret_Data(std::vector<std::string>& Data, Client &Client, ChannelManager Channels_Manager);
+		int		Interpret_Data(Client &Client, ChannelManager &Channel_Manager, Client_Manager &Client_Manager);
 
 };
 

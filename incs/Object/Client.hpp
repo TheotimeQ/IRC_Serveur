@@ -2,7 +2,9 @@
 #define CLIENT_HPP
 
 #include <string>
+#include <vector>
 #include <iostream>
+#include <sstream>
 #include <unistd.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -17,13 +19,16 @@ class Client
 
 	public:
 
-		std::string 	_UserName;
-		std::string	    _NickName;
-        std::string	    _Password;
-		std::string	    _Channel;
-        int             _Type;
-		std::string		_Data;
-		int 			_Client_Socket;  
+		std::string 				UserName;
+		std::string	    			NickName;
+        std::string	    			Password;
+        int             			Type;
+		int							Logged;
+
+		int 						Socket;
+
+		std::string					Data;
+		std::vector<std::string> 	All_Cmd; 
 
 		Client(); 
         Client(int Serveur_Socket); 

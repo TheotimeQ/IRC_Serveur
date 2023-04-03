@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 10:18:15 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/02 11:57:59 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/03 06:38:12 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void				Channel::setTopic(std::string const &newTopic) {
 	 _topic = newTopic;
 }
 
-t_chanmode const	&Channel::getChanmode() const { return _mode; }
+t_chanmode const	&Channel::getChanmode() const { return mode; }
 
 // check if channel users is empty or only with ban clients
 bool				Channel::isEmpty()	const {
@@ -75,14 +75,14 @@ void				Channel::addUser(Client const &newUser) {
 	status.him = newUser;
 	status.chop = false;
 	status.creator = false;
-	_users[newUser._UserName] = status;
+	_users[newUser.NickName] = status;
 }
 
 // delete an user from channel
 void				Channel::delUser(Client const &userToDel) {
 	t_mapClientStatus::iterator	it;
 
-	it = _users.find(userToDel._UserName);
+	it = _users.find(userToDel.NickName);
 	if (it != _users.end()) {
 		_users.erase(it);
 	}
@@ -131,12 +131,13 @@ void				Channel::dealUsersStatus(Client &chop) {
 		status.creator = true;
 	}
 	status.chop = true;
-	_users[chop._UserName] = status;
+	status.voice = false;
+	_users[chop.NickName] = status;
 }
 
 // can't use memset or bzero because there is a std::map<> in t_chanmode struct
 void				Channel::initChannel() {
-	bzero(&_mode, sizeof(t_chanmode));
+	bzero(&mode, sizeof(t_chanmode));
 	_users.clear();
 }
 
@@ -161,7 +162,7 @@ std::ostream	&operator<<(std::ostream &o, t_mapClientStatus const &users) {
 		}
 		if (it != users.begin())
 			o << ", ";
-		o << it->second.him._NickName;
+		o << it->second.him.NickName;
 		it++;
 	}
 	return o;

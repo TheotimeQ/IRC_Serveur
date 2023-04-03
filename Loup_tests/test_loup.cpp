@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test_loup.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 06:51:40 by loumarti          #+#    #+#             */
-/*   Updated: 2023/03/29 08:44:32 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/02 15:54:43 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,29 +93,29 @@ while (1) {
 			if (i == 0) {
 				struct sockaddr_in6	client_addr;
 				socklen_t client_addr_len = sizeof(client_addr);
-				int client_socket; // Le socket / fd du nouveau client
+				int Socket; // Le socket / fd du nouveau client
 
-				client_socket = accept(server_socket, \
+				Socket = accept(server_socket, \
 					reinterpret_cast<struct sockaddr *>(&client_addr), \
 					&client_addr_len);
-				if (client_socket < 0) {
+				if (Socket < 0) {
 					cerr << "ircserv : accept() error : " << strerror(errno) << endl;
 					break ;
 				} else {
-					cout << "Nouvelle connection entrante client_socket = " << client_socket << endl;
+					cout << "Nouvelle connection entrante Socket = " << Socket << endl;
 				}
 
 				// Ajout du nouveau socket au poll_set (le fd du nouveau client)
-				poll_set[nfds].fd = client_socket;
+				poll_set[nfds].fd = Socket;
 				poll_set[nfds].events = POLLIN;
 				++nfds; // index up pour prochain nouveau client
 				
 			} 
 			// Donnees recu d'un client deja enregistre
 			else {
-				int client_socket = poll_set[i].fd;
+				int Socket = poll_set[i].fd;
 				char buffer[BUFFER_SIZE];
-				int nbytes = recv(client_socket, buffer, BUFFER_SIZE, 0);
+				int nbytes = recv(Socket, buffer, BUFFER_SIZE, 0);
 
 				if (nbytes < 0) {
 					cerr << "ircserv : recv() error : " << strerror(errno) << endl;
@@ -124,8 +124,8 @@ while (1) {
 				
 				// 0 bytes recu correpond a une deco du client (reception de eof)
 				else if (nbytes == 0) {
-					cout << "Deconnection du client_socket : " << client_socket << endl;
-					close(client_socket); // [+] gestion erreur de close() ?
+					cout << "Deconnection du Socket : " << Socket << endl;
+					close(Socket); // [+] gestion erreur de close() ?
 					// on ecrase ce client deco avec la valeur du dernier client du set
 					poll_set[i] = poll_set[nfds - 1]; // anh ! c'est malin !
 					bzero(&poll_set[nfds - 1], sizeof(poll_set[nfds - 1]));
