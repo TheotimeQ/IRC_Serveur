@@ -3,17 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-<<<<<<< HEAD
 /*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:50:43 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/02 11:56:13 by zelinsta         ###   ########.fr       */
-=======
-/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/01 10:50:43 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/02 16:29:51 by tquere           ###   ########.fr       */
->>>>>>> refs/remotes/origin/master
+/*   Updated: 2023/04/03 08:47:38 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,16 +87,14 @@ int	Server::Run()
                 }
                 else 
                 {
-                    Client Cur_Client = _CltMng.Get_Client_by_fd(_Poll_Set[i].fd);
-
+                    Client *Cur_Client = _CltMng.Get_Client_by_fd(_Poll_Set[i].fd);
+                    if (!Cur_Client)
+                        break;
+                        
                     if(this->Get_Data(Cur_Client))
-                        this->Deconnect_Client(Cur_Client, i);
+                        this->Deconnect_Client((*Cur_Client), i);
                     else
-<<<<<<< HEAD
-                        this->_CmdMng.Interpret_Data(Data, this->_Clients[i - 1], _ChnMng);
-=======
                         this->_CmdMng.Interpret_Data(Cur_Client, _ChnMng, _CltMng);
->>>>>>> refs/remotes/origin/master
                 }
             }
         }
@@ -142,23 +133,23 @@ void Server::Deconnect_Client(const Client &Client, int index)
     _CltMng.Remove_Client(Client);
 }
 
-int Server::Get_Data(Client &Client) 
+int Server::Get_Data(Client *Client) 
 {
     char        Buffer[BUFFER_SIZE];  
     size_t      Bytes;
 
-    Client.All_Cmd.clear();
+    (*Client).All_Cmd.clear();
 
-    while ((Bytes = recv(Client.Socket, Buffer, BUFFER_SIZE, 0)) > 0) 
+    while ((Bytes = recv((*Client).Socket, Buffer, BUFFER_SIZE, 0)) > 0) 
     {
-        Client.Data.append(Buffer, Bytes);                                                            
+        (*Client).Data.append(Buffer, Bytes);                                                            
         size_t pos;
 
-        while ((pos = Client.Data.find("\n")) != std::string::npos)
+        while ((pos = (*Client).Data.find("\n")) != std::string::npos)
         {
-            std::string ligne = Client.Data.substr(0, pos);                                            
-            Client.All_Cmd.push_back(ligne);  
-            Client.Data.erase(0, pos + 1);                                                             
+            std::string ligne = (*Client).Data.substr(0, pos);                                            
+            (*Client).All_Cmd.push_back(ligne);  
+            (*Client).Data.erase(0, pos + 1);                                                             
         }
 
         if (Bytes < BUFFER_SIZE)

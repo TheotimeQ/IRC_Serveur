@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client_Manager.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
+/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:32:08 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/02 16:44:53 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/03 08:57:39 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,30 +37,30 @@ void Client_Manager::Print_Clients(void)
     }
 }
 
-Client &Client_Manager::Get_Client_by_fd(int fd)
+Client *Client_Manager::Get_Client_by_fd(int fd)
 {
     std::map<std::string, Client>::iterator it;
     
     for (it = _All_Clients.begin(); it != _All_Clients.end(); ++it) 
     {
         if ((it->second).Socket == fd)
-            return (it->second);
+            return &(it->second);
     }
     std::cerr << ERROR_FID_CLIENT << fd << std::endl;
-	return _All_Clients.begin()->second;
+	return NULL;
 }
 
-Client &Client_Manager::Get_Client(std::string NickName)
+Client *Client_Manager::Get_Client(std::string NickName)
 {
     std::map<std::string, Client>::iterator it;
     
     for (it = _All_Clients.begin(); it != _All_Clients.end(); ++it) 
     {
         if ((it->second).NickName == NickName)
-            return (it->second);
+            return &(it->second);
     }
     std::cerr << ERROR_FID_CLIENT << NickName << std::endl;
-	return _All_Clients.begin()->second;
+	return NULL;
 }
 
 int Client_Manager::Add_Client(const Client& Client)
@@ -74,7 +74,7 @@ int Client_Manager::Add_Client(const Client& Client)
     _All_Clients[Client.NickName] = Client;
     this->Nb_Clients++;
 
-    this->Print_Clients();
+    // this->Print_Clients();
 
 	return GOOD;
 }

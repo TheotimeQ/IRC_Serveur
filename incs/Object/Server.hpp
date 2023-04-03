@@ -52,7 +52,7 @@ class Server
 
 		int		Setup_Client(const Client& Client);
 		void	Deconnect_Client(const Client& Client, int index);
-		int 	Get_Data(Client &Client);
+		int 	Get_Data(Client *Client);
 
 	public:
 		

@@ -6,7 +6,7 @@
 /*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:12:57 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/03 08:40:47 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/03 08:42:59 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,25 +81,6 @@ class KICK_Command : public A_Command {
     public:
         virtual void Execute(Client &Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager); };
 
-//=====================================Server queries and commands======================================
-
-class VERSION_Command : public A_Command { 
-    public:
-        virtual void Execute(Client &Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager); };
-
-class STATS_Command : public A_Command { 
-    public:
-        virtual void Execute(Client &Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager); };
-
-class ADMIN_Command : public A_Command { 
-    public:
-        virtual void Execute(Client &Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager); };
-
-class INFO_Command : public A_Command { 
-    public:
-        virtual void Execute(Client &Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager); };
-
-
 //=====================================Sending messages======================================
 
 class PRIVMSG_Command : public A_Command { 
@@ -109,40 +90,5 @@ class PRIVMSG_Command : public A_Command {
 class NOTICE_Command : public A_Command { 
     public:
         virtual void Execute(Client &Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager); };
-
-
-//=====================================User-based queries======================================
-
-class WHO_Command : public A_Command { 
-    public:
-        virtual void Execute(Client &Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager); };
-
-class WHOIS_Command : public A_Command { 
-    public:
-        virtual void Execute(Client &Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager); };
-
-class WHOWAS_Command : public A_Command { 
-    public:
-        virtual void Execute(Client &Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager); };
-
-
-//=====================================Miscellaneous messages======================================
-
-class KILL_Command : public A_Command { 
-    public:
-        virtual void Execute(Client &Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager); };
-
-class PING_Command : public A_Command { 
-    public:
-        virtual void Execute(Client &Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager); };
-
-class PONG_Command : public A_Command { 
-    public:
-        virtual void Execute(Client &Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager); };
-
-class ERROR_Command : public A_Command { 
-    public:
-        virtual void Execute(Client &Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager); };
-
 
 #endif

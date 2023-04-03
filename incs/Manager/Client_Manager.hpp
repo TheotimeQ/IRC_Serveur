@@ -16,25 +16,25 @@
 
 class Client_Manager
 {
-        private:
+	private:
 
-                std::map<std::string, Client>          _All_Clients;
-                std::map<std::string, std::string>     _All_Credentials;
+		std::map<std::string, Client>          _All_Clients;
+		std::map<std::string, std::string>     _All_Credentials;
 
-        public:
+	public:
 
-                int					Nb_Clients;
-                
-                Client_Manager(); 
-                ~Client_Manager();
+		int					Nb_Clients;
+		
+		Client_Manager(); 
+		~Client_Manager();
 
-                Client         &Get_Client_by_fd(int index);
-                Client         &Get_Client(std::string NickName);
-                int             Add_Client(const Client &Client);
-                int             Remove_Client(const Client &Client);
-                void            Print_Clients(void);
+		Client         *Get_Client_by_fd(int index);
+		Client         *Get_Client(std::string NickName);
+		int             Add_Client(const Client &Client);
+		int             Remove_Client(const Client &Client);
+		void            Print_Clients(void);
 
-                int             Check_If_Can_Log(const Client& Clt);
+		int             Check_If_Can_Log(const Client& Clt);
 };
 
 #endif
