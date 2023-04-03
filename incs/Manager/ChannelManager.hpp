@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:10:11 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/03 08:54:41 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/03 10:03:31 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ class ChannelManager {
  private :
 	t_mapChannel			_chanList;
 
-	bool	isChannelExists(std::string const &channelName)	const;
 	void	log(std::string const &logMsg)					const;
 
 	void	tryAddNewChannel(std::string const &name, Client &chop);
@@ -47,6 +46,7 @@ class ChannelManager {
 	ChannelManager	&operator=(ChannelManager const &righty);
 
 	t_mapChannel const	&getChanList() const;
+	bool	isChannelExists(std::string const &channelName)	const;
 
 	void	addClientToChannel(Client &user, std::string const &channelName);
 	void	rmClientToChannel(Client &user, std::string const &channelName);

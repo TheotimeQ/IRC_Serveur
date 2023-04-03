@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands_Channel_Operation.cpp                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/03 08:38:13 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/03 10:06:08 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,13 @@ void  JOIN_Command::Execute(Client &Client, std::vector<std::string> Args, Chann
     this->Send_Cmd(Client.Socket,":IRC 333 Zel #test dan!~d@localhost 1547691506 \n"); //set topic
     this->Send_Cmd(Client.Socket,":IRC MODE #test +nt \n");
     this->Send_Cmd(Client.Socket,":IRC 475 Zel #test :Cannot join channel (+k) - bad key \n");
-	this->Send_Cmd(Client.Socket,"MESSAGE DE RETOUR POUR TEST CUSTOM NON FORMATE \n");
 
 
 	// [1] Le channel n'existe pas -> c'est donc une creation
 	// 403    ERR_NOSUCHCHANNEL "<channel name> :No such channel" 
 	//- Used to indicate the given channel name is invalid
 	if (!Channel_Manager.isChannelExists(Args[1])) {
-		
+
 	}
 
 
