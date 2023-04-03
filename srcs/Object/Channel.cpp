@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
+/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 10:18:15 by loumarti          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2023/04/02 15:36:45 by tquere           ###   ########.fr       */
-=======
-/*   Updated: 2023/04/02 14:27:46 by loumarti         ###   ########lyon.fr   */
->>>>>>> d5f67b5f15860024358e69203a105a647d5c3137
+/*   Updated: 2023/04/03 06:38:12 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,23 +75,14 @@ void				Channel::addUser(Client const &newUser) {
 	status.him = newUser;
 	status.chop = false;
 	status.creator = false;
-<<<<<<< HEAD
-	_users[newUser.UserName] = status;
-=======
-	status.voice = (mode.m == true ? false : true);
-	_users[newUser._NickName] = status;
->>>>>>> d5f67b5f15860024358e69203a105a647d5c3137
+	_users[newUser.NickName] = status;
 }
 
 // delete an user from channel
 void				Channel::delUser(Client const &userToDel) {
 	t_mapClientStatus::iterator	it;
 
-<<<<<<< HEAD
-	it = _users.find(userToDel.UserName);
-=======
-	it = _users.find(userToDel._NickName);
->>>>>>> d5f67b5f15860024358e69203a105a647d5c3137
+	it = _users.find(userToDel.NickName);
 	if (it != _users.end()) {
 		_users.erase(it);
 	}
@@ -144,12 +131,8 @@ void				Channel::dealUsersStatus(Client &chop) {
 		status.creator = true;
 	}
 	status.chop = true;
-<<<<<<< HEAD
-	_users[chop.UserName] = status;
-=======
 	status.voice = false;
-	_users[chop._UserName] = status;
->>>>>>> d5f67b5f15860024358e69203a105a647d5c3137
+	_users[chop.NickName] = status;
 }
 
 // can't use memset or bzero because there is a std::map<> in t_chanmode struct

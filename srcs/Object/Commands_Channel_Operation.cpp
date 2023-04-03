@@ -61,7 +61,7 @@ void  TOPIC_Command::Execute(Client &Client, std::vector<std::string> Args, Chan
     (void )Client;
 	// [1] si nb Args == 2 (exemple Topic #test) --> demande le topic
 	if (Args.size() == 2) {
-		this->Send_Cmd(Client._Client_Socket, ":IRC 332 " + Client._NickName + " " + Args[1] + " :" + "demande du channel topic" + " \n");
+		this->Send_Cmd(Client.Socket, ":IRC 332 " + Client.NickName + " " + Args[1] + " :" + "demande du channel topic" + " \n");
 	}
 
 	// // sinon c'est une tentative pour changer le Topic
