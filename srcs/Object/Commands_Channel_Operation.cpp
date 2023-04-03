@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:09:32 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/02 14:55:42 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/02 15:02:54 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void  MODE_Command::Execute(Client &Client, std::vector<std::string> Args, Chann
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.4
 void  TOPIC_Command::Execute(Client &Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
-	int	ret;
+	// int	ret;
 
     (void )Args;
     (void )Channel_Manager;
@@ -78,7 +78,10 @@ void  TOPIC_Command::Execute(Client &Client, std::vector<std::string> Args, Chan
 		this->Send_Cmd(Client._Client_Socket, ":IRC 332 " + Client._NickName + " " + Args[1] + " :" + "demande du channel topic" + " \n");
 	}
 
-	// sinon c'est une tentative pour changer le Topic
+	// // sinon c'est une tentative pour changer le Topic
+	// else {
+	// 	ret = Channel_Manager.setTopicOf()
+	// }
 	
 
 

@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/02 14:47:36 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/02 15:02:43 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,12 @@ int			ChannelManager::setTopicOf(std::string const &channelName, std::string con
 	it = _chanList.find(channelName);
 	if (it != _chanList.end()) {
 		
+		// si le mode autorise changement de topic () // +si le client a les droits
+		
+		// constinuer ici (...)
+		(void) newTopic;
+		// sinon retour err CM_TOPICLOCK
+		return 0; // pour compiler
 	} else {
 		return CM_NOCHANNEL;
 	}
