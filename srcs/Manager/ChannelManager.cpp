@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/01 10:26:20 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/02 11:11:18 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ ChannelManager	&ChannelManager::operator=(ChannelManager const &righty) {
 
 // if user is already in channel, nothing happens
 void	ChannelManager::addClientToChannel(Client &user, std::string const &channelName) {
+
+
 	if (!isChannelExists(channelName))
 		tryAddNewChannel(channelName, user);
 	if (isChannelExists(channelName)) {
@@ -48,7 +50,7 @@ void	ChannelManager::rmClientToChannel(Client &user, std::string const &channelN
 	if (!isChannelExists(channelName))
 		return; // [?] besoin de gerer erreure ici ?
 	_chanList[channelName].delUser(user);
-	if (_chanList[channelName].getUsers().size() < 1)
+	if (_chanList[channelName].isEmpty())
 		rmChannel(channelName);
 }
 
