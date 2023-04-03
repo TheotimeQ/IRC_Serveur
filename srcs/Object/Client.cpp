@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
+/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 09:03:00 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/02 16:34:37 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/03 08:59:52 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ Client::Client():
     NickName("Undefined"),
     Password("Undefined"),
     Type(-1),
-	Logged(0)
+	Logged(1) //Logged by default
 {
 	_Client_Address_Len = sizeof(_Client_Address);
 	Socket = -1;
@@ -29,7 +29,7 @@ Client::Client(int Serveur_Socket):
     NickName("Undefined"),
     Password("Undefined"),
     Type(-1),
-	Logged(0)
+	Logged(1) //Logged by default
 {
 	_Client_Address_Len = sizeof(_Client_Address);
 	Socket = accept(Serveur_Socket, (struct sockaddr *)&_Client_Address, &_Client_Address_Len);
@@ -65,11 +65,11 @@ Client::~Client()
 std::ostream& operator<<(std::ostream &out, const Client &Client)
 {
 	out << "\n"      							<< std::endl;
-    out << "USER : " << Client.UserName     	<< std::endl;
-	out << "NICK : " << Client.NickName   		<< std::endl;
-    out << "PASS : " << Client.Password      	<< std::endl;
-	out << "SOCK : " << Client.Socket   		<< std::endl;
-    out << "TYPE : " << Client.Password        	<< std::endl;
-	out << "TYPE : " << Client.Logged        	<< std::endl;
+    out << "USER   : " << Client.UserName     	<< std::endl;
+	out << "NICK   : " << Client.NickName   		<< std::endl;
+    out << "PASS   : " << Client.Password      	<< std::endl;
+	out << "SOCK   : " << Client.Socket   		<< std::endl;
+    out << "TYPE   : " << Client.Password        	<< std::endl;
+	out << "LOGGED : " << Client.Logged        	<< std::endl;
 	return (out);
 }
