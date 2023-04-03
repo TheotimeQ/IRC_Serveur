@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:10:11 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/02 14:46:52 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/03 08:54:41 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,14 @@
 # include "../Object/Client.hpp"
 # include <iostream>
 
-# define ERRCHAN_CREATION 	"channel creation error : "
+# define ERRCHAN_CREATION	"channel creation error : "
+# define ERRCHAN_WRONGNAME	"[!] Channel Manager can't find : "
+
+# define LOGCHAN_NOTOPICPERM	" : has no topic set permission in channel : "
 
 // channel manager errors -> en faire une enum ?
 # define CM_NOCHANNEL 1
+# define CM_NOTOPICPERM 2
 
 
 typedef std::map<std::string, Channel>		t_mapChannel;
@@ -28,8 +32,6 @@ typedef std::map<std::string, Channel>		t_mapChannel;
 class ChannelManager {
 
  private :
-	
-
 	t_mapChannel			_chanList;
 
 	bool	isChannelExists(std::string const &channelName)	const;
@@ -49,9 +51,12 @@ class ChannelManager {
 	void	addClientToChannel(Client &user, std::string const &channelName);
 	void	rmClientToChannel(Client &user, std::string const &channelName);
 
+	//USERS STATUS
+	t_status const &getStatusOfIn(Client const &user, std::string const &channelName) const;
+
 	//TOPIC
 	std::string	getTopicOf(std::string const &channelName) const;
-	int			setTopicOf(std::string const &channelName, std::string const &newTopic);
+	int			setTopicOf(std::string const &channelName, std::string const &newTopic, Client const &user);
 
 };
 

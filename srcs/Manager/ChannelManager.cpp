@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/02 15:02:43 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/03 08:52:02 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,26 +59,57 @@ std::string	ChannelManager::getTopicOf(std::string const &channelName) const {
 	
 	it = _chanList.find(channelName);
 	if (it != _chanList.end()) {
-		return it->second.getTopic();
+		if (it->second.getTopic() == "")
+			return "No topic is set";
+		else
+			return it->second.getTopic();
 	} else {
-		return "";
+	std::cerr << ERRCHAN_WRONGNAME << channelName << std::endl;
+		return "No topic is set";
 	}
 }
 
-// try to set a topic, return values : 0 on success | > 0 if errors
-int			ChannelManager::setTopicOf(std::string const &channelName, std::string const &newTopic) {
+t_status const &ChannelManager::getStatusOfIn(Client const &user, std::string const &channelName) const {
 	t_mapChannel::const_iterator	it;
-	
+
 	it = _chanList.find(channelName);
 	if (it != _chanList.end()) {
+		return it->second.getStatusOf(user.NickName);
+	} else {
+		log(ERRCHAN_WRONGNAME + channelName);
+		return _chanList.begin()->second.getStatusOf(user.NickName);
+	}
+}
+
+
+
+
+// try to set a topic, return values : 0 on success | > 0 if errors
+int			ChannelManager::setTopicOf(std::string const &channelName, std::string const &newTopic, Client const &user) {
+	t_mapChannel::iterator	it;
+	// int	ret;
+	(void) user;
+
+	it = _chanList.find(channelName);
+	if (it != _chanList.end()) {
+
+		// Si le channel a le mode +t --> topic settable by channel operator only flag
+		if (it->second.mode.t == true) {
+			t_status status = getStatusOfIn(user, channelName);
+			if (status.creator == false && status.chop == false) {
+				log(user.NickName + LOGCHAN_NOTOPICPERM + channelName);
+				return CM_NOTOPICPERM;
+			}
+		}
 		
 		// si le mode autorise changement de topic () // +si le client a les droits
-		
+		it->second.setTopic(newTopic);
+		return 0; //GOOD
 		// constinuer ici (...)
-		(void) newTopic;
+		
 		// sinon retour err CM_TOPICLOCK
-		return 0; // pour compiler
 	} else {
+		log(ERRCHAN_WRONGNAME + channelName);
 		return CM_NOCHANNEL;
 	}
 }
@@ -95,6 +126,7 @@ void	ChannelManager::tryAddNewChannel(std::string const &name, Client &chop) {
 	} catch(Channel::ErrorMsgException &e) {
 		log(std::string(ERRCHAN_CREATION) + e.what());
 		// [+] envoyer un message retour au client qui a mal fait son /join
+		// NON -> utiliser des code erreures a remonter jusqua la commande par le biais du ChManager
 	}
 }
 
@@ -118,9 +150,9 @@ bool	ChannelManager::isChannelExists(std::string const &channelName) const {
 
 // to print log message from  ChannelManager class
 void	ChannelManager::log(std::string const &logMsg)	const {
-	std::cout << "\033[38;5;102m";
-	std::cout << "ChannelManager : " << logMsg << std::endl;
-	std::cout << "\033[m";
+	std::cerr << "\033[38;5;102m";
+	std::cerr << "ChannelManager : " << logMsg << std::endl;
+	std::cerr << "\033[m";
 }
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~ getter setters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */

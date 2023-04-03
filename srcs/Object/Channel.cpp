@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 10:18:15 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/03 06:38:12 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/03 08:25:13 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,19 @@ bool				Channel::isEmpty()	const {
 	return (_users.size() < 1 ? true : false);
 }
 
+t_status const		&Channel::getStatusOf(std::string const &userName) const {
+	t_mapClientStatus::const_iterator	it;
+
+	it = _users.find(userName);
+	if (it != _users.end()) {
+		return it->second.status;
+	} else {
+		log(CHERR_USERNAME_NOTFOUND + userName);
+		return _users.begin()->second.status;
+	}
+}
+
+
 
 //////////////////////* public methods *//////////////////////////
 
@@ -70,12 +83,13 @@ void				Channel::announce(std::string msg) const {
 
 // if user is already in channel, nothing happens
 void				Channel::addUser(Client const &newUser) {
-	t_status status;
+	t_clientData clientData;
 
-	status.him = newUser;
-	status.chop = false;
-	status.creator = false;
-	_users[newUser.NickName] = status;
+	clientData.him = newUser;
+	clientData.status.chop = false;
+	clientData.status.creator = false;
+	clientData.status.voice = false;
+	_users[newUser.NickName] = clientData;
 }
 
 // delete an user from channel
@@ -95,10 +109,10 @@ void				Channel::rmOpPrivilege(std::string const &username) {
 
 	it = _users.find(username);
 	if (it != _users.end()) {
-		if (it->second.chop == true) {
+		if (it->second.status.chop == true) {
 			log("removing channel operatore privilege to " + it->first);
-			it->second.chop = false;
-		} else{
+			it->second.status.chop = false;
+		} else {
 			log(it->first + " is not channel operator, can't remove privilege");
 		}
 	}
@@ -124,15 +138,15 @@ void			Channel::checkChanName(std::string const &name) {
 
 // manage status/privilege channel operator + channel creator
 void				Channel::dealUsersStatus(Client &chop) {
-	t_status	status;
+	t_clientData	clientData;
 	
 	if (_name[0] == '!') {
 		_name[0] = '#';
-		status.creator = true;
+		clientData.status.creator = true;
 	}
-	status.chop = true;
-	status.voice = false;
-	_users[chop.NickName] = status;
+	clientData.status.chop = true;
+	clientData.status.voice = true;
+	_users[chop.NickName] = clientData;
 }
 
 // can't use memset or bzero because there is a std::map<> in t_chanmode struct
@@ -143,9 +157,9 @@ void				Channel::initChannel() {
 
 // to print log message from Channel class
 void	Channel::log(std::string const &logMsg)	const {
-	std::cout << "\033[38;5;24m";
-	std::cout << "Channel : " + _name + " : " << logMsg << std::endl;
-	std::cout << "\033[m";
+	std::cerr << "\033[38;5;24m";
+	std::cerr << "Channel : " + _name + " : " << logMsg << std::endl;
+	std::cerr << "\033[m";
 }
 
 
@@ -155,9 +169,9 @@ std::ostream	&operator<<(std::ostream &o, t_mapClientStatus const &users) {
 	t_mapClientStatus::const_iterator	it = users.begin();
 
 	while (it != users.end()) {
-		if (it->second.creator == true) {
+		if (it->second.status.creator == true) {
 			o << "!"; // channel creator tag (maybe it should be ~ instead)
-		} else if (it->second.chop == true) {
+		} else if (it->second.status.chop == true) {
 			o << "@"; // channel operator tag
 		}
 		if (it != users.begin())
