@@ -1,5 +1,5 @@
 /* JE GARDE CECI POUR LE MOMENT*/
-// void  JOIN_Command::Execute(Client &Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
+// void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 // {
 //     (void )Args;
 //     (void )Channel_Manager;

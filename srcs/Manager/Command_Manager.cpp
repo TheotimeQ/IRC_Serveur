@@ -6,7 +6,7 @@
 /*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:32:08 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/03 08:56:06 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/03 16:50:28 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,13 @@
 Command_Manager::Command_Manager()
 {
     //TEST
-    Cmd_List["TEST"]    = new TEST_Command();
+    Cmd_List["DEBUG"]   = new DEBUG_Command();
     
     //Connection Registration
     Cmd_List["PASS"]    = new PASS_Command();
     Cmd_List["NICK"]    = new NICK_Command(); 
     Cmd_List["USER"]    = new USER_Command();
     Cmd_List["OPER"]    = new OPER_Command();
-    Cmd_List["QUIT"]    = new QUIT_Command();  
 
     //Channel operations
     Cmd_List["JOIN"]    = new JOIN_Command();
@@ -34,26 +33,9 @@ Command_Manager::Command_Manager()
     Cmd_List["INVITE"]  = new INVITE_Command(); 
     Cmd_List["KICK"]    = new KICK_Command(); 
 
-    // //Server queries and commands 
-    // Cmd_List["VERSION"]   = new VERSION_Command(); 
-    // Cmd_List["STATS"]     = new STATS_Command(); 
-    // Cmd_List["ADMIN"]     = new ADMIN_Command(); 
-    // Cmd_List["INFO"]      = new INFO_Command();
-
     //Sending messages
     Cmd_List["PRIVMSG"]   = new PRIVMSG_Command(); 
     Cmd_List["NOTICE"]    = new NOTICE_Command();
-
-    // //User-based queries 
-    // Cmd_List["WHO"]       = new WHO_Command();
-    // Cmd_List["WHOIS"]     = new WHOIS_Command();  
-    // Cmd_List["WHOWAS"]    = new WHOWAS_Command(); 
-
-    // //Miscellaneous messages 
-    // Cmd_List["KILL"]     = new KILL_Command();
-    // Cmd_List["PING"]     = new PING_Command();  
-    // Cmd_List["PONG"]     = new PONG_Command(); 
-    // Cmd_List["ERROR"]    = new ERROR_Command(); 
 
     return;
 }
@@ -74,16 +56,24 @@ A_Command* Command_Manager::Get_Command(std::string str)
 
     if (it != Cmd_List.end())
     {
-        std::cerr << EVENT_CMDFOUND << it->first << std::endl;
+        std::cout << EVENT_CMDFOUND << it->first << std::endl;
         return it->second;
     }
-    std::cerr << ERROR_CMDNOTFOUND << str << std::endl;
+    std::cout << ERROR_CMDNOTFOUND << str << std::endl;
     return NULL;
 }
 
 void Command_Manager::Tokenize(std::string const &str, const char delim, std::vector<std::string> &out) 
 { 
-    std::stringstream ss(str); 
+    std::string Cleaned = "";
+
+    for (int i = 0; i < (int)str.length(); i++) {
+        if (str[i] != '\r') {
+            Cleaned += str[i];
+        }
+    }
+
+    std::stringstream ss(Cleaned); 
  
     std::string s; 
     while (std::getline(ss, s, delim)) { 
@@ -99,25 +89,29 @@ int Command_Manager::Interpret_Data(Client *Client, ChannelManager &Channel_Mana
         Tokenize(*it, ' ', Args); 
         
         //DEBUG
-        std::cout << "-> Received   : "<< *it << std::endl;
+        // std::cout << "-> Received   : "<< *it << std::endl;
 
+        if (Args[0] == "QUIT")
+            return QUIT;
+            
         A_Command *Cmd = this->Get_Command(Args[0]);
-        
+
         if ((*Client).Logged == 0)
         {
             if (Args[0] == "USER" || Args[0] == "PASS" || Args[0] == "NICK")
             {
                 if (Cmd != NULL)
-                    Cmd->Execute((*Client), Args, Channel_Manager, Client_Manager);
+                    Cmd->Execute(Client, Args, Channel_Manager, Client_Manager);
+                //CHECK IF CAN LOG
             }
             else
                 std::cout << "Can't , not logged yet" << std::endl;
         }
         else   
             if (Cmd != NULL)
-                Cmd->Execute((*Client), Args, Channel_Manager, Client_Manager);
+                Cmd->Execute(Client, Args, Channel_Manager, Client_Manager);
     }
-
+    
     (*Client).All_Cmd.clear();
 
     return GOOD;

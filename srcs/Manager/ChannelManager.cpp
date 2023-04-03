@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelManager.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/03 12:16:01 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/03 14:56:26 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ std::string	ChannelManager::getTopicOf(std::string const &channelName) const {
 		else
 			return it->second.getTopic();
 	} else {
-	std::cerr << ERRCHAN_WRONGNAME << channelName << std::endl;
+	std::cout << ERRCHAN_WRONGNAME << channelName << std::endl;
 		return "No topic is set";
 	}
 }

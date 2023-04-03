@@ -1,8 +1,9 @@
 #ifndef IRC_HPP
 # define IRC_HPP
 
-#define ERROR 1
 #define GOOD  0
+#define ERROR 1
+#define QUIT  2
 
 #define SERVER_NAME "IRC"
 #define SERVER_PORT 6667

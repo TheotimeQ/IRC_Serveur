@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test_loup.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
+/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 06:51:40 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/02 15:54:43 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/03 14:56:26 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	catch_error;
 
 	if (server_socket < 0) {
 		// Si fail on a le msg erreure avec errno
-		cerr << "ircserv : socket() error : " << strerror(errno) << endl;
+		cout << "ircserv : socket() error : " << strerror(errno) << endl;
 		exit(1);
 	} else {
 		// Si success on a le file descriptor du socket
@@ -55,14 +55,14 @@ server_addr.sin6_port = htons(12345);
 catch_error = bind(server_socket, \
 	reinterpret_cast<struct sockaddr *>(&server_addr), sizeof(server_addr));
 if (catch_error < 0) {
-	cerr << "ircserv : bind() error : " << strerror(errno) << endl;
+	cout << "ircserv : bind() error : " << strerror(errno) << endl;
 	exit(1);
 }
 
 // [2]-[2] socket_server -> Listen mode
 catch_error = listen(server_socket, MAX_CLIENTS);
 if (catch_error < 0) {
-	cerr << "ircserv : listen() error : " << strerror(errno) << endl;
+	cout << "ircserv : listen() error : " << strerror(errno) << endl;
 	exit(1);
 }
 ///////////////////////////////////////////////////////////////////////
@@ -81,7 +81,7 @@ while (1) {
 	int ret = poll(poll_set, nfds, -1);
 
 	if (ret < 0) {
-		cerr << "ircserv : poll() error : " << strerror(errno) << endl;
+		cout << "ircserv : poll() error : " << strerror(errno) << endl;
 		break ;
 	}
 
@@ -99,7 +99,7 @@ while (1) {
 					reinterpret_cast<struct sockaddr *>(&client_addr), \
 					&client_addr_len);
 				if (Socket < 0) {
-					cerr << "ircserv : accept() error : " << strerror(errno) << endl;
+					cout << "ircserv : accept() error : " << strerror(errno) << endl;
 					break ;
 				} else {
 					cout << "Nouvelle connection entrante Socket = " << Socket << endl;
@@ -118,7 +118,7 @@ while (1) {
 				int nbytes = recv(Socket, buffer, BUFFER_SIZE, 0);
 
 				if (nbytes < 0) {
-					cerr << "ircserv : recv() error : " << strerror(errno) << endl;
+					cout << "ircserv : recv() error : " << strerror(errno) << endl;
 					break ;
 				}
 				

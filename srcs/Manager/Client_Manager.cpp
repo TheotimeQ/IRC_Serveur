@@ -6,7 +6,7 @@
 /*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:32:08 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/03 08:57:39 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/03 16:51:38 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,37 +29,35 @@ Client_Manager::~Client_Manager()
 
 void Client_Manager::Print_Clients(void)
 {
-    std::map<std::string, Client>::iterator it;
+    std::vector<Client>::iterator it;
     
     for (it = _All_Clients.begin(); it != _All_Clients.end(); ++it)
     {
-        std::cout << it->second << std::endl;
+        std::cout << *it << std::endl;
     }
 }
 
 Client *Client_Manager::Get_Client_by_fd(int fd)
 {
-    std::map<std::string, Client>::iterator it;
-    
-    for (it = _All_Clients.begin(); it != _All_Clients.end(); ++it) 
+    std::vector<Client>::iterator it;
+
+    for (it = _All_Clients.begin(); it != _All_Clients.end(); ++it)
     {
-        if ((it->second).Socket == fd)
-            return &(it->second);
+        if ((*it).Socket == fd)
+            return &(*it);
     }
-    std::cerr << ERROR_FID_CLIENT << fd << std::endl;
 	return NULL;
 }
 
 Client *Client_Manager::Get_Client(std::string NickName)
 {
-    std::map<std::string, Client>::iterator it;
-    
-    for (it = _All_Clients.begin(); it != _All_Clients.end(); ++it) 
+    std::vector<Client>::iterator it;
+
+    for (it = _All_Clients.begin(); it != _All_Clients.end(); ++it)
     {
-        if ((it->second).NickName == NickName)
-            return &(it->second);
-    }
-    std::cerr << ERROR_FID_CLIENT << NickName << std::endl;
+        if ((*it).NickName == NickName)
+            return &(*it);
+    }  
 	return NULL;
 }
 
@@ -67,32 +65,31 @@ int Client_Manager::Add_Client(const Client& Client)
 {
     if (this->Nb_Clients >= MAX_CLIENTS)
     {
-        std::cerr << ERROR_MAX_CLIENT << std::endl;
+        std::cout << ERROR_MAX_CLIENT << std::endl;
         return ERROR;
     }   
-
-    _All_Clients[Client.NickName] = Client;
+    _All_Clients.push_back(Client);
     this->Nb_Clients++;
-
-    // this->Print_Clients();
-
+    
 	return GOOD;
 }
 
 int Client_Manager::Remove_Client(const Client& Clt) 
 {
-    std::map<std::string, Client>::iterator it = _All_Clients.find(Clt.NickName);
+    std::vector<Client>::iterator it;
 
-    if (it != _All_Clients.end()) {
-        _All_Clients.erase(it);
-        return GOOD;
+    for (it = _All_Clients.begin(); it != _All_Clients.end(); ++it)
+    {
+        if ((*it).NickName == Clt.NickName)
+        {
+            _All_Clients.erase(it);
+            return GOOD;
+        }
     }
-    std::cerr << ERROR_DEL_CLIENT << std::endl;
+
+    std::cout << ERROR_DEL_CLIENT << std::endl;
     return ERROR;
 }
-
-
-
 
 //Regarde si le client peut etre logge
 int Client_Manager::Check_If_Can_Log(const Client& Client) 

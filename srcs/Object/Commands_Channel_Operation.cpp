@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands_Channel_Operation.cpp                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/03 12:33:16 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/03 16:29:31 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 //=====================================Channel operations======================================
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.1
-void  JOIN_Command::Execute(Client &Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
+void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
     (void )Args;
     (void )Channel_Manager;
@@ -45,7 +45,7 @@ void  JOIN_Command::Execute(Client &Client, std::vector<std::string> Args, Chann
 	// 403    ERR_NOSUCHCHANNEL "<channel name> :No such channel" 
 	//- Used to indicate the given channel name is invalid
 	if (!Channel_Manager.isChannelExists(Args[1])) {
-		int ret = Channel_Manager.addNewChannel(Args[1], Client);
+		int ret = Channel_Manager.addNewChannel(Args[1], (*Client));
 		
 		if (ret == 0) { // le channel est bien ajoute
 
@@ -55,8 +55,8 @@ void  JOIN_Command::Execute(Client &Client, std::vector<std::string> Args, Chann
 			std::cout << "chan_list : " << Channel_Manager.getChanList() << std::endl; //checking
 
 		} else { // toute forme d'erreur lie a un mauvais nom de channel
-			std::string rep = BuildRep_Basic(403, Client.NickName, Args[1], " :No such channel");
-			this->Send_Cmd(Client.Socket, rep);
+			std::string rep = BuildRep_Basic(403, Client->NickName, Args[1], " :No such channel");
+			this->Send_Cmd(Client->Socket, rep);
 		}
 	}
 
@@ -79,7 +79,7 @@ void  JOIN_Command::Execute(Client &Client, std::vector<std::string> Args, Chann
 }
 
 /* JE GARDE CECI POUR LE MOMENT*/
-// void  JOIN_Command::Execute(Client &Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
+// void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 // {
 //     (void )Args;
 //     (void )Channel_Manager;
@@ -106,7 +106,7 @@ void  JOIN_Command::Execute(Client &Client, std::vector<std::string> Args, Chann
 // }
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.2
-void  PART_Command::Execute(Client &Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
+void  PART_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
     (void )Args;
     (void )Channel_Manager;
@@ -115,7 +115,7 @@ void  PART_Command::Execute(Client &Client, std::vector<std::string> Args, Chann
 }
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.3
-void  MODE_Command::Execute(Client &Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
+void  MODE_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
     (void )Args;
     (void )Channel_Manager;
@@ -127,7 +127,7 @@ void  MODE_Command::Execute(Client &Client, std::vector<std::string> Args, Chann
 
 // [+] autre code a gere une fois join fini
 // 442     ERR_NOTONCHANNEL "<channel> :You're not on that channel"
-void  TOPIC_Command::Execute(Client &Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
+void  TOPIC_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
 	int	ret;
 	// Memo :  Args[1] is Channel Name;
@@ -144,15 +144,15 @@ void  TOPIC_Command::Execute(Client &Client, std::vector<std::string> Args, Chan
 		std::string theTopic;
 		
 		theTopic = Channel_Manager.getTopicOf(Args[1]);
-		rep = BuildRep_Basic(332, Client.NickName, Args[1], theTopic);
+		rep = BuildRep_Basic(332, (*Client).NickName, Args[1], theTopic);
 		//buildRep = ":" + std::string(SERVER_NAME) + " 332 " + Client.NickName + " " + Args[1] + " :" + theTopic + " \n";
-		this->Send_Cmd(Client.Socket, rep);
+		this->Send_Cmd(Client->Socket, rep);
 	}
 
 	// [+] a tester une fois JOIN et MODE faits
 	// [2] sinon c'est une tentative pour changer le Topic
 	else if (Args.size() > 2) {
-		ret = Channel_Manager.setTopicOf(Args[1], Args[2], Client);
+		ret = Channel_Manager.setTopicOf(Args[1], Args[2], (*Client));
 		if (ret == GOOD) { // construire la reponse du changement de topic
 			//":IRC 333 Zel #test dan!~d@localhost 1547691506 \n")
 			// [+] a finir
@@ -172,7 +172,7 @@ void  TOPIC_Command::Execute(Client &Client, std::vector<std::string> Args, Chan
 }
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.5
-void  NAMES_Command::Execute(Client &Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
+void  NAMES_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
     (void )Args;
     (void )Channel_Manager;
@@ -181,7 +181,7 @@ void  NAMES_Command::Execute(Client &Client, std::vector<std::string> Args, Chan
 }
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.6
-void  LIST_Command::Execute(Client &Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
+void  LIST_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
     (void )Args;
     (void )Channel_Manager;
@@ -190,16 +190,15 @@ void  LIST_Command::Execute(Client &Client, std::vector<std::string> Args, Chann
 }
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.7
-void  INVITE_Command::Execute(Client &Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
+void  INVITE_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
     (void )Args;
     (void )Channel_Manager;
     (void )Client_Manager;
     (void )Client;
 }
-
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.8
-void  KICK_Command::Execute(Client &Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
+void  KICK_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
     (void )Args;
     (void )Channel_Manager;

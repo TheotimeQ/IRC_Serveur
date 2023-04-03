@@ -6,7 +6,7 @@
 /*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:50:43 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/03 08:47:38 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/03 16:03:03 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	Server::Start_Server()
 {
     _Server_Socket = socket(AF_INET6, SOCK_STREAM, 0);
     if (_Server_Socket < 0) {
-        std::cerr << ERROR_SOCKET << std::endl;
+        std::cout << ERROR_SOCKET << std::endl;
         return ERROR;
     }
 
@@ -44,17 +44,17 @@ int	Server::Start_Server()
 
     int yes = 1;
     if (setsockopt(_Server_Socket, SOL_SOCKET, SO_REUSEADDR, &(yes), sizeof(int)) == -1) {
-        std::cerr << ERROR_CONF_SOCKET << strerror(errno) << std::endl;
+        std::cout << ERROR_CONF_SOCKET << strerror(errno) << std::endl;
         return ERROR;
     }
 
     if (bind(_Server_Socket, (struct sockaddr *)&_Server_Address, sizeof(_Server_Address)) < 0) {
-        std::cerr << ERROR_BIND << std::endl;
+        std::cout << ERROR_BIND << std::endl;
         return ERROR;
     }
 
     if (listen(_Server_Socket, MAX_CLIENTS) < 0) {
-        std::cerr << ERROR_LISTEN << std::endl;
+        std::cout << ERROR_LISTEN << std::endl;
         return ERROR;
     }
 
@@ -67,12 +67,14 @@ int	Server::Start_Server()
 
 int	Server::Run()
 {
+    int ret = 0;
+
     while (true) 
     {
         int ret = poll(_Poll_Set, _CltMng.Nb_Clients, -1);
         if (ret < 0) 
         {
-            std::cerr << ERROR_POLL << std::endl;
+            std::cout << ERROR_POLL << std::endl;
             break;
         }
 
@@ -94,19 +96,22 @@ int	Server::Run()
                     if(this->Get_Data(Cur_Client))
                         this->Deconnect_Client((*Cur_Client), i);
                     else
-                        this->_CmdMng.Interpret_Data(Cur_Client, _ChnMng, _CltMng);
+                        ret = this->_CmdMng.Interpret_Data(Cur_Client, _ChnMng, _CltMng);
+                        
+                    if (ret == QUIT)
+                        this->Deconnect_Client((*Cur_Client), i);
                 }
             }
         }
     }
-    return GOOD;
+    return ret;
 }
 
 int Server::Setup_Client(const Client& Client)
 {    
     if (Client.Socket < 0) 
     {
-        std::cerr << ERROR_CONNECTION << std::endl;
+        std::cout << ERROR_CONNECTION << std::endl;
         return ERROR;
     }
 

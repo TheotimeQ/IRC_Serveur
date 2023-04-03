@@ -22,6 +22,7 @@ class Client
 		std::string 				UserName;
 		std::string	    			NickName;
         std::string	    			Password;
+		std::string	    			HostName;
         int             			Type;
 		int							Logged;
 

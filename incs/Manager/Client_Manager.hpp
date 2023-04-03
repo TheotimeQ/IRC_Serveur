@@ -9,17 +9,18 @@
 #include "../Irc.hpp"
 #include "../Object/Client.hpp"
 
-#define ERROR_MAX_CLIENT	"Error: Can't add new client , max reached"
-#define ERROR_RTN_CLIENT	"Error: Can't return client , wrong index"
-#define ERROR_DEL_CLIENT	"Error: Can't add remove client , no such client"
-#define ERROR_FID_CLIENT	"Error: Can't find client , no such : "
+#define ERROR_MAX_CLIENT			"Error: Can't add new client , max reached"
+#define ERROR_RTN_CLIENT			"Error: Can't return client , wrong index"
+#define ERROR_DEL_CLIENT			"Error: Can't add remove client , no such client"
+#define ERROR_FID_CLIENT			"Error: Can't find client , no such : "
+#define ERROR_NICKNAME_ALREADY_USED	"Error: Can't change nickname , already used"
 
 class Client_Manager
 {
 	private:
 
-		std::map<std::string, Client>          _All_Clients;
-		std::map<std::string, std::string>     _All_Credentials;
+		std::vector<Client>          			_All_Clients;
+		std::map<std::string, std::string>     	_All_Credentials;
 
 	public:
 
@@ -33,6 +34,8 @@ class Client_Manager
 		int             Add_Client(const Client &Client);
 		int             Remove_Client(const Client &Client);
 		void            Print_Clients(void);
+
+		int				Set_Client_Nickname(Client &Client, std::string New_Nickname);
 
 		int             Check_If_Can_Log(const Client& Clt);
 };
