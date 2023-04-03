@@ -50,10 +50,9 @@ class Server
 		Command_Manager		_CmdMng;
 		Client_Manager		_CltMng;
 
-		int		Setup_Client(Client Client);
-		void	Deconnect_Client(int index);
-		int 	Get_Data(Client &Client, std::vector<std::string>& Data);
-		void	log(std::string const &logMsg)	const;
+		int		Setup_Client(const Client& Client);
+		void	Deconnect_Client(const Client& Client, int index);
+		int 	Get_Data(Client &Client);
 
 	public:
 		

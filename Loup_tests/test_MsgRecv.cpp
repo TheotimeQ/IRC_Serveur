@@ -20,12 +20,12 @@ int main() {
 	Client unPelo = Client();
 	Client unePelotte = Client();
 	
-	leChef.Set_NickName("leChef_n");
-	leChef.Set_UserName("M. Boss_u");
-	unPelo.Set_NickName("unPelo_n");
-	unPelo.Set_UserName("pelo_u");
-	unePelotte.Set_NickName("unePelotte_n");
-	unePelotte.Set_UserName("pelotte_u");
+	leChef.SetNickName("leChef_n");
+	leChef.SetUserName("M. Boss_u");
+	unPelo.SetNickName("unPelo_n");
+	unPelo.SetUserName("pelo_u");
+	unePelotte.SetNickName("unePelotte_n");
+	unePelotte.SetUserName("pelotte_u");
 	
 	//std::cout << leChef << std::endl;
 	

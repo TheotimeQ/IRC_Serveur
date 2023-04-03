@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:09:32 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/02 14:52:23 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/02 15:54:43 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void  TEST_Command::Execute(Client &Client, std::vector<std::string> Args, Chann
     (void )Client_Manager;
     (void )Client_Manager;
 
-    // std::cout << Client << std::endl;
+    std::cout << Client << std::endl;
 
-    this->Send_Cmd(Client._Client_Socket,":IRC 366 Zel #test :End of /NAMES list \n");
+    // this->Send_Cmd(Client.Socket,":IRC 366 Zel #test :End of /NAMES list \n");
 }

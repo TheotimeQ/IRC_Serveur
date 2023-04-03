@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Commands_Channel_Operation.cpp                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/01 10:09:32 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/02 15:02:54 by loumarti         ###   ########lyon.fr   */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "../../incs/Object/Commands.hpp"
 
@@ -27,20 +16,20 @@ void  JOIN_Command::Execute(Client &Client, std::vector<std::string> Args, Chann
     //Regarde si tu peux join
 
     //Si c'es bon
-        this->Send_Cmd(Client._Client_Socket,":Zel!~a@localhost JOIN #test \n");
+        this->Send_Cmd(Client.Socket,":Zel!~a@localhost JOIN #test \n");
 
-        this->Send_Cmd(Client._Client_Socket,":IRC 332 Zel #test :This is my cool channel! \n");
+        this->Send_Cmd(Client.Socket,":IRC 332 Zel #test :This is my cool channel! \n");
 
-        this->Send_Cmd(Client._Client_Socket,":IRC 353 Zel = #test :@Zel Tristan\n");
-        this->Send_Cmd(Client._Client_Socket,":IRC 366 Zel #test :End of /NAMES list \n");
+        this->Send_Cmd(Client.Socket,":IRC 353 Zel = #test :@Zel Tristan\n");
+        this->Send_Cmd(Client.Socket,":IRC 366 Zel #test :End of /NAMES list \n");
 
     //Si tu peux pas meesage d'erreur
 
 
-    this->Send_Cmd(Client._Client_Socket,":IRC 332 Zel #test Rien a dire \n");
-    this->Send_Cmd(Client._Client_Socket,":IRC 333 Zel #test dan!~d@localhost 1547691506 \n");
-    this->Send_Cmd(Client._Client_Socket,":IRC MODE #test +nt \n");
-    this->Send_Cmd(Client._Client_Socket,":IRC 475 Zel #test :Cannot join channel (+k) - bad key \n");
+    this->Send_Cmd(Client.Socket,":IRC 332 Zel #test Rien a dire \n");
+    this->Send_Cmd(Client.Socket,":IRC 333 Zel #test dan!~d@localhost 1547691506 \n");
+    this->Send_Cmd(Client.Socket,":IRC MODE #test +nt \n");
+    this->Send_Cmd(Client.Socket,":IRC 475 Zel #test :Cannot join channel (+k) - bad key \n");
 }
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.2
@@ -50,9 +39,6 @@ void  PART_Command::Execute(Client &Client, std::vector<std::string> Args, Chann
     (void )Channel_Manager;
     (void )Client_Manager;
     (void )Client;
-
-    
-
 }
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.3
