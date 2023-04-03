@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/03 10:06:08 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/03 12:33:16 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,27 +25,39 @@ void  JOIN_Command::Execute(Client &Client, std::vector<std::string> Args, Chann
     //Regarde si tu peux join
 
     //Si c'est bon
-        this->Send_Cmd(Client.Socket,":Zel!~a@localhost JOIN #test \n");
+    //     this->Send_Cmd(Client.Socket,":Zel!~a@localhost JOIN #test \n");
 
-        this->Send_Cmd(Client.Socket,":IRC 332 Zel #test :This is my cool channel! \n");
+    //     this->Send_Cmd(Client.Socket,":IRC 332 Zel #test :This is my cool channel! \n");
 
-        this->Send_Cmd(Client.Socket,":IRC 353 Zel = #test :@Zel Tristan\n");
-        this->Send_Cmd(Client.Socket,":IRC 366 Zel #test :End of /NAMES list \n");
+    //     this->Send_Cmd(Client.Socket,":IRC 353 Zel = #test :@Zel Tristan\n");
+    //     this->Send_Cmd(Client.Socket,":IRC 366 Zel #test :End of /NAMES list \n");
 
-    //Si tu peux pas message d'erreur
+    // //Si tu peux pas message d'erreur
 
 
-    this->Send_Cmd(Client.Socket,":IRC 332 Zel #test Rien a dire \n");
-    this->Send_Cmd(Client.Socket,":IRC 333 Zel #test dan!~d@localhost 1547691506 \n"); //set topic
-    this->Send_Cmd(Client.Socket,":IRC MODE #test +nt \n");
-    this->Send_Cmd(Client.Socket,":IRC 475 Zel #test :Cannot join channel (+k) - bad key \n");
+    // this->Send_Cmd(Client.Socket,":IRC 332 Zel #test Rien a dire \n");
+    // this->Send_Cmd(Client.Socket,":IRC 333 Zel #test dan!~d@localhost 1547691506 \n"); //set topic
+    // this->Send_Cmd(Client.Socket,":IRC MODE #test +nt \n");
+    // this->Send_Cmd(Client.Socket,":IRC 475 Zel #test :Cannot join channel (+k) - bad key \n");
 
 
 	// [1] Le channel n'existe pas -> c'est donc une creation
 	// 403    ERR_NOSUCHCHANNEL "<channel name> :No such channel" 
 	//- Used to indicate the given channel name is invalid
 	if (!Channel_Manager.isChannelExists(Args[1])) {
+		int ret = Channel_Manager.addNewChannel(Args[1], Client);
+		
+		if (ret == 0) { // le channel est bien ajoute
 
+			//A BUILD POUR CONTINUER : ":Zel!~a@localhost JOIN #test \n"
+			// std::string rep = "";
+			std::cout << "new chan process reponse" << std::endl; //checking
+			std::cout << "chan_list : " << Channel_Manager.getChanList() << std::endl; //checking
+
+		} else { // toute forme d'erreur lie a un mauvais nom de channel
+			std::string rep = BuildRep_Basic(403, Client.NickName, Args[1], " :No such channel");
+			this->Send_Cmd(Client.Socket, rep);
+		}
 	}
 
 
@@ -128,12 +140,13 @@ void  TOPIC_Command::Execute(Client &Client, std::vector<std::string> Args, Chan
 
 	// [1] si nb Args == 2 (exemple Topic #test) --> demande le topic
 	if (Args.size() == 2) {
-		std::string buildRep;
+		std::string rep;
 		std::string theTopic;
 		
 		theTopic = Channel_Manager.getTopicOf(Args[1]);
-		buildRep = ":IRC 332 " + Client.NickName + " " + Args[1] + " :" + theTopic + " \n";
-		this->Send_Cmd(Client.Socket, buildRep);
+		rep = BuildRep_Basic(332, Client.NickName, Args[1], theTopic);
+		//buildRep = ":" + std::string(SERVER_NAME) + " 332 " + Client.NickName + " " + Args[1] + " :" + theTopic + " \n";
+		this->Send_Cmd(Client.Socket, rep);
 	}
 
 	// [+] a tester une fois JOIN et MODE faits

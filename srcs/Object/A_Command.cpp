@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   A_Command.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 09:03:06 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/03 08:41:00 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/03 11:55:54 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,13 @@ int A_Command::Send_Cmd(int client_sock, const std::string& message)
     }
     std::cout << EVENT_NEW_MSG << message << std::endl;
     return GOOD;
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Build REP ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+// [Basic REP] -> ":IRC 332 Zel #test :This is my cool channel! \n"
+std::string	A_Command::BuildRep_Basic(int code, std::string const &nick, std::string const &channel, std::string const &addon) {
+	std::ostringstream oss;
+	oss << code;
+	return (":" + std::string(SERVER_NAME) + " " + oss.str() + " " + nick + " " + channel + " :" + addon + " \n");
 }

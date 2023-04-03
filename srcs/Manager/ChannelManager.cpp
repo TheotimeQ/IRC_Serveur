@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/03 08:52:02 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/03 12:16:01 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,37 @@ ChannelManager	&ChannelManager::operator=(ChannelManager const &righty) {
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ public methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
+// channel's name is [200]length prefixed by &, #, +, ! => gestion de '#' et '!'
+// forbidden characters : space, comma, semi-colon
+int		ChannelManager::checkChanName(std::string const &name) const {
+	if (name.size() < 2) {
+		log("name too short : " + name);
+		return CM_WRONGNAMEFORMAT;
+	}
+		
+	else if ((name[0] != '#' && name[0] != '!')) {
+		log("wrong name prefix : " + name);
+		return CM_WRONGNAMEFORMAT;
+	}
+	else if (name.size() > 200) {
+		log("name exceeded max length");
+		return CM_WRONGNAMEFORMAT;
+	}
+	for (unsigned i = 0; i < name.size(); ++i) {
+		if (name[i] == ' ' || name[i] == ',' || name[i] == ':') {
+			log("forbidden character found in : " + name);
+			return CM_WRONGNAMEFORMAT;
+		}
+	}
+	return 0;
+}
+
+
+
 // if user is already in channel, nothing happens
 void	ChannelManager::addClientToChannel(Client &user, std::string const &channelName) {
-
-
 	if (!isChannelExists(channelName))
-		tryAddNewChannel(channelName, user);
+		addNewChannel(channelName, user);
 	if (isChannelExists(channelName)) {
 		_chanList[channelName].addUser(user);
 	}
@@ -116,17 +141,19 @@ int			ChannelManager::setTopicOf(std::string const &channelName, std::string con
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ private methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-void	ChannelManager::tryAddNewChannel(std::string const &name, Client &chop) {
-	try {
-		t_mapChannel::iterator	it;
-		it = _chanList.find(name);
-		if (it != _chanList.end())
-			throw Channel::ErrorMsgException("this Channel already exists");
-		_chanList[name] = Channel(name, chop);
-	} catch(Channel::ErrorMsgException &e) {
-		log(std::string(ERRCHAN_CREATION) + e.what());
-		// [+] envoyer un message retour au client qui a mal fait son /join
-		// NON -> utiliser des code erreures a remonter jusqua la commande par le biais du ChManager
+int	ChannelManager::addNewChannel(std::string const &name, Client &chop) {
+	t_mapChannel::iterator	it;
+	
+	it = _chanList.find(name);
+	if (it == _chanList.end()) {
+		int ret = checkChanName(name);
+		if (ret == 0) {
+			_chanList[name] = Channel(name, chop);
+		}
+		return ret;
+	} else {
+		log("addNewChannel() : error");
+		return CM_ERROR;
 	}
 }
 
@@ -150,9 +177,9 @@ bool	ChannelManager::isChannelExists(std::string const &channelName) const {
 
 // to print log message from  ChannelManager class
 void	ChannelManager::log(std::string const &logMsg)	const {
-	std::cerr << "\033[38;5;102m";
-	std::cerr << "ChannelManager : " << logMsg << std::endl;
-	std::cerr << "\033[m";
+	std::cout << "\033[38;5;102m";
+	std::cout << "ChannelManager : " << logMsg << std::endl;
+	std::cout << "\033[m";
 }
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~ getter setters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */

@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 11:17:45 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/03 08:25:08 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/03 12:18:07 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ Parameters: <channel> {[+|-]|o|p|s|i|t|n|b|v} [<limit>] [<user>]
 # define CHERR_FORMAT_FCHAR		"channel name can't have spaces, coma or semicolon"
 
 // errors while maping into _users
-# 
 # define CHERR_USERNAME_NOTFOUND	"can't find the user : "
 
 
@@ -119,7 +118,6 @@ class Channel {
 	std::string					_key; // password to join (-> if +k mode is on)
 
 	/* private methods */
-	void				checkChanName(std::string const &name);
 	void				dealUsersStatus(Client &chop);
 	void				initChannel();
 	void				log(std::string const &logMsg)	const;
@@ -135,13 +133,13 @@ class Channel {
 
 	/* getters setters */
 
-	std::string const	&getName()		const;
-	t_mapClientStatus const	&getUsers()		const;
-	std::string const	&getTopic()		const;
-	t_chanmode const	&getChanmode()	const;
-	void				setTopic(std::string const &newTopic);
-	bool				isEmpty()		const;
-	t_status const		&getStatusOf(std::string const &userName) const;
+	std::string const		&getName()									const;
+	t_mapClientStatus const	&getUsers()									const;
+	std::string const		&getTopic()									const;
+	t_chanmode const		&getChanmode()								const;
+	void					setTopic(std::string const &newTopic);
+	bool					isEmpty()									const;
+	t_status const			&getStatusOf(std::string const &userName)	const;
 	// setter du chanmode un par un ?? a voir ...
 
 

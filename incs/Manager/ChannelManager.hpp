@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:10:11 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/03 10:03:31 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/03 11:03:10 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,10 @@
 # define LOGCHAN_NOTOPICPERM	" : has no topic set permission in channel : "
 
 // channel manager errors -> en faire une enum ?
-# define CM_NOCHANNEL 1
-# define CM_NOTOPICPERM 2
-
+# define CM_ERROR 1
+# define CM_NOCHANNEL 2
+# define CM_NOTOPICPERM 3
+# define CM_WRONGNAMEFORMAT 4
 
 typedef std::map<std::string, Channel>		t_mapChannel;
 
@@ -36,8 +37,6 @@ class ChannelManager {
 
 	void	log(std::string const &logMsg)					const;
 
-	void	tryAddNewChannel(std::string const &name, Client &chop);
-	void	rmChannel(std::string const &name);
 
  public :
 	ChannelManager();
@@ -46,7 +45,13 @@ class ChannelManager {
 	ChannelManager	&operator=(ChannelManager const &righty);
 
 	t_mapChannel const	&getChanList() const;
+
+	// BASIC MANAGEMENT
 	bool	isChannelExists(std::string const &channelName)	const;
+	int		addNewChannel(std::string const &name, Client &chop);
+	int		checkChanName(std::string const &name) const; // au niveau du manager -> try catch pas pratique ici
+	void	rmChannel(std::string const &name);
+
 
 	void	addClientToChannel(Client &user, std::string const &channelName);
 	void	rmClientToChannel(Client &user, std::string const &channelName);

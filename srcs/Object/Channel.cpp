@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 10:18:15 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/03 08:25:13 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/03 12:26:40 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,10 @@ Channel::~Channel() {
 
 // Utiliser un try-catch pour creer un channel -> throw exceptions
 Channel::Channel(std::string const &name, Client &chop) 
-: _topic(""), _key("")
+: _name(name), _topic(""), _key("")
 {
-	//log(" creation in progress");
+	log("creation in progress");
 	initChannel();
-	checkChanName(name);
 	dealUsersStatus(chop);
 }
 
@@ -67,7 +66,7 @@ t_status const		&Channel::getStatusOf(std::string const &userName) const {
 
 
 
-//////////////////////* public methods *//////////////////////////
+//////////////////////* methods *//////////////////////////
 
 // Envoi d' un objet message à tout les clients connecté
 // ( Faudra bien definir l'objet message ) -> string pour l'instant
@@ -119,23 +118,6 @@ void				Channel::rmOpPrivilege(std::string const &username) {
 }
 
 
-////////////////////////* private methods *////////////////////////
-
-// channel's name is [200]length prefixed by &, #, +, ! => gestion de '#' et '!'
-// forbidden characters : space, comma, semi-colon
-void			Channel::checkChanName(std::string const &name) {
-	if (name.size() < 2)
-		throw ErrorMsgException(CHERR_FORMAT);
-	else if ((name[0] != '#' && name[0] != '!'))
-		throw ErrorMsgException(CHERR_FORMAT_PRE);
-	else if (name.size() > 200)
-		throw ErrorMsgException(CHERR_FORMAT_TOOLONG);
-	for (unsigned i = 0; i < name.size(); ++i) {
-		if (name[i] == ' ' || name[i] == ',' || name[i] == ':')
-			throw ErrorMsgException(CHERR_FORMAT_FCHAR);
-	}
-}
-
 // manage status/privilege channel operator + channel creator
 void				Channel::dealUsersStatus(Client &chop) {
 	t_clientData	clientData;
@@ -157,9 +139,9 @@ void				Channel::initChannel() {
 
 // to print log message from Channel class
 void	Channel::log(std::string const &logMsg)	const {
-	std::cerr << "\033[38;5;24m";
-	std::cerr << "Channel : " + _name + " : " << logMsg << std::endl;
-	std::cerr << "\033[m";
+	std::cout << "\033[38;5;24m";
+	std::cout << "Channel : " + _name + " : " << logMsg << std::endl;
+	std::cout << "\033[m";
 }
 
 
