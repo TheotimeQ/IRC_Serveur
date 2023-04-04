@@ -6,7 +6,7 @@
 /*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 09:03:06 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/03 16:24:57 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/04 08:44:59 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int A_Command::Send_Cmd(int client_sock, const std::string& message)
         std::cout << ERROR_SEND_MSG << strerror(errno) << std::endl;
         return ERROR;
     }
-    std::cout << EVENT_NEW_MSG << message << std::endl;
+    std::cout << EVENT_NEW_MSG << message ;
     return GOOD;
 }
 

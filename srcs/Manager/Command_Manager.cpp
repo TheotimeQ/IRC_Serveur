@@ -6,7 +6,7 @@
 /*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:32:08 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/03 16:50:28 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/04 09:00:29 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,10 @@ int Command_Manager::Interpret_Data(Client *Client, ChannelManager &Channel_Mana
         // std::cout << "-> Received   : "<< *it << std::endl;
 
         if (Args[0] == "QUIT")
+        {
+            std::cout << EVENT_CMDFOUND << Args[0] << std::endl;
             return QUIT;
+        }
             
         A_Command *Cmd = this->Get_Command(Args[0]);
 

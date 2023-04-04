@@ -6,7 +6,7 @@
 /*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:12:57 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/03 16:25:22 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/04 08:15:52 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,15 @@
 
 #include "../../incs/Object/A_Command.hpp"
 
-#define RPL_TOPIC       332
-#define RPL_NAMREPLY    353
-#define RPL_ENDOFNAMES  366
+#define RPL_AWAY                301
+#define RPL_TOPIC               332
+#define RPL_NAMREPLY            353
+#define RPL_ENDOFNAMES          366
+#define ERR_CANNOTSENDTOCHAN    404
+#define ERR_WASNOSUCHNICK       406
+#define ERR_TOOMANYTARGETS      407
+#define ERR_NORECIPIENT         411     
+#define ERR_NOTEXTTOSEND        412     
 
 #define ERROR_BAD_FORMAT 	"Error: Bad format \n"
 

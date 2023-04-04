@@ -6,7 +6,7 @@
 /*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/03 16:29:31 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/04 08:34:04 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,14 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
     //Regarde si tu peux join
 
     //Si c'est bon
-    //     this->Send_Cmd(Client.Socket,":Zel!~a@localhost JOIN #test \n");
+	this->Send_Cmd(Client->Socket,":Zel!~a@localhost JOIN #test \n");
 
-    //     this->Send_Cmd(Client.Socket,":IRC 332 Zel #test :This is my cool channel! \n");
+	this->Send_Cmd(Client->Socket,":IRC 332 Zel #test :This is my cool channel! \n");
 
-    //     this->Send_Cmd(Client.Socket,":IRC 353 Zel = #test :@Zel Tristan\n");
-    //     this->Send_Cmd(Client.Socket,":IRC 366 Zel #test :End of /NAMES list \n");
+	this->Send_Cmd(Client->Socket,":IRC 353 Zel = #test :@Zel Tristan\n");
+	this->Send_Cmd(Client->Socket,":IRC 366 Zel #test :End of /NAMES list \n");
 
+	return ;
     // //Si tu peux pas message d'erreur
 
 

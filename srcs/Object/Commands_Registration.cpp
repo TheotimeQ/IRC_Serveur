@@ -6,7 +6,7 @@
 /*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:09:32 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/03 16:50:40 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/04 09:43:19 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@
 //PASS 
 void  PASS_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
+
+    // ERR_NEEDMOREPARAMS              
+    // ERR_ALREADYREGISTRED
+    
     (void )Channel_Manager;
     (void )Client_Manager;
 
@@ -31,6 +35,12 @@ void  PASS_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 //NICK
 void  NICK_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
+
+    // ERR_NONICKNAMEGIVEN             
+    // ERR_ERRONEUSNICKNAME
+    // ERR_NICKNAMEINUSE               
+    // ERR_NICKCOLLISION
+
     (void) Channel_Manager;
 
     if (Args.size() < 2)
@@ -53,6 +63,9 @@ void  NICK_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 //USER
 void  USER_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
+    // ERR_NEEDMOREPARAMS              
+    // ERR_ALREADYREGISTRED
+    
     (void )Channel_Manager;
     (void )Client_Manager;
 
@@ -66,6 +79,12 @@ void  USER_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 //OPER
 void  OPER_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
+
+    // ERR_NEEDMOREPARAMS              
+    // RPL_YOUREOPER
+    // ERR_NOOPERHOST                  
+    // ERR_PASSWDMISMATCH
+    
     (void )Args;
     (void )Channel_Manager;
     (void )Client_Manager;

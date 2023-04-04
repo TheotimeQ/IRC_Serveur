@@ -18,8 +18,7 @@
 #include "../Manager/Client_Manager.hpp"
 
 #define ERROR_SEND_MSG 		"Error: Can't send message : \n"
-
-#define EVENT_NEW_MSG 		"Log: Message sent : \n"
+#define EVENT_NEW_MSG 		"Log: Message sent : "
 
 class A_Command
 {
