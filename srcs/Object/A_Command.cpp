@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   A_Command.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 09:03:06 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/04 08:44:59 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/05 08:52:16 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,12 @@ std::string	A_Command::BuildRep_Basic(int code, std::string const &nick, std::st
 	std::ostringstream oss;
 	oss << code;
 	return (":" + std::string(SERVER_NAME) + " " + oss.str() + " " + nick + " " + channel + " :" + addon + " \n");
+}
+
+// [Command Event REP] -> ":Zel!~a@localhost JOIN #test \n"
+std::string	A_Command::BuildRep_CmdEvent(std::string const &cmde, std::string const &nick, std::string const &channel) {
+	std::string host = "~a@localhost"; // surment a passer en arg pour que ce soit pas fixe
+	// lie au client->Hostname ?
+
+	return (":" + nick + "!" + host + " " + cmde + " " + channel + " \n");
 }

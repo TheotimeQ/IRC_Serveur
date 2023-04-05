@@ -33,6 +33,8 @@ class A_Command
 		virtual void	Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager);
 		int				Send_Cmd(int client_sock, const std::string& Cmd);
 		std::string	BuildRep_Basic(int code, std::string const &nick, std::string const &channel, std::string const &addon);
+		std::string	BuildRep_CmdEvent(std::string const &cmde, std::string const &nick, std::string const &channel);
+
 };
 
 #endif

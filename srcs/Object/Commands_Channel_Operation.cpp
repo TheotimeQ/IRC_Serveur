@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands_Channel_Operation.cpp                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/04 08:34:04 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/05 08:59:18 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,16 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
     //Regarde si tu peux join
 
     //Si c'est bon
-	this->Send_Cmd(Client->Socket,":Zel!~a@localhost JOIN #test \n");
+	// this->Send_Cmd(Client->Socket,":Zel!~a@localhost JOIN #test \n");
 
-	this->Send_Cmd(Client->Socket,":IRC 332 Zel #test :This is my cool channel! \n");
+	// this->Send_Cmd(Client->Socket,":IRC 332 Zel #test :This is my cool channel! \n");
 
-	this->Send_Cmd(Client->Socket,":IRC 353 Zel = #test :@Zel Tristan\n");
-	this->Send_Cmd(Client->Socket,":IRC 366 Zel #test :End of /NAMES list \n");
+	// this->Send_Cmd(Client->Socket,":IRC 353 Zel = #test :@Zel Tristan\n");
+	// this->Send_Cmd(Client->Socket,":IRC 366 Zel #test :End of /NAMES list \n");
 
-	return ;
+	// return ;
+
     // //Si tu peux pas message d'erreur
-
 
     // this->Send_Cmd(Client.Socket,":IRC 332 Zel #test Rien a dire \n");
     // this->Send_Cmd(Client.Socket,":IRC 333 Zel #test dan!~d@localhost 1547691506 \n"); //set topic
@@ -51,12 +51,17 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 		if (ret == 0) { // le channel est bien ajoute
 
 			//A BUILD POUR CONTINUER : ":Zel!~a@localhost JOIN #test \n"
-			// std::string rep = "";
+			std::string rep = BuildRep_CmdEvent(Args[0], Client->NickName, Args[1]);
+			this->Send_Cmd(Client->Socket, rep);
+			
+			std::cout << "client hostname = [" + Client->HostName + "]" << std::endl; // checking
 			std::cout << "new chan process reponse" << std::endl; //checking
 			std::cout << "chan_list : " << Channel_Manager.getChanList() << std::endl; //checking
 
 		} else { // toute forme d'erreur lie a un mauvais nom de channel
-			std::string rep = BuildRep_Basic(403, Client->NickName, Args[1], " :No such channel");
+			// [!] Je peux pas repondre avec Args[1] => puisque c'est un mauvais nom de channel, 
+			// [!] Comment on recupere le "current channel" du Client ??? 
+			std::string rep = BuildRep_Basic(403, Client->NickName, Args[1], "No such channel");
 			this->Send_Cmd(Client->Socket, rep);
 		}
 	}
