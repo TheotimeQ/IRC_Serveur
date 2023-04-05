@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command_Manager.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:32:08 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/04 09:00:29 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/05 09:16:56 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,10 @@ int Command_Manager::Interpret_Data(Client *Client, ChannelManager &Channel_Mana
         Tokenize(*it, ' ', Args); 
         
         //DEBUG
-        // std::cout << "-> Received   : "<< *it << std::endl;
+		std::cout << "\033[38;5;180m";
+        std::cout << "      -> Received   : "<< *it << std::endl;
+		std::cout << "\033[m";
+		//DEBUG
 
         if (Args[0] == "QUIT")
         {

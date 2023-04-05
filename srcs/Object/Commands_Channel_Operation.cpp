@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/05 08:59:18 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/05 11:16:07 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,15 +54,23 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 			std::string rep = BuildRep_CmdEvent(Args[0], Client->NickName, Args[1]);
 			this->Send_Cmd(Client->Socket, rep);
 			
-			std::cout << "client hostname = [" + Client->HostName + "]" << std::endl; // checking
-			std::cout << "new chan process reponse" << std::endl; //checking
 			std::cout << "chan_list : " << Channel_Manager.getChanList() << std::endl; //checking
 
 		} else { // toute forme d'erreur lie a un mauvais nom de channel
 			// [!] Je peux pas repondre avec Args[1] => puisque c'est un mauvais nom de channel, 
-			// [!] Comment on recupere le "current channel" du Client ??? 
-			std::string rep = BuildRep_Basic(403, Client->NickName, Args[1], "No such channel");
-			this->Send_Cmd(Client->Socket, rep);
+			// [!] Comment on recupere le "current channel" du Client ???
+
+			// [A] - Si le client est dans aucun channel : fonctionne bien ainsi :
+			if (!Channel_Manager.isClientSomewhere(Client->NickName)) {
+				std::string rep = BuildRep_Basic(403, Client->NickName, Args[1], "No such channel"); // utiliser messageprv ou notice a la place ?
+				this->Send_Cmd(Client->Socket, rep);
+			} else {
+				// pas ideal le PRIVMSG ==> a voir si on trouve mieux
+				// peut etre que repondre par la 403 dans tous les channs trouves
+				// a suivre
+				std::string Msg = ": PRIVMSG " + Client->NickName + " :" + Args[1] + ": No such channel" + "\n";
+				this->Send_Cmd(Client->Socket, Msg);
+			}
 		}
 	}
 
