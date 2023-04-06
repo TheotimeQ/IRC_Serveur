@@ -24,6 +24,8 @@ class Client
         std::string	    			Password;
 		std::string	    			HostName;
         int             			Type;
+		int							Away;
+		std::string					Away_Str;
 		int							Logged;
 
 		int 						Socket;

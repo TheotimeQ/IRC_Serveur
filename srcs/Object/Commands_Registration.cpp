@@ -6,7 +6,7 @@
 /*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:09:32 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/04 09:43:19 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/06 11:38:12 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,9 @@ void  USER_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
     (void )Client_Manager;
 
     if (Args.size() < 2)
+        return ;
+
+    if (Args[1] == "")
         return ;
     
     Client->UserName = Args[1];

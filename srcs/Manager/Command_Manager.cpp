@@ -6,7 +6,7 @@
 /*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:32:08 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/04 09:00:29 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/06 11:31:02 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ Command_Manager::Command_Manager()
     //Sending messages
     Cmd_List["PRIVMSG"]   = new PRIVMSG_Command(); 
     Cmd_List["NOTICE"]    = new NOTICE_Command();
+    Cmd_List["AWAY"]      = new AWAY_Command();
 
     return;
 }
@@ -89,7 +90,7 @@ int Command_Manager::Interpret_Data(Client *Client, ChannelManager &Channel_Mana
         Tokenize(*it, ' ', Args); 
         
         //DEBUG
-        // std::cout << "-> Received   : "<< *it << std::endl;
+        std::cout << "Log : Received : "<< *it << std::endl;
 
         if (Args[0] == "QUIT")
         {
@@ -105,7 +106,7 @@ int Command_Manager::Interpret_Data(Client *Client, ChannelManager &Channel_Mana
             {
                 if (Cmd != NULL)
                     Cmd->Execute(Client, Args, Channel_Manager, Client_Manager);
-                //CHECK IF CAN LOG
+                Client_Manager.Check_Log(Client);
             }
             else
                 std::cout << "Can't , not logged yet" << std::endl;

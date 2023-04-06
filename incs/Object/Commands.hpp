@@ -6,7 +6,7 @@
 /*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:12:57 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/04 08:15:52 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/04 11:04:15 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 #include "../../incs/Object/A_Command.hpp"
 
 #define RPL_AWAY                301
+#define RPL_UNAWAY              305                     
+#define RPL_NOWAWAY             306    
 #define RPL_TOPIC               332
 #define RPL_NAMREPLY            353
 #define RPL_ENDOFNAMES          366
@@ -23,7 +25,7 @@
 #define ERR_WASNOSUCHNICK       406
 #define ERR_TOOMANYTARGETS      407
 #define ERR_NORECIPIENT         411     
-#define ERR_NOTEXTTOSEND        412     
+#define ERR_NOTEXTTOSEND        412 
 
 #define ERROR_BAD_FORMAT 	"Error: Bad format \n"
 
@@ -92,6 +94,10 @@ class PRIVMSG_Command : public A_Command {
         virtual void Execute(Client *Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager); };
 
 class NOTICE_Command : public A_Command { 
+    public:
+        virtual void Execute(Client *Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager); };
+
+class AWAY_Command : public A_Command { 
     public:
         virtual void Execute(Client *Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager); };
 

@@ -6,19 +6,21 @@
 /*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 09:03:00 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/04 08:18:50 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/06 11:37:49 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../incs/Object/Client.hpp"
 
 Client::Client(): 
-    UserName("Undefined"), 
+    UserName(""), 
     NickName("Undefined"),
     Password("Undefined"),
 	HostName("Undefined"),
     Type(-1),
-	Logged(1) //Logged by default
+	Away(0),
+	Away_Str("Undefined"),
+	Logged(0)
 {
 	_Client_Address_Len = sizeof(_Client_Address);
 	Socket = -1;
@@ -26,12 +28,14 @@ Client::Client():
 }
 
 Client::Client(int Serveur_Socket): 
-    UserName("Undefined"), 
+    UserName(""), 
     NickName("Undefined"),
     Password("Undefined"),
 	HostName("Undefined"),
     Type(-1),
-	Logged(1) //Logged by default
+	Away(0),
+	Away_Str("Undefined"),
+	Logged(0)
 {
 	_Client_Address_Len = sizeof(_Client_Address);
 	Socket = accept(Serveur_Socket, (struct sockaddr *)&_Client_Address, &_Client_Address_Len);
@@ -53,6 +57,8 @@ Client& Client::operator=(const Client& other)
 		this->HostName = other.HostName;
         this->Type     = other.Type;	
 		this->Logged   = other.Logged;
+		this->Away	   = other.Away;
+		this->Away_Str = other.Away_Str;
 
 		this->_Client_Address_Len = other._Client_Address_Len;
 		this->Socket = other.Socket;
@@ -74,6 +80,7 @@ std::ostream& operator<<(std::ostream &out, const Client &Client)
 	out << "HOST   : " << Client.HostName       << std::endl;
 	out << "SOCK   : " << Client.Socket   		<< std::endl;
     out << "TYPE   : " << Client.Type       	<< std::endl;
+	out << "AWAY   : " << Client.Away       	<< std::endl;
 	out << "LOGGED : " << Client.Logged        	<< std::endl;
 	return (out);
 }

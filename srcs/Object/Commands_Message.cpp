@@ -6,7 +6,7 @@
 /*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:09:32 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/04 09:48:07 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/05 08:11:30 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,35 +25,36 @@ static std::string I_To_S(int num)
     return (ss.str());
 }
 
+static int Check_Double(std::string NickName, std::string Args)
+{
+    std::stringstream Targets(Args); 
+    std::string Target; 
+    int nb = 0;
+
+    while (std::getline(Targets, Target, ',')) 
+    {
+        if (NickName == Target)
+            nb++;
+    }
+    if (nb > 1)
+        return ERROR;
+    return GOOD;
+}
+
+static std::string Join_End(int start, std::vector<std::string> Args)
+{
+    std::vector<Client>::iterator it;
+    std::string Joined = ""; 
+
+    for (int i = start; i < (int)Args.size(); ++i)
+        Joined += Args[i] + " ";
+
+    // "REMOVE LE \n"
+
+    return Joined;
+}
+
 //=====================================Sending messages======================================
-
-
-// #define ERR_NORECIPIENT         411     
-//":No recipient given (<command>)"
-
-// #define ERR_NOTEXTTOSEND        412     
-// ":No text to send"
-
-// #define ERR_CANNOTSENDTOCHAN    404
-//"<channel name> :Cannot send to channel"
-
-// - Sent to a user who is either (a) not on a channel
-//     which is mode +n or (b) not a chanop (or mode +v) on
-//     a channel which has mode +m set and is trying to send
-//     a PRIVMSG message to that channel.
-
-// #define ERR_TOOMANYTARGETS      407
-//"<target> :Duplicate recipients. No message delivered"
-
-// - Returned to a client which is attempting to send a
-//     PRIVMSG/NOTICE using the user@host destination format
-//     and for a user@host which has several occurrences.
-
-// #define ERR_WASNOSUCHNICK       406
-//"<nickname> :There was no such nickname"
-
-// #define RPL_AWAY                301
-//"<nick> :<away message>"
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.4.1
 void  PRIVMSG_Command::Execute(Client *From_Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
@@ -74,67 +75,75 @@ void  PRIVMSG_Command::Execute(Client *From_Client, std::vector<std::string> Arg
         return ;
     }
 
+    //Concataine les args pour former le message
+    std::string Message_to_send = Join_End(3, Args);
+
     //Mauvais format
     if (Args.size() != 3)
         return ;
 
-    std::stringstream ss(Args[1]); 
-    std::string Targets; 
+    //Implementation des wildcard ? 
 
-    while (std::getline(ss, Targets, ',')) 
+    std::stringstream Targets(Args[1]); 
+    std::string Target; 
+
+    while (std::getline(Targets, Target, ',')) 
     { 
-        std::cout << Targets << std::endl; 
+        std::cout << Target << std::endl; 
 
         //Si c'est une channel
-        if (Targets[0] == '#')
-        {
-            //Pour chaque client/channel
-                //Si c'est un channel (start with #)
+        if (Target[0] == '#')
+        {  
+            (void) Channel_Manager;
+            
+            //Check si la channel exist 
 
-                    //Announce de la channel
+                //Check si l'user est pas dans la channel et que channel mode = +n
+                
+                //Check si pas chanop ou mode +v et la channel en mode +m
 
-                    //Si impossible d'envoyer le message
-                    // std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_CANNOTSENDTOCHAN) + " " + From_Client->NickName + " :Cannot send to channel" + "\n";
+                std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_CANNOTSENDTOCHAN) + " " + From_Client->NickName + " :Cannot send to channel" + "\n";
+                this->Send_Cmd(From_Client->Socket, Msg);
+            
+                //Announce de la channel
+
             continue;
         }
 
         //Si c'est un client
         else
         {
-            //Si client en double
-            // std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_TOOMANYTARGETS) + " " + From_Client->NickName + " :Duplicate recipients. No message delivered" + "\n";
-
-            //Si le client est away 
-            //std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(RPL_AWAY)  + " " + From_Client->NickName + ":" + "<away message>" + "\n";
-
             //Si pas de client avec ce nickname
-            // std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_WASNOSUCHNICK) + " " + From_Client->NickName + " :There was no such nickname" + "\n";
-
-            //Si pas de client avec ce nickname
-            Client *To_Client = Client_Manager.Get_Client(Targets);
+            Client *To_Client = Client_Manager.Get_Client(Target);
             if (To_Client == NULL)
             {
                 std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_WASNOSUCHNICK) + " " + From_Client->NickName + " :There was no such nickname" + "\n";
                 this->Send_Cmd(From_Client->Socket, Msg);
                 continue;
             }
+            
+            //Si client en double
+            if (Check_Double(Target, Args[1]))
+            {
+                std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_TOOMANYTARGETS) + " " + From_Client->NickName + " :Duplicate recipients. No message delivered" + "\n";
+                this->Send_Cmd(From_Client->Socket, Msg);
+                continue;
+            }
+
+            //Si le client est away
+            if (To_Client->Away)
+            {
+                std::string Msg = ":" + std::string(To_Client->NickName) + " " + I_To_S(RPL_AWAY)  + " " + From_Client->NickName + To_Client->NickName + " :" + To_Client->Away_Str + "\n";
+                this->Send_Cmd(From_Client->Socket, Msg);
+                continue;
+            }
 
             //Envoi le message
-            std::string Msg = ":" + From_Client->NickName + "!" + From_Client->UserName + "@" + From_Client->HostName + " PRIVMSG " + To_Client->NickName + " :" + Args[2] + "\n";
+            std::string Msg = ":" + From_Client->NickName + "!" + From_Client->UserName + "@" + From_Client->HostName + " PRIVMSG " + To_Client->NickName + " :" + Message_to_send + "\n";
             this->Send_Cmd(To_Client->Socket, Msg);
         }
 
     } 
-
-    //Implementation des wildcard ? 
-
-    //Recupere le Client/Channel qui recoit le message
-    //Decoupe args[1] sur les ","
-
-           
-    (void)Channel_Manager;
-    (void)From_Client;
-    (void)Client_Manager;
 }
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.4.2
@@ -151,4 +160,36 @@ void  NOTICE_Command::Execute(Client *From_Client, std::vector<std::string> Args
 
     std::string Msg = ":" + From_Client->NickName + "!" + From_Client->UserName + "@" + From_Client->HostName + " NOTICE " + To_Client->NickName + " :" + Args[2] + "\n";
     this->Send_Cmd(To_Client->Socket, Msg);
+}
+
+// https://www.rfc-editor.org/rfc/rfc1459#section-5.1
+void  AWAY_Command::Execute(Client *From_Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
+{
+    (void)Channel_Manager;
+    (void)Client_Manager;
+
+    std::string Msg = "";
+
+
+    if (Args.size() == 1)
+    {
+        From_Client->Away = 0;
+        Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(RPL_UNAWAY)  + " " + From_Client->NickName + " :You are no longer marked as being away" + "\n";
+        this->Send_Cmd(From_Client->Socket, Msg);
+
+        Msg = ":" + From_Client->NickName + "!" + From_Client->UserName + "@" + From_Client->HostName + " AWAY " +  "\n";
+        this->Send_Cmd(From_Client->Socket, Msg);
+    }
+
+    if (Args.size() >= 2)
+    {
+        From_Client->Away = 1;
+        
+        //Concataine les args pour former le message
+        std::string Message_to_send = Join_End(1, Args);
+        From_Client->Away_Str = Message_to_send;
+
+        Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(RPL_NOWAWAY)  + " " + From_Client->NickName + " :You have been marked as being away" + "\n";
+        this->Send_Cmd(From_Client->Socket, Msg);
+    }
 }
