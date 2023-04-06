@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 10:18:15 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/03 12:26:40 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/05 10:15:16 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ t_status const		&Channel::getStatusOf(std::string const &userName) const {
 
 // Envoi d' un objet message à tout les clients connecté
 // ( Faudra bien definir l'objet message ) -> string pour l'instant
-void				Channel::announce(std::string msg) const {
+void	Channel::announce(std::string msg) const {
 	t_mapClientStatus::const_iterator	it = _users.begin();
 
 	while (it != _users.end()) {
@@ -81,7 +81,7 @@ void				Channel::announce(std::string msg) const {
 }
 
 // if user is already in channel, nothing happens
-void				Channel::addUser(Client const &newUser) {
+void	Channel::addUser(Client const &newUser) {
 	t_clientData clientData;
 
 	clientData.him = newUser;
@@ -92,7 +92,7 @@ void				Channel::addUser(Client const &newUser) {
 }
 
 // delete an user from channel
-void				Channel::delUser(Client const &userToDel) {
+void	Channel::delUser(Client const &userToDel) {
 	t_mapClientStatus::iterator	it;
 
 	it = _users.find(userToDel.NickName);
@@ -101,8 +101,14 @@ void				Channel::delUser(Client const &userToDel) {
 	}
 }
 
+bool	Channel::isClientIn(std::string const &nickname) const {
+	t_mapClientStatus::const_iterator	it;
+
+	it = _users.find(nickname);
+	return (it != _users.end() ? true : false);
+}
+
 // remove an user from channel operator map -> nothing happens if not in map
-// aura surment besoin de 
 void				Channel::rmOpPrivilege(std::string const &username) {
 	t_mapClientStatus::iterator	it;
 

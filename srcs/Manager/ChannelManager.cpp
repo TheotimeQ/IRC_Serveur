@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelManager.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/03 14:56:26 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/05 11:16:42 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,6 @@ int			ChannelManager::setTopicOf(std::string const &channelName, std::string con
 	}
 }
 
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ private methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 int	ChannelManager::addNewChannel(std::string const &name, Client &chop) {
 	t_mapChannel::iterator	it;
@@ -174,6 +173,41 @@ bool	ChannelManager::isChannelExists(std::string const &channelName) const {
 	return (it != _chanList.end() ? true : false);
 }
 
+bool	ChannelManager::isClientIn(std::string const &nickname, std::string const &channelName) const {
+	return (getChannel(channelName).isClientIn(nickname));
+}
+
+// True if client is into at least one channel
+bool	ChannelManager::isClientSomewhere(std::string const &nickname)	const {
+	t_mapChannel::const_iterator	it;
+
+	for (it = _chanList.begin(); it != _chanList.end(); ++it) {
+		if (it->second.isClientIn(nickname)) {
+			//log("Client " + nickname + " found in channel : " + it->second.getName());
+			return true;
+		}
+	}
+	return false;
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~ getter setters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+t_mapChannel const	&ChannelManager::getChanList() const { return _chanList; }
+
+Channel const		&ChannelManager::getChannel(std::string const &channelName)	const {
+	t_mapChannel::const_iterator	it;
+
+	it = _chanList.find(channelName);
+	if (it != _chanList.end()) {
+		return it->second;
+	} else {
+		log("[!] getChannel() : error, channel not found");
+		return _chanList.begin()->second;
+	}
+}
+
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ private methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 // to print log message from  ChannelManager class
 void	ChannelManager::log(std::string const &logMsg)	const {
@@ -182,9 +216,6 @@ void	ChannelManager::log(std::string const &logMsg)	const {
 	std::cout << "\033[m";
 }
 
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~ getter setters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-
-t_mapChannel const	&ChannelManager::getChanList() const { return _chanList; }
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~ operator overload ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 std::ostream& operator<<(std::ostream &out, const t_mapChannel &ChanList) {

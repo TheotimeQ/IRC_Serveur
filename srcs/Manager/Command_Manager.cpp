@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   Command_Manager.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:32:08 by tquere            #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2023/04/06 11:31:02 by zelinsta         ###   ########.fr       */
+=======
+/*   Updated: 2023/04/05 09:16:56 by loumarti         ###   ########lyon.fr   */
+>>>>>>> refs/remotes/origin/master
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +94,14 @@ int Command_Manager::Interpret_Data(Client *Client, ChannelManager &Channel_Mana
         Tokenize(*it, ' ', Args); 
         
         //DEBUG
+<<<<<<< HEAD
         std::cout << "Log : Received : "<< *it << std::endl;
+=======
+		std::cout << "\033[38;5;180m";
+        std::cout << "      -> Received   : "<< *it << std::endl;
+		std::cout << "\033[m";
+		//DEBUG
+>>>>>>> refs/remotes/origin/master
 
         if (Args[0] == "QUIT")
         {

@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:10:11 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/03 11:03:10 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/05 10:49:49 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,17 @@ class ChannelManager {
 	ChannelManager(ChannelManager const &ori);
 	ChannelManager	&operator=(ChannelManager const &righty);
 
-	t_mapChannel const	&getChanList() const;
 
 	// BASIC MANAGEMENT
-	bool	isChannelExists(std::string const &channelName)	const;
+	bool	isChannelExists(std::string const &channelName)			const;
+	bool	isClientIn(std::string const &nickname, std::string const &channelName)	const;
+	bool	isClientSomewhere(std::string const &nickname)			const;
 	int		addNewChannel(std::string const &name, Client &chop);
-	int		checkChanName(std::string const &name) const; // au niveau du manager -> try catch pas pratique ici
+	int		checkChanName(std::string const &name)					const; // au niveau du manager -> try catch pas pratique ici
 	void	rmChannel(std::string const &name);
 
+	t_mapChannel const	&getChanList()								const;
+	Channel const 		&getChannel(std::string const &channelName)	const;
 
 	void	addClientToChannel(Client &user, std::string const &channelName);
 	void	rmClientToChannel(Client &user, std::string const &channelName);
