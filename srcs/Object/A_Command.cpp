@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 09:03:06 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/05 08:52:16 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/06 10:12:18 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,14 @@ int A_Command::Send_Cmd(int client_sock, const std::string& message)
         std::cout << ERROR_SEND_MSG << strerror(errno) << std::endl;
         return ERROR;
     }
-    std::cout << EVENT_NEW_MSG << message ;
+
+	//DEBUG
+	std::cout << "\033[38;5;182m";
+    std::cout << "      <- Sent       : " << message << std::endl;
+	std::cout << "\033[m";
+	//DEBUG
+
+    // std::cout << EVENT_NEW_MSG << message ;
     return GOOD;
 }
 
@@ -49,7 +56,7 @@ int A_Command::Send_Cmd(int client_sock, const std::string& message)
 std::string	A_Command::BuildRep_Basic(int code, std::string const &nick, std::string const &channel, std::string const &addon) {
 	std::ostringstream oss;
 	oss << code;
-	return (":" + std::string(SERVER_NAME) + " " + oss.str() + " " + nick + " " + channel + " :" + addon + " \n");
+	return (":" + std::string(SERVER_NAME) + " " + oss.str() + " " + nick + " " + channel + " " + addon + " \n");
 }
 
 // [Command Event REP] -> ":Zel!~a@localhost JOIN #test \n"

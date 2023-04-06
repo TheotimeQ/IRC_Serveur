@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/05 11:16:07 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/06 10:56:26 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,18 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 			} else {
 				// pas ideal le PRIVMSG ==> a voir si on trouve mieux
 				// peut etre que repondre par la 403 dans tous les channs trouves
-				// a suivre
-				std::string Msg = ": PRIVMSG " + Client->NickName + " :" + Args[1] + ": No such channel" + "\n";
-				this->Send_Cmd(Client->Socket, Msg);
+				// a suivre  ===> pour le moment reponse dans les channels ou est le client (solution la moins pire)
+				t_mapChannel::const_iterator it;
+				std::string rep;
+				
+				for (it = Channel_Manager.getChanList().begin(); it != Channel_Manager.getChanList().end(); ++it) {
+					if (it->second.isClientIn(Client->NickName)) {
+						rep = BuildRep_Basic(403, Client->NickName, it->first, " " + Args[1] + " : No such channel");
+						this->Send_Cmd(Client->Socket, rep);
+					}
+				}
+				// std::string Msg = ": PRIVMSG " + Client->NickName + " :" + Args[1] + ": No such channel" + "\n";
+				// this->Send_Cmd(Client->Socket, Msg);
 			}
 		}
 	}
@@ -78,6 +87,10 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 
 
 	// [2] Le channel existe, on veut le rejoindre
+	else {
+		std::cout << "Log :" << Client->NickName << " want to join channel : " << Args[1] << std::endl; // checking
+		// CONTINUER ICI -> faire rejoindre plrs user
+
 		// [2]-[1] passer les differents checks -> build msgs
 			// si taille user max (mode -> l)
 
@@ -90,34 +103,9 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 			// si l'user est dans la liste des bans/kicked
 
 			// SINON tout est ok -> ajoute le client au channel + build reponse ()
+
+	}
 }
-
-/* JE GARDE CECI POUR LE MOMENT*/
-// void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
-// {
-//     (void )Args;
-//     (void )Channel_Manager;
-//     (void )Client_Manager;
-
-
-//     //Regarde si tu peux join
-
-//     //Si c'est bon
-//         this->Send_Cmd(Client.Socket,":Zel!~a@localhost JOIN #test \n");
-
-//         this->Send_Cmd(Client.Socket,":IRC 332 Zel #test :This is my cool channel! \n");
-
-//         this->Send_Cmd(Client.Socket,":IRC 353 Zel = #test :@Zel Tristan\n");
-//         this->Send_Cmd(Client.Socket,":IRC 366 Zel #test :End of /NAMES list \n");
-
-//     //Si tu peux pas message d'erreur
-
-
-//     this->Send_Cmd(Client.Socket,":IRC 332 Zel #test Rien a dire \n");
-//     this->Send_Cmd(Client.Socket,":IRC 333 Zel #test dan!~d@localhost 1547691506 \n"); //set topic
-//     this->Send_Cmd(Client.Socket,":IRC MODE #test +nt \n");
-//     this->Send_Cmd(Client.Socket,":IRC 475 Zel #test :Cannot join channel (+k) - bad key \n");
-// }
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.2
 void  PART_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
@@ -141,6 +129,8 @@ void  MODE_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 
 // [+] autre code a gere une fois join fini
 // 442     ERR_NOTONCHANNEL "<channel> :You're not on that channel"
+// 333     RPL_TOPICWHOTIME "<client> <channel> <nick> <setat>"
+// Args[0] TOPIC  |  Args[1] #currentChannel  |  Args[2-+] new topic (vector string to join)
 void  TOPIC_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
 	int	ret;
@@ -153,6 +143,8 @@ void  TOPIC_Command::Execute(Client *Client, std::vector<std::string> Args, Chan
     (void )Client_Manager;
 
 	// [1] si nb Args == 2 (exemple Topic #test) --> demande le topic
+	// [+] gerer Si le topic existe pas ? (user peut faire /topic ET /topic #unknowchannel 
+	//     ET /topic #unchannelOuilestpas ET /topic #unchannelprive etc. --> /[U_U]\ misere)
 	if (Args.size() == 2) {
 		std::string rep;
 		std::string theTopic;
@@ -166,11 +158,31 @@ void  TOPIC_Command::Execute(Client *Client, std::vector<std::string> Args, Chan
 	// [+] a tester une fois JOIN et MODE faits
 	// [2] sinon c'est une tentative pour changer le Topic
 	else if (Args.size() > 2) {
-		ret = Channel_Manager.setTopicOf(Args[1], Args[2], (*Client));
+		//[2]-[A] --> join les Args pour construire le topic, 
+		std::string	newTopic;
+		std::vector<std::string>::iterator it = Args.begin() + 2;
+		while (it != Args.end()) {
+			if (it != Args.begin() + 2)
+				newTopic += " ";
+			newTopic += *it;
+			++it;
+		}
+		ret = Channel_Manager.setTopicOf(Args[1], newTopic, (*Client));
 		if (ret == GOOD) { // construire la reponse du changement de topic
+			// la demande peut etre faite depuis n'importe quel channel
+			// je ne sais pas trop comment gerer ca. (je laisse pour l'instant)
+
+			
+			//[2]-[B] --> formater le msg de changement de topic (avec setat -> infos temps)
 			//":IRC 333 Zel #test dan!~d@localhost 1547691506 \n")
-			// [+] a finir
-			std::cout << "set topic is good" << std::endl;
+			this->Send_Cmd(Client->Socket, ":IRC 333 Zel #poumy Zel 1547691506 \n");
+			// (optionnel ?) 
+			// CONTINUER : formater le temps <setat> 
+			// D'abord avancer JOIN pour voir ce qui est afficher chez differents users dans un meme channel
+
+			//[2]-[C] --> passer le nouveau topic au channel + send_message le resultat
+			this->Send_Cmd(Client->Socket, BuildRep_Basic(332, (*Client).NickName, Args[1], newTopic));
+			//std::cout << "set topic is good" << std::endl; //checking
 
 		} else if (ret == CM_NOTOPICPERM) { 
 		// construire la reponse
