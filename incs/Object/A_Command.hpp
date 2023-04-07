@@ -34,15 +34,22 @@ class A_Command
 		int				Send_Cmd(int client_sock, const std::string& Cmd);
 
 
-		/* Build reponse mehod-tool */
+		/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Build reponse mehod-tool ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 			// [Basic REP] -> ":IRC 332 Zel #test :This is my cool channel! \n"
 			// [Basic REP] -> ":<server> <code> <user> <channel> :<msg_to_send> \n"
-		std::string	BuildRep_Basic(int code, std::string const &nick, std::string const &channel, std::string const &addon);
+		std::string	BuildRep_Basic(int code, std::string const &nick, std::string const &channel, std::string const &addon) const;
+
+			// [Cmde REP] -> ":IRC 461 <command> :Not enough parameters"
+			// [Cmde REP] -> ":<server> <code> <user> <channel> :<msg_to_send> \n"
+		std::string	BuildRep_Cmde(int code, std::string const &cmde, std::string const &addon) const;
 
 			// [Command Event REP] -> ":Zel!~a@localhost JOIN #test \n"
-		std::string	BuildRep_CmdEvent(std::string const &cmde, std::string const &nick, std::string const &channel);
+		std::string	BuildRep_CmdEvent(std::string const &cmde, std::string const &nick, std::string const &channel) const;
 
+
+		/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Parsing precheck mehod-tool ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+		bool	Is_Channel_Name_Arg(std::string const &arg) const;
 
 };
 

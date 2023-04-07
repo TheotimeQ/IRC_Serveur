@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/07 11:38:35 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/07 12:53:00 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ ChannelManager	&ChannelManager::operator=(ChannelManager const &righty) {
 
 // channel's name is [200]length prefixed by &, #, +, !
 // forbidden characters : space, comma, semi-colon
+// To update check too -> A_Command.Is_Channel_Name_Arg() method
 int		ChannelManager::checkChanName(std::string const &name) const {
 	if (name.size() < 2) {
 		log("name too short : " + name);
