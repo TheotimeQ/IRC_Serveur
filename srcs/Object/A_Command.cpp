@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 09:03:06 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/07 12:52:19 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/07 14:11:48 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,15 @@ int A_Command::Send_Cmd(int client_sock, const std::string& message)
     return GOOD;
 }
 
+void	A_Command::Log(std::string const &cmde, std::string const &msg) const {
+	std::cout << "\033[38;5;47m";
+	std::cout << cmde << " : ";
+	std::cout << "\033[38;5;49m";
+	std::cout << msg << std::endl;
+	std::cout << "\033[m";
+
+}
+
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Build REP ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 // [Basic REP] -> ":IRC 332 Zel #test :This is my cool channel! \n"
@@ -65,6 +74,14 @@ std::string	A_Command::BuildRep_Cmde(int code, std::string const &cmde, std::str
 	std::ostringstream oss;
 	oss << code;
 	return (":" + std::string(SERVER_NAME) + " " + oss.str() + " " + cmde + " :" + addon + " \n");
+}
+
+			// [Chan REP ] -> ":IRC 442 <channel> :You're not on that channel"
+			// [Chan REP ] -> ":<server> <code> <channel> :<msg_to_send> \n"
+std::string	A_Command::BuildRep_Chan(int code, std::string const &channel, std::string const &addon) const {
+	std::ostringstream oss;
+	oss << code;
+	return (":" + std::string(SERVER_NAME) + " " + oss.str() + " " + channel + " :" + addon + " \n");
 }
 
 // [Command Event REP] -> ":Zel!~a@localhost JOIN #test \n"

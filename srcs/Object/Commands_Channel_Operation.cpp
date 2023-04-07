@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/07 12:54:22 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/07 14:56:15 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,7 @@ void  PART_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
     (void )Client;
 }
 
-
+//. https://stackoverflow.com/questions/12886573/implementing-irc-rfc-how-to-respond-to-mode
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.3
 // Note that there is a maximum limit of three (3) changes per command for modes that take a parameter
 void  MODE_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
@@ -171,6 +171,24 @@ void  MODE_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 
 	// [2] Si l'utilisateur fait /mode #nomChannel
 	if (Args.size() == 2 && Is_Channel_Name_Arg(Args[1])) {
+		Log("MODE", "get mode info from channel : " + Args[1]);
+
+		// [2]-[1] Le channel n'existe pas ou le client n'est pas dans le channel
+		// 441    ERR_USERNOTINCHANNEL "<nick> <channel> :They aren't on that channel"
+		if (!Channel_Manager.isChannelExists(Args[1]) || !Channel_Manager.isClientIn(Client->NickName, Args[1])) {
+			this->Send_Cmd(Client->Socket, BuildRep_Chan(441, Client->NickName + " " + Args[1], "They aren't on that channel"));
+			// [!] comme dans join je sais pas afficher retour puisque le channel est pas bon
+		}
+
+
+		// [2]-[2] L'utilisateur fait partie du channel
+		// 324    RPL_CHANNELMODEIS "<channel> <mode> <mode params>"
+		else {
+
+			this->Send_Cmd(Client->Socket, BuildRep_Basic(324, Client->NickName, Args[1], "000 +-+-+-+-+-"));
+			// CONTINUER ici avec un Channel_Manager.getModeStringOf(Args[1])
+			// this->Send_Cmd(Client->Socket, BuildRep_Basic(324, Client->NickName, Args[1], "mode  : +-+-+-+-+-"));
+		}
 	}
 }
 
