@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/06 10:56:26 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/07 11:38:40 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,9 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 		
 		if (ret == 0) { // le channel est bien ajoute
 
-			//A BUILD POUR CONTINUER : ":Zel!~a@localhost JOIN #test \n"
+			//JOIN SUCCEED : ":Zel!~a@localhost JOIN #test \n"
 			std::string rep = BuildRep_CmdEvent(Args[0], Client->NickName, Args[1]);
 			this->Send_Cmd(Client->Socket, rep);
-			
 			std::cout << "chan_list : " << Channel_Manager.getChanList() << std::endl; //checking
 
 		} else { // toute forme d'erreur lie a un mauvais nom de channel
@@ -86,24 +85,58 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 
 
 
-	// [2] Le channel existe, on veut le rejoindre
+	// [2] Le channel existe (Args[1]), on veut le rejoindre
 	else {
 		std::cout << "Log :" << Client->NickName << " want to join channel : " << Args[1] << std::endl; // checking
 		// CONTINUER ICI -> faire rejoindre plrs user
 
 		// [2]-[1] passer les differents checks -> build msgs
+
+	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CHECKS WALL ~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+			// si le client est deja dans le channel [facultatif HexChat a la securite]
+			//443    ERR_USERONCHANNEL  "<user> <channel> :is already on channel"
+			if (Channel_Manager.isClientIn(Client->NickName, Args[1])) {
+				this->Send_Cmd(Client->Socket, BuildRep_Basic(443, Client->NickName, Args[1], "is already on channel"));
+				return ;
+			}
 			// si taille user max (mode -> l)
+			// 471    ERR_CHANNELISFULL "<channel> :Cannot join channel (+l)"
+			if (!Channel_Manager.joinCheck_l(Args[1])) {
+				this->Send_Cmd(Client->Socket, BuildRep_Basic(471, Client->NickName, Args[1], Args[1] + " :Cannot join channel (+l)"));
+				// [+] A TESTER UNE FOIS MODE FAIT
+				return ;
+			}
 
 			// si besoin une cle + assez d'Args du coup (mode +k)
-
-			// si private (mode +p)
+			// 475    ERR_BADCHANNELKEY "<channel> :Cannot join channel (+k)
+			if (!Channel_Manager.joinCheck_k(Args[1], (Args.size() > 2 ? Args[2] : ""))) {
+				this->Send_Cmd(Client->Socket, BuildRep_Basic(475, Client->NickName, Args[1], Args[1] + " :Cannot join channel (+k)"));
+				// [+] A TESTER UNE FOIS MODE FAIT
+				return ;
+			}
 
 			// si invite-only (mode +i)
+			// 473    ERR_INVITEONLYCHAN "<channel> :Cannot join channel (+i)"
+			if (!Channel_Manager.joinCheck_i(Args[1])) {
+				this->Send_Cmd(Client->Socket, BuildRep_Basic(475, Client->NickName, Args[1], Args[1] + " :Cannot join channel (+i)"));
+				// [+] A TESTER UNE FOIS MODE FAIT
+				return ;
+			}
 
 			// si l'user est dans la liste des bans/kicked
+			// 474    ERR_BANNEDFROMCHAN "<channel> :Cannot join channel (+b)
+			if (!Channel_Manager.joinCheck_bans(Client->NickName, Args[1])) {
+				this->Send_Cmd(Client->Socket, BuildRep_Basic(474, Client->NickName, Args[1], Args[1] + " :Cannot join channel (+b)"));
+				// [+] A TESTER UNE FOIS MODE FAIT
+				return ;
+			}
 
+	/* ~~~~~~~~~~~~~~~~~~~~~~~~ CHECKS WALL DONE ~~~~~~~~~~~~~~~~~~~~~~ */
 			// SINON tout est ok -> ajoute le client au channel + build reponse ()
-
+			Channel_Manager.addClientToChannel(*Client, Args[1]);
+			//JOIN SUCCEED : ":Zel!~a@localhost JOIN #test \n"
+			std::string rep = BuildRep_CmdEvent(Args[0], Client->NickName, Args[1]);
+			this->Send_Cmd(Client->Socket, rep);
 	}
 }
 
@@ -185,16 +218,11 @@ void  TOPIC_Command::Execute(Client *Client, std::vector<std::string> Args, Chan
 			//std::cout << "set topic is good" << std::endl; //checking
 
 		} else if (ret == CM_NOTOPICPERM) { 
-		// construire la reponse
+		// construire la reponse (mode +t)
 		// 482 ERR_CHANOPRIVSNEEDED "<channel> :You're not channel operator"
 			// [+] a finir
 		}
-			
 	}
-	
-
-
-	
 }
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.5

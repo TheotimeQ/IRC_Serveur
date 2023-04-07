@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command_Manager.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:32:08 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/06 11:40:10 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/07 08:58:18 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,10 @@ A_Command* Command_Manager::Get_Command(std::string str)
 
     if (it != Cmd_List.end())
     {
-        std::cout << EVENT_CMDFOUND << it->first << std::endl;
+		Log(EVENT_CMDFOUND + it->first);
         return it->second;
     }
-    std::cout << ERROR_CMDNOTFOUND << str << std::endl;
+	Log(ERROR_CMDNOTFOUND + str);
     return NULL;
 }
 
@@ -97,7 +97,7 @@ int Command_Manager::Interpret_Data(Client *Client, ChannelManager &Channel_Mana
 
         if (Args[0] == "QUIT")
         {
-            std::cout << EVENT_CMDFOUND << Args[0] << std::endl;
+            Log(EVENT_CMDFOUND + Args[0]);
             return QUIT;
         }
             
@@ -112,7 +112,7 @@ int Command_Manager::Interpret_Data(Client *Client, ChannelManager &Channel_Mana
                 Client_Manager.Check_Log(Client);
             }
             else
-                std::cout << "Can't , not logged yet" << std::endl;
+                Log("Can't , not logged yet");
         }
         else   
             if (Cmd != NULL)
@@ -122,4 +122,10 @@ int Command_Manager::Interpret_Data(Client *Client, ChannelManager &Channel_Mana
     (*Client).All_Cmd.clear();
 
     return GOOD;
+}
+
+void		Command_Manager::Log(std::string const &msg)	const {
+	std::cout << "\033[38;5;108m";
+	std::cout << "CommandManager : " << msg << std::endl;
+	std::cout << "\033[m";
 }

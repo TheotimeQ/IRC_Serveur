@@ -26,6 +26,8 @@ class Command_Manager
 		A_Command* 	Get_Command(std::string str);
 		void 		Tokenize(std::string const &str, const char delim, std::vector<std::string> &out);
 
+		void		Log(std::string const &msg)	const;
+
 	public:
 		
 		Command_Manager(); 

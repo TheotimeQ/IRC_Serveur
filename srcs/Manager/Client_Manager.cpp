@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client_Manager.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:32:08 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/06 11:37:55 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/07 08:49:47 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,11 @@
 
 Client_Manager::Client_Manager(): Nb_Clients(1)
 {
-    _All_Credentials["Zel"]     = "0000";
-    _All_Credentials["Loup"]    = "1234";
-    _All_Credentials["root"]    = "666";
+    _All_Credentials["Zel"]     	= "0000";
+    _All_Credentials["Loup"]    	= "1234";
+	_All_Credentials["Pignouf"]    	= "pouet";
+	_All_Credentials["Neopuyo"]    	= "supermdp";
+    _All_Credentials["root"]    	= "666";
 
     return;
 }

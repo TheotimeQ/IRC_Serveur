@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 11:17:45 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/05 10:09:29 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/07 10:50:31 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,9 @@ class Channel {
 
 	std::string const		&getName()									const;
 	t_mapClientStatus const	&getUsers()									const;
+	t_mapClient const		&getBans()									const;
 	std::string const		&getTopic()									const;
+	std::string const		&getKey()									const;
 	t_chanmode const		&getChanmode()								const;
 	void					setTopic(std::string const &newTopic);
 	bool					isEmpty()									const;

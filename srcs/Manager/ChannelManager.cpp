@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/05 11:16:42 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/07 11:38:35 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ ChannelManager	&ChannelManager::operator=(ChannelManager const &righty) {
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ public methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-// channel's name is [200]length prefixed by &, #, +, ! => gestion de '#' et '!'
+// channel's name is [200]length prefixed by &, #, +, !
 // forbidden characters : space, comma, semi-colon
 int		ChannelManager::checkChanName(std::string const &name) const {
 	if (name.size() < 2) {
@@ -42,7 +42,7 @@ int		ChannelManager::checkChanName(std::string const &name) const {
 		return CM_WRONGNAMEFORMAT;
 	}
 		
-	else if ((name[0] != '#' && name[0] != '!')) {
+	else if ((name[0] != '#' && name[0] != '!' && name[0] != '+' && name[0] != '&')) {
 		log("wrong name prefix : " + name);
 		return CM_WRONGNAMEFORMAT;
 	}
@@ -140,14 +140,18 @@ int			ChannelManager::setTopicOf(std::string const &channelName, std::string con
 }
 
 
+// Management convention : All channel name will be save starting with '#'
 int	ChannelManager::addNewChannel(std::string const &name, Client &chop) {
 	t_mapChannel::iterator	it;
+	std::string		sharpName;
 	
-	it = _chanList.find(name);
+	sharpName = name;
+	sharpName[0] = '#';
+	it = _chanList.find(sharpName);
 	if (it == _chanList.end()) {
-		int ret = checkChanName(name);
+		int ret = checkChanName(sharpName);
 		if (ret == 0) {
-			_chanList[name] = Channel(name, chop);
+			_chanList[sharpName] = Channel(sharpName, chop);
 		}
 		return ret;
 	} else {
@@ -190,7 +194,70 @@ bool	ChannelManager::isClientSomewhere(std::string const &nickname)	const {
 	return false;
 }
 
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~ getter setters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ join checks ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* ~~~~~~~~~~~~~~~~~~~~ [true] if check is ok [false] if not ~~~~~~~~~~~~~~~~~~ */
+
+bool	ChannelManager::joinCheck_l(std::string const &channelName) const {
+	t_mapChannel::const_iterator	it;
+	t_chanmode						mode;
+
+	it = _chanList.find(channelName);
+	if (it == _chanList.end()) {
+		log("joinCheck_l() error");
+		return false;
+	}
+	mode = it->second.getChanmode();
+	if (mode.l == 0)
+		return true;
+	else
+		return (it->second.getUsers().size() < static_cast<unsigned>(mode.l) ? true : false);
+}
+
+bool	ChannelManager::joinCheck_k(std::string const &channelName, std::string const &key) const {
+	t_mapChannel::const_iterator	it;
+	t_chanmode						mode;
+
+	it = _chanList.find(channelName);
+	if (it == _chanList.end()) {
+		log("joinCheck_k() error");
+		return false;
+	}
+	mode = it->second.getChanmode();
+	if (mode.k == 0)
+		return true;
+	else
+		return (it->second.getKey().compare(key) == 0 ? true : false);
+}
+
+bool	ChannelManager::joinCheck_i(std::string const &channelName) const {
+	t_mapChannel::const_iterator	it;
+	t_chanmode						mode;
+
+	it = _chanList.find(channelName);
+	if (it == _chanList.end()) {
+		log("joinCheck_i() error");
+		return false;
+	}
+	mode = it->second.getChanmode();
+	return !mode.i;
+}
+
+bool	ChannelManager::joinCheck_bans(std::string const &user, std::string const &channelName)	const {
+	t_mapChannel::const_iterator	it;
+	t_mapClient						banList;
+	t_mapClient::const_iterator		itb;
+
+	it = _chanList.find(channelName);
+	if (it == _chanList.end()) {
+		log("joinCheck_bans() error");
+		return false;
+	}
+	banList = it->second.getBans();
+	itb = banList.find(user);
+	return (itb == banList.end() ? true : false);
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ getter setters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 t_mapChannel const	&ChannelManager::getChanList() const { return _chanList; }
 

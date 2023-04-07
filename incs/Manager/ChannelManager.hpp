@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:10:11 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/05 10:49:49 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/07 10:54:06 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ class ChannelManager {
 	bool	isClientIn(std::string const &nickname, std::string const &channelName)	const;
 	bool	isClientSomewhere(std::string const &nickname)			const;
 	int		addNewChannel(std::string const &name, Client &chop);
-	int		checkChanName(std::string const &name)					const; // au niveau du manager -> try catch pas pratique ici
+	int		checkChanName(std::string const &name)					const;
 	void	rmChannel(std::string const &name);
 
 	t_mapChannel const	&getChanList()								const;
@@ -65,6 +65,12 @@ class ChannelManager {
 	//TOPIC
 	std::string	getTopicOf(std::string const &channelName) const;
 	int			setTopicOf(std::string const &channelName, std::string const &newTopic, Client const &user);
+
+	//JOIN CHECK
+	bool	joinCheck_l(std::string const &channelName)								const;
+	bool	joinCheck_k(std::string const &channelName, std::string const &key)		const;
+	bool	joinCheck_i(std::string const &channelName)								const;
+	bool	joinCheck_bans(std::string const &user, std::string const &channelName)	const;
 
 };
 

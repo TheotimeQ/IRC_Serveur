@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 10:18:15 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/05 10:15:16 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/07 11:24:39 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,11 @@ std::string const	&Channel::getName() const { return _name; }
 
 t_mapClientStatus const	&Channel::getUsers() const { return _users; }
 
+t_mapClient const		&Channel::getBans()	const { return _banlist; }
+
 std::string const	&Channel::getTopic() const { return _topic; }
+
+std::string const	&Channel::getKey() const { return _key; }
 
 void				Channel::setTopic(std::string const &newTopic) {
 	 _topic = newTopic;
@@ -128,10 +132,13 @@ void				Channel::rmOpPrivilege(std::string const &username) {
 void				Channel::dealUsersStatus(Client &chop) {
 	t_clientData	clientData;
 	
-	if (_name[0] == '!') {
-		_name[0] = '#';
+
+	if (_name[0] == '!')
 		clientData.status.creator = true;
-	}
+	if (_name[0] == '+')
+		mode.t = true;
+	if (_name[0] == '!' || _name[0] == '+' || _name[0] == '&')
+		_name[0] = '#';
 	clientData.status.chop = true;
 	clientData.status.voice = true;
 	_users[chop.NickName] = clientData;
