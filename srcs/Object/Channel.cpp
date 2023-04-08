@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 10:18:15 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/07 11:24:39 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/08 08:38:51 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,17 @@ bool	Channel::isClientIn(std::string const &nickname) const {
 
 	it = _users.find(nickname);
 	return (it != _users.end() ? true : false);
+}
+
+bool	Channel::isClientChop(std::string const &nickname) const {
+	t_mapClientStatus::const_iterator	it;
+
+	it = _users.find(nickname);
+	if (it == _users.end()) {
+		log("isClientChop() error");
+		return false;
+	}
+	return it->second.status.chop;
 }
 
 // remove an user from channel operator map -> nothing happens if not in map

@@ -19,6 +19,8 @@
 
 #define ERROR_SEND_MSG 		"Error: Can't send message : \n"
 #define EVENT_NEW_MSG 		"Log: Message sent : "
+#define MODE_BASIC_ARGS		"ntmsipNTMSIP"
+#define MODE_ADVANCED_ARGS	"lkLK"
 
 class A_Command
 {
@@ -34,7 +36,6 @@ class A_Command
 		int				Send_Cmd(int client_sock, const std::string& Cmd);
 
 		void			Log(std::string const &cmde, std::string const &msg) const;
-
 
 		/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Build reponse mehod-tool ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
@@ -57,7 +58,8 @@ class A_Command
 
 		/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Parsing precheck mehod-tool ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 		bool	Is_Channel_Name_Arg(std::string const &arg) const;
-
+		bool	Is_Channel_Mode_BArgs(std::string const &args) const;
+		bool	Is_Channel_Mode_AArgs(std::string const &args) const;
 };
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 09:03:06 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/07 14:11:48 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/08 09:53:26 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,5 +107,29 @@ bool	A_Command::Is_Channel_Name_Arg(std::string const &arg) const {
 			return false;
 		}
 	}
+	return true;
+}
+
+//  checking if valid Basic mode Arguments : <[+-][ntmsipNTMSIP]> (multi arg allowed)
+bool	A_Command::Is_Channel_Mode_BArgs(std::string const &args) const {
+	if (args.size() < 2)
+		return false;
+	if (args[0] != '+' && args[0] != '-')
+		return false;
+	for (unsigned i = 1; i < args.size(); ++i) {
+		if (std::string(MODE_BASIC_ARGS).find_first_of(args[i]) == std::string::npos)
+			return false;
+	}
+	return true;
+}
+
+//  checking if valid advanced mode Arguments : <[+-][lkLK]> (only one flag at once)
+bool	A_Command::Is_Channel_Mode_AArgs(std::string const &args) const {
+	if (args.size() != 2)
+		return false;
+	if (args[0] != '+' && args[0] != '-')
+		return false;
+	if (std::string(MODE_ADVANCED_ARGS).find_first_of(args[1]) == std::string::npos)
+		return false;
 	return true;
 }

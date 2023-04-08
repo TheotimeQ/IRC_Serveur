@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/07 12:53:00 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/08 10:54:22 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,6 +195,17 @@ bool	ChannelManager::isClientSomewhere(std::string const &nickname)	const {
 	return false;
 }
 
+bool	ChannelManager::isClientChopOf(std::string const &nickname, std::string const &channelName)	const {
+	t_mapChannel::const_iterator	it;
+
+	it = _chanList.find(channelName);
+	if (it == _chanList.end()) {
+		log("isClientChopOf() error");
+		return false;
+	}
+	return it->second.isClientChop(nickname);
+}
+
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ join checks ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 /* ~~~~~~~~~~~~~~~~~~~~ [true] if check is ok [false] if not ~~~~~~~~~~~~~~~~~~ */
 
@@ -256,6 +267,105 @@ bool	ChannelManager::joinCheck_bans(std::string const &user, std::string const &
 	banList = it->second.getBans();
 	itb = banList.find(user);
 	return (itb == banList.end() ? true : false);
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MODE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+std::string	ChannelManager::getModeAsString(std::string const &channelName) const {
+	t_mapChannel::const_iterator	it;
+	std::string						modeList;
+	
+	it = _chanList.find(channelName);
+	if (it == _chanList.end()) {
+		log("getModeAsString() error");
+		return "";
+	}
+	if (it->second.mode.p)
+		modeList += "+p ";
+	if (it->second.mode.s)
+		modeList += "+s ";
+	if (it->second.mode.i)
+		modeList += "+i ";
+	if (it->second.mode.t)
+		modeList += "+t ";
+	if (it->second.mode.n)
+		modeList += "+n ";
+	if (it->second.mode.m)
+		modeList += "+m ";
+	if (it->second.mode.l > 0) {
+		std::ostringstream oss;
+		oss << it->second.mode.l;
+		modeList += "+l(" + oss.str() + ") ";
+	}
+	if (it->second.mode.k)
+		modeList += "+k ";
+	return modeList;
+}
+
+void	ChannelManager::setModesOfAs(std::string const &channelName, bool isPlus, std::string const &flags) {
+	t_mapChannel::iterator	it;
+
+	it = _chanList.find(channelName);
+	if (it == _chanList.end()) {
+		log("setModesOfAs() error");
+		return ;
+	}
+	for (unsigned i = 1; i < flags.size(); ++i) {
+		char f = toupper(flags[i]);
+		switch (f) {
+			case 'N' :
+					it->second.mode.n = isPlus;
+					break;
+			case 'T' :
+					it->second.mode.t = isPlus;
+					break;
+			case 'M' :
+					it->second.mode.m = isPlus;
+					break;
+			case 'S' :
+					it->second.mode.s = isPlus;
+					break;
+			case 'I' :
+					it->second.mode.i = isPlus;
+					break;
+			case 'P' :
+					it->second.mode.p = isPlus;
+					break;
+			default :
+					log("setModesOfAs() default case reached");
+		}
+	}
+}
+
+void	ChannelManager::setLimitModeOfAsWith(std::string const &channelName, bool isPlus, std::string const &option) {
+	t_mapChannel::iterator	it;
+	long	lvalue;
+	int		value;
+
+	it = _chanList.find(channelName);
+	if (it == _chanList.end()) {
+		log("setLimitModeOfAsWith() error");
+		return ;
+	}
+	errno = 0;
+	lvalue = strtol(option.c_str(), NULL, 10);
+	if (lvalue < 0 || lvalue > INT_MAX || errno == ERANGE) {
+		log("setLimitModeOfAsWith() overflow or negative value reached");
+		value = 0;
+	} else
+		value = static_cast<int>(lvalue); 
+	if (!isPlus)
+		it->second.mode.l = 0;
+	else
+		it->second.mode.l = value;
+}
+
+void	ChannelManager::setKeyModeOfAsWith(std::string const &channelName, bool isPlus, std::string const &option) {
+	(void)channelName;
+	(void)isPlus;
+	(void)option;
+
+	// continuer ici
 }
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ getter setters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */

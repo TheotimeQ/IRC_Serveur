@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/07 14:56:15 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/08 10:33:05 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,7 @@ void  PART_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 void  MODE_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
     // (void )Args;
-    (void )Channel_Manager;
+    // (void )Channel_Manager;
     (void )Client_Manager;
     // (void )Client;
 
@@ -163,14 +163,17 @@ void  MODE_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 	std::cout << "Args[0] = " << Args[0] << std::endl;			//checking
 	std::cout << "Args[1] = " << Args[1] << std::endl;			//checking
 
+
+
+
 	// [1] Si l'utilisateur fait /mode dans aucun channel sans parametre
 	// 461    ERR_NEEDMOREPARAMS "<command> :Not enough parameters"
 	if (Args.size() == 2 && Args[1].compare("") == 0) {
 		this->Send_Cmd(Client->Socket, BuildRep_Cmde(461, "MODE", "Not enough parameters"));
+		return ;
 	}
-
-	// [2] Si l'utilisateur fait /mode #nomChannel
-	if (Args.size() == 2 && Is_Channel_Name_Arg(Args[1])) {
+	// [2] Sinon Si l'utilisateur fait /mode #nomChannel
+	else if (Args.size() == 2 && Is_Channel_Name_Arg(Args[1])) {
 		Log("MODE", "get mode info from channel : " + Args[1]);
 
 		// [2]-[1] Le channel n'existe pas ou le client n'est pas dans le channel
@@ -179,17 +182,69 @@ void  MODE_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 			this->Send_Cmd(Client->Socket, BuildRep_Chan(441, Client->NickName + " " + Args[1], "They aren't on that channel"));
 			// [!] comme dans join je sais pas afficher retour puisque le channel est pas bon
 		}
-
-
 		// [2]-[2] L'utilisateur fait partie du channel
 		// 324    RPL_CHANNELMODEIS "<channel> <mode> <mode params>"
-		else {
-
-			this->Send_Cmd(Client->Socket, BuildRep_Basic(324, Client->NickName, Args[1], "000 +-+-+-+-+-"));
-			// CONTINUER ici avec un Channel_Manager.getModeStringOf(Args[1])
-			// this->Send_Cmd(Client->Socket, BuildRep_Basic(324, Client->NickName, Args[1], "mode  : +-+-+-+-+-"));
-		}
+		else 
+			Send_RPL_CHANNELMODEIS(Client, Args, Channel_Manager, Client_Manager);
+		return ;
 	}
+
+	// [3] pour aller plus loin le channel doit exister
+	if (!Channel_Manager.isChannelExists(Args[1]) || !Channel_Manager.isClientIn(Client->NickName, Args[1])) { 
+		this->Send_Cmd(Client->Socket, BuildRep_Chan(441, Client->NickName + " " + Args[1], "They aren't on that channel"));
+		// Ce bloc est idem  que + haut ==> a faire une fonction + tard
+	} 
+	// [3 -suite] et l'user doit etre chanop
+	else if (!Channel_Manager.isClientChopOf(Client->NickName, Args[1])) {
+		// 482    ERR_CHANOPRIVSNEEDED "<channel> :You're not channel operator"
+		this->Send_Cmd(Client->Socket, BuildRep_Basic(482, Client->NickName, Args[1], "You're not channel operator"));
+	}
+	//[4] Sinon si l'utilisateur fait /mode #nomChannel <[+-][ntmsipNTMSIP]>
+	else if (Args.size() == 3 && Is_Channel_Name_Arg(Args[1]) && Is_Channel_Mode_BArgs(Args[2])) {
+		Exe_Basic_Settings(Client, Args, Channel_Manager, Client_Manager);
+	}
+
+
+	//[5] Sinon si l'utilisateur fait /mode #nomChannel <[+-][lkLK]> *<Unsigned/key>
+	else if ((Args.size() == 3 || Args.size() == 4) && Is_Channel_Name_Arg(Args[1]) && Is_Channel_Mode_AArgs(Args[2])) {
+		Exe_Advanced_Settings(Client, Args, Channel_Manager, Client_Manager);
+	}
+
+	// [6] Au Secours ! va t on vraiment dans le bon sens ?
+}
+
+// when user prompt is /mode #channelName <[+-][ntmsipNTMSIP]>
+void	MODE_Command::Exe_Basic_Settings(Client *Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager) const {
+	(void)Client_Manager;
+	bool	isPlus = (Args[2][0] == '+' ? true : false);
+
+	Log("MODE", "basic channel mode setting : " + Args[2]);
+	Channel_Manager.setModesOfAs(Args[1], isPlus, Args[2]);
+	Send_RPL_CHANNELMODEIS(Client, Args, Channel_Manager, Client_Manager);
+}
+
+// when user prompt is /mode #nomChannel <[+-][lkLK]> *<Unsigned/key> (not needed if '-')
+void	MODE_Command::Exe_Advanced_Settings(Client *Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager) const {
+	(void)Client_Manager;
+	(void)Client;
+	(void)Channel_Manager;
+	bool	isPlus = (Args[2][0] == '+' ? true : false);
+	std::string option = (Args.size() == 4 ? Args[3] : "");
+	Log("MODE", "advanced channel mode setting : " + Args[2]);
+	if (toupper(Args[2][1]) == 'L') {
+		Channel_Manager.setLimitModeOfAsWith(Args[1], isPlus, option);
+	} else {
+		Channel_Manager.setKeyModeOfAsWith(Args[1], isPlus, option);
+	}
+
+}
+
+// 324    RPL_CHANNELMODEIS "<channel> <mode> <mode params>"
+void	MODE_Command::Send_RPL_CHANNELMODEIS(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) const {
+	(void)Client_Manager;
+
+	std::string ModeList = Channel_Manager.getModeAsString(Args[1]);
+	const_cast<MODE_Command *>(this)->Send_Cmd(Client->Socket, BuildRep_Basic(324, Client->NickName, Args[1], ModeList));
 }
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.4

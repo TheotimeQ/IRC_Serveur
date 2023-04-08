@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:10:11 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/07 10:54:06 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/08 10:50:35 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 # include "../Object/Channel.hpp"
 # include "../Object/Client.hpp"
 # include <iostream>
+# include <climits>
+# include <cstdlib>
+# include <cerrno>
 
 # define ERRCHAN_CREATION	"channel creation error : "
 # define ERRCHAN_WRONGNAME	"[!] Channel Manager can't find : "
@@ -37,7 +40,6 @@ class ChannelManager {
 
 	void	log(std::string const &logMsg)					const;
 
-
  public :
 	ChannelManager();
 	~ChannelManager();
@@ -49,6 +51,7 @@ class ChannelManager {
 	bool	isChannelExists(std::string const &channelName)			const;
 	bool	isClientIn(std::string const &nickname, std::string const &channelName)	const;
 	bool	isClientSomewhere(std::string const &nickname)			const;
+	bool	isClientChopOf(std::string const &nickname, std::string const &channelName)	const;
 	int		addNewChannel(std::string const &name, Client &chop);
 	int		checkChanName(std::string const &name)					const;
 	void	rmChannel(std::string const &name);
@@ -72,6 +75,11 @@ class ChannelManager {
 	bool	joinCheck_i(std::string const &channelName)								const;
 	bool	joinCheck_bans(std::string const &user, std::string const &channelName)	const;
 
+	//MODE
+	std::string	getModeAsString(std::string const &channelName)						const;
+	void		setModesOfAs(std::string const &channelName, bool isPlus, std::string const &flags);
+	void		setLimitModeOfAsWith(std::string const &channelName, bool isPlus, std::string const &option);
+	void		setKeyModeOfAsWith(std::string const &channelName, bool isPlus, std::string const &option);
 };
 
 std::ostream& operator<<(std::ostream	&o, t_mapChannel const &ChanList);

@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 11:17:45 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/07 10:50:31 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/08 08:35:09 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,8 @@ class Channel {
 	void				addUser(Client const &newUser);
 	void				delUser(Client const &userToDel);
 	bool				isClientIn(std::string const &nickname)			const;
-	
+	bool				isClientChop(std::string const &nickname)		const;
+
 		// mode management
 	void				rmOpPrivilege(std::string const &username);
 
