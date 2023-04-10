@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/08 10:33:05 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/10 11:29:59 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,31 +17,7 @@
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.1
 void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
-    (void )Args;
-    (void )Channel_Manager;
     (void )Client_Manager;
-
-
-    //Regarde si tu peux join
-
-    //Si c'est bon
-	// this->Send_Cmd(Client->Socket,":Zel!~a@localhost JOIN #test \n");
-
-	// this->Send_Cmd(Client->Socket,":IRC 332 Zel #test :This is my cool channel! \n");
-
-	// this->Send_Cmd(Client->Socket,":IRC 353 Zel = #test :@Zel Tristan\n");
-	// this->Send_Cmd(Client->Socket,":IRC 366 Zel #test :End of /NAMES list \n");
-
-	// return ;
-
-    // //Si tu peux pas message d'erreur
-
-    // this->Send_Cmd(Client.Socket,":IRC 332 Zel #test Rien a dire \n");
-    // this->Send_Cmd(Client.Socket,":IRC 333 Zel #test dan!~d@localhost 1547691506 \n"); //set topic
-    // this->Send_Cmd(Client.Socket,":IRC MODE #test +nt \n");
-    // this->Send_Cmd(Client.Socket,":IRC 475 Zel #test :Cannot join channel (+k) - bad key \n");
-
-
 	// [1] Le channel n'existe pas -> c'est donc une creation
 	// 403    ERR_NOSUCHCHANNEL "<channel name> :No such channel" 
 	//- Used to indicate the given channel name is invalid
@@ -140,13 +116,49 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 	}
 }
 
-// https://www.rfc-editor.org/rfc/rfc1459#section-4.2.2
+// https://www.rfc-editor.org/rfc/rfc14m59#section-4.2.2
+// ERR_NEEDMOREPARAMS - ERR_NOSUCHCHANNEL - ERR_NOTONCHANNEL
+// Parameters: <channel> *( "," <channel> ) [ <Part Message> ]
 void  PART_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
-    (void )Args;
-    (void )Channel_Manager;
-    (void )Client_Manager;
-    (void )Client;
+    (void)Args;
+    (void)Channel_Manager;
+    (void)Client_Manager;
+    (void)Client;
+
+	std::vector<std::string> 					channels;
+	std::vector<std::string>::const_iterator	it;
+	std::string 								leavingMsg;
+	
+	showStringVector("Args", Args); //DEBUG //checking
+	/* Memo Args */
+	//	Args[0] = "PART"
+	//	Args[1] = "#channelCurrent" OU #channelAupif OU #chan1,#chan2,#chan3
+	//	Args[2 et +] = ":Leaving"(default) OU ":MessagefromUserBeforeLeaving" a concat
+
+	//[1] get Channels from Args[1] List (coma separated)
+	channels = extractComaList(Args[1]);
+	showStringVector("channels", channels); //DEBUG //checking
+
+	// [2] concat leaving message (Args[2-end])
+	leavingMsg = catStringVector(Args, 2);
+	std::cout << "Leaving message -> " << leavingMsg << std::endl; //DEBUG //checking
+
+	//[3] try part from each channel 
+	for (it = channels.begin(); it != channels.end(); ++it) {
+		if (!Channel_Manager.isChannelExists(*it)) {
+			this->Send_Cmd(Client->Socket, BuildRep_Basic(403, Client->NickName, *it, " " + Args[1] + " : No such channel"));
+			// [!] comme dans join je sais pas afficher retour puisque le channel est pas bon (idem)
+		} else if (!Channel_Manager.isClientIn(Client->NickName, *it)) {
+			this->Send_Cmd(Client->Socket, BuildRep_Chan(441, Client->NickName + " " + *it, "They aren't on that channel"));
+			// [!] comme dans join je sais pas afficher retour puisque le client est pas dans le channel
+		} else {
+			// CONTINER ici leavingProcess(...) ...
+		}
+	}
+
+
+	
 }
 
 //. https://stackoverflow.com/questions/12886573/implementing-irc-rfc-how-to-respond-to-mode
@@ -154,17 +166,9 @@ void  PART_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 // Note that there is a maximum limit of three (3) changes per command for modes that take a parameter
 void  MODE_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
-    // (void )Args;
-    // (void )Channel_Manager;
     (void )Client_Manager;
-    // (void )Client;
 
-	std::cout << "Args.size() = " << Args.size() << std::endl;	//checking
-	std::cout << "Args[0] = " << Args[0] << std::endl;			//checking
-	std::cout << "Args[1] = " << Args[1] << std::endl;			//checking
-
-
-
+	showStringVector("Args", Args); //DEBUG //checking
 
 	// [1] Si l'utilisateur fait /mode dans aucun channel sans parametre
 	// 461    ERR_NEEDMOREPARAMS "<command> :Not enough parameters"
@@ -226,8 +230,7 @@ void	MODE_Command::Exe_Basic_Settings(Client *Client, std::vector<std::string> A
 // when user prompt is /mode #nomChannel <[+-][lkLK]> *<Unsigned/key> (not needed if '-')
 void	MODE_Command::Exe_Advanced_Settings(Client *Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager) const {
 	(void)Client_Manager;
-	(void)Client;
-	(void)Channel_Manager;
+	
 	bool	isPlus = (Args[2][0] == '+' ? true : false);
 	std::string option = (Args.size() == 4 ? Args[3] : "");
 	Log("MODE", "advanced channel mode setting : " + Args[2]);
@@ -236,7 +239,7 @@ void	MODE_Command::Exe_Advanced_Settings(Client *Client, std::vector<std::string
 	} else {
 		Channel_Manager.setKeyModeOfAsWith(Args[1], isPlus, option);
 	}
-
+	Send_RPL_CHANNELMODEIS(Client, Args, Channel_Manager, Client_Manager);
 }
 
 // 324    RPL_CHANNELMODEIS "<channel> <mode> <mode params>"
@@ -258,10 +261,6 @@ void  TOPIC_Command::Execute(Client *Client, std::vector<std::string> Args, Chan
 	int	ret;
 	// Memo :  Args[1] is Channel Name;
 	//         Args[2] is newtopic
-
-    // (void )Args;
-    // (void )Channel_Manager;
-    // (void )Client;
     (void )Client_Manager;
 
 	// [1] si nb Args == 2 (exemple Topic #test) --> demande le topic
@@ -272,7 +271,7 @@ void  TOPIC_Command::Execute(Client *Client, std::vector<std::string> Args, Chan
 		std::string theTopic;
 		
 		theTopic = Channel_Manager.getTopicOf(Args[1]);
-		rep = BuildRep_Basic(332, (*Client).NickName, Args[1], theTopic);
+		rep = BuildRep_Basic(332, Client->NickName, Args[1], theTopic);
 		//buildRep = ":" + std::string(SERVER_NAME) + " 332 " + Client.NickName + " " + Args[1] + " :" + theTopic + " \n";
 		this->Send_Cmd(Client->Socket, rep);
 	}
@@ -297,19 +296,15 @@ void  TOPIC_Command::Execute(Client *Client, std::vector<std::string> Args, Chan
 			
 			//[2]-[B] --> formater le msg de changement de topic (avec setat -> infos temps)
 			//":IRC 333 Zel #test dan!~d@localhost 1547691506 \n")
-			this->Send_Cmd(Client->Socket, ":IRC 333 Zel #poumy Zel 1547691506 \n");
-			// (optionnel ?) 
-			// CONTINUER : formater le temps <setat> 
-			// D'abord avancer JOIN pour voir ce qui est afficher chez differents users dans un meme channel
+			//this->Send_Cmd(Client->Socket, ":IRC 333 Zel #poumy Zel 1547691506 \n");
+			this->Send_Cmd(Client->Socket, BuildRep_Basic(333, Client->NickName, Args[1], Client->NickName + " " + getNow()));
 
 			//[2]-[C] --> passer le nouveau topic au channel + send_message le resultat
-			this->Send_Cmd(Client->Socket, BuildRep_Basic(332, (*Client).NickName, Args[1], newTopic));
-			//std::cout << "set topic is good" << std::endl; //checking
+			this->Send_Cmd(Client->Socket, BuildRep_Basic(332, Client->NickName, Args[1], newTopic));
 
 		} else if (ret == CM_NOTOPICPERM) { 
-		// construire la reponse (mode +t)
 		// 482 ERR_CHANOPRIVSNEEDED "<channel> :You're not channel operator"
-			// [+] a finir
+			this->Send_Cmd(Client->Socket, BuildRep_Basic(482, Client->NickName, Args[1], "You're not channel operator"));
 		}
 	}
 }

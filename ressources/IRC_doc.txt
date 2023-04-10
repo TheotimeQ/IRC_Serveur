@@ -45,6 +45,6 @@ fiche eval
 	used to trigger specific action (e.g. like reading again after errno
 	== EAGAIN).
 
- fnctl()
+ fnctl() --> MAC OS only
 	Verify that each call to fnctl() is done as follows: fcntl(fd, F_SETFL, O_NONBLOCK);
 	Any other use of fcntl() is forbidden.

@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 11:17:45 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/08 08:35:09 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/10 08:32:37 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,7 @@ class Channel {
 	std::string const		&getKey()									const;
 	t_chanmode const		&getChanmode()								const;
 	void					setTopic(std::string const &newTopic);
+	void					setKey(std::string const &newKey);
 	bool					isEmpty()									const;
 	t_status const			&getStatusOf(std::string const &userName)	const;
 	// setter du chanmode un par un ?? a voir ...
@@ -147,7 +148,7 @@ class Channel {
 
 	/* public methods */
 		// bases
-	void				announce(std::string msg)						const;
+	void				announce(std::string const &msg)						const;
 	void				addUser(Client const &newUser);
 	void				delUser(Client const &userToDel);
 	bool				isClientIn(std::string const &nickname)			const;

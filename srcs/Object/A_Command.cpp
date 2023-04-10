@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 09:03:06 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/08 09:53:26 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/10 10:27:02 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,4 +132,49 @@ bool	A_Command::Is_Channel_Mode_AArgs(std::string const &args) const {
 	if (std::string(MODE_ADVANCED_ARGS).find_first_of(args[1]) == std::string::npos)
 		return false;
 	return true;
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ other-tool ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+std::string	A_Command::getNow()	const {
+	struct timeval now;
+	std::ostringstream oss;
+	
+	gettimeofday(&now, 0);
+	oss << now.tv_sec;
+	return oss.str();
+}
+
+std::vector<std::string>	A_Command::extractComaList(std::string const &comaList)	const {
+	std::vector<std::string>	extract;
+	std::string					stamp;
+	std::stringstream			ss;
+
+	ss << comaList;
+	while (getline(ss, stamp, ',')) {
+		extract.push_back(stamp);
+	}
+	return extract;
+}
+
+std::string		A_Command::catStringVector(std::vector<std::string> const &vector, unsigned start) const {
+	std::vector<std::string>::const_iterator	it;
+	std::string 								cat = "";
+
+	for (it = vector.begin() + start; it != vector.end(); ++it) {
+		if (it != vector.begin() + start)
+			cat += " ";
+		cat += *it;
+	}
+	return cat;
+}
+
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ debug-tool ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+void	A_Command::showStringVector(std::string const &title, std::vector<std::string> const  &vect) const {
+	std::cout << "\033[38;5;242m";
+	std::cout << title << ".size() = " << vect.size() << std::endl;
+	for (unsigned i = 0; i < vect.size(); ++i) {
+		std::cout << title <<"[" << i << "] = " << "|" << vect[i] << "|" << std::endl;
+	}
+	std::cout << "\033[m";
 }

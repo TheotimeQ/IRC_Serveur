@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:10:11 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/08 10:50:35 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/10 08:46:14 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ class ChannelManager {
 	int		addNewChannel(std::string const &name, Client &chop);
 	int		checkChanName(std::string const &name)					const;
 	void	rmChannel(std::string const &name);
+	// void	announce(std::string const &channelName, std::string const &msg)	const;
 
 	t_mapChannel const	&getChanList()								const;
 	Channel const 		&getChannel(std::string const &channelName)	const;

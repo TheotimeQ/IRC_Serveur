@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 10:18:15 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/08 08:38:51 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/10 08:34:17 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,12 @@ std::string const	&Channel::getTopic() const { return _topic; }
 
 std::string const	&Channel::getKey() const { return _key; }
 
-void				Channel::setTopic(std::string const &newTopic) {
+void		Channel::setTopic(std::string const &newTopic) {
 	 _topic = newTopic;
+}
+
+void		Channel::setKey(std::string const &newKey) {
+	_key = newKey;
 }
 
 t_chanmode const	&Channel::getChanmode() const { return mode; }
@@ -74,7 +78,7 @@ t_status const		&Channel::getStatusOf(std::string const &userName) const {
 
 // Envoi d' un objet message à tout les clients connecté
 // ( Faudra bien definir l'objet message ) -> string pour l'instant
-void	Channel::announce(std::string msg) const {
+void	Channel::announce(std::string const &msg) const {
 	t_mapClientStatus::const_iterator	it = _users.begin();
 
 	while (it != _users.end()) {

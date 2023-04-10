@@ -10,6 +10,7 @@
 
 #include <string>
 #include <cstring>
+# include <sys/time.h>
 
 #include "../Irc.hpp"
 #include "../Object/Client.hpp"
@@ -60,6 +61,14 @@ class A_Command
 		bool	Is_Channel_Name_Arg(std::string const &arg) const;
 		bool	Is_Channel_Mode_BArgs(std::string const &args) const;
 		bool	Is_Channel_Mode_AArgs(std::string const &args) const;
+
+		/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ other-tool ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+		std::string					getNow()	const;
+		std::vector<std::string>	extractComaList(std::string const &comaList)	const;
+		std::string					catStringVector(std::vector<std::string>  const &vector, unsigned start) const;
+
+		/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ debug-tool ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+		void	showStringVector(std::string const &title, std::vector<std::string> const  &vect) const;
 };
 
 #endif

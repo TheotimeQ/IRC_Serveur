@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/08 10:54:22 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/10 08:53:55 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,6 @@ t_status const &ChannelManager::getStatusOfIn(Client const &user, std::string co
 }
 
 
-
-
 // try to set a topic, return values : 0 on success | > 0 if errors
 int			ChannelManager::setTopicOf(std::string const &channelName, std::string const &newTopic, Client const &user) {
 	t_mapChannel::iterator	it;
@@ -142,10 +140,14 @@ int			ChannelManager::setTopicOf(std::string const &channelName, std::string con
 
 
 // Management convention : All channel name will be save starting with '#'
+// if channel name is valid to create one, its first char will be '#'
 int	ChannelManager::addNewChannel(std::string const &name, Client &chop) {
 	t_mapChannel::iterator	it;
 	std::string		sharpName;
 	
+	int ret2 = checkChanName(name);
+	if (ret2 != 0)
+		return ret2;
 	sharpName = name;
 	sharpName[0] = '#';
 	it = _chanList.find(sharpName);
@@ -170,6 +172,17 @@ void	ChannelManager::rmChannel(std::string const &name) {
 		log("Deleting channel : " + name);
 	}
 }
+
+// void	ChannelManager::announce(std::string const &channelName, std::string const &msg)	const {
+// 	t_mapChannel::const_iterator	it;
+
+// 	it = _chanList.find(channelName);
+// 	if (it == _chanList.end()) {
+// 		log("announceAt() error");
+// 		return;
+// 	}
+// 	it->second.announce(msg);
+// }
 
 bool	ChannelManager::isChannelExists(std::string const &channelName) const {
 	t_mapChannel::const_iterator	it;
@@ -361,11 +374,19 @@ void	ChannelManager::setLimitModeOfAsWith(std::string const &channelName, bool i
 }
 
 void	ChannelManager::setKeyModeOfAsWith(std::string const &channelName, bool isPlus, std::string const &option) {
-	(void)channelName;
-	(void)isPlus;
-	(void)option;
+	t_mapChannel::iterator	it;
 
-	// continuer ici
+	it = _chanList.find(channelName);
+	if (it == _chanList.end()) {
+		log("setKeyModeOfAsWith() error");
+		return ;
+	}
+	if (isPlus == false || option.compare("") == 0) {
+		it->second.mode.k = false;
+	} else {
+		it->second.mode.k = true;
+		it->second.setKey(option);
+	}
 }
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ getter setters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
