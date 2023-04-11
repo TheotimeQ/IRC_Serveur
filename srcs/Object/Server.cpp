@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:50:43 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/03 16:03:03 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/11 14:00:16 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,11 @@
 #include "../../incs/Manager/Command_Manager.hpp"
 #include "../../incs/Manager/Client_Manager.hpp"
 
-Server::Server(const std::string& name, int port) : 
+Server::Server(const std::string& name, int port, std::string password) : 
     _Name(name), 
     _Port(port)
-{
+{   
+    _CltMng.Set_Password(password);
 	return;
 }
 

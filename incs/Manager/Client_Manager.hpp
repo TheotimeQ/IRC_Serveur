@@ -14,7 +14,6 @@
 #define ERROR_DEL_CLIENT			"Error: Can't add remove client , no such client"
 #define ERROR_FID_CLIENT			"Error: Can't find client , no such : "
 #define ERROR_NICKNAME_ALREADY_USED	"Error: Can't change nickname , already used"
-#define ERROR_NICKNAME_UNKOW		"Error: Can't find nickname , no such : "
 
 #define EVENT_LOGGED				"Log: Client logged : "
 
@@ -22,8 +21,8 @@ class Client_Manager
 {
 	private:
 
-		std::vector<Client>          			_All_Clients;
-		std::map<std::string, std::string>     	_All_Credentials;
+		std::vector<Client>    	_All_Clients;
+		std::string    			_Password;
 
 	public:
 
@@ -38,12 +37,11 @@ class Client_Manager
 		int             Remove_Client(const Client &Client);
 		void            Print_Clients(void);
 
-		std::string* 	Get_Client_Pass(std::string NickName);
+		void			Set_Password(std::string &password);
+
 		void 			Check_Log(Client* Clt);
 
 		int				Set_Client_Nickname(Client &Client, std::string New_Nickname);
-
-		int             Check_If_Can_Log(const Client& Clt);
 };
 
 #endif

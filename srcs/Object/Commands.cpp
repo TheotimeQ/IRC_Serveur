@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:09:32 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/03 16:24:57 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/11 14:53:18 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,3 +24,5 @@ void  DEBUG_Command::Execute(Client *Client, std::vector<std::string> Args, Chan
     (void )Client_Manager;
     (void )Client;
 }
+
+

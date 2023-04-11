@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:12:57 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/11 14:08:41 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/11 15:19:39 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,10 @@
 //=============================================TEST=================================================
 
 class DEBUG_Command : public A_Command { 
+    public:
+        virtual void Execute(Client *Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager); };
+
+class CAP_Command : public A_Command { 
     public:
         virtual void Execute(Client *Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager); };
 

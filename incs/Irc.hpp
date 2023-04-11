@@ -6,7 +6,6 @@
 #define QUIT  2
 
 #define SERVER_NAME "IRC"
-#define SERVER_PORT 6667
 
 const int MAX_CLIENTS = 10;
 const int BUFFER_SIZE = 1024;

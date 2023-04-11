@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command_Manager.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:32:08 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/07 08:58:18 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/11 14:59:11 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ Command_Manager::Command_Manager()
     Cmd_List["NICK"]    = new NICK_Command(); 
     Cmd_List["USER"]    = new USER_Command();
     Cmd_List["OPER"]    = new OPER_Command();
+    Cmd_List["CAP"]     = new CAP_Command();
 
     //Channel operations
     Cmd_List["JOIN"]    = new JOIN_Command();
@@ -105,7 +106,7 @@ int Command_Manager::Interpret_Data(Client *Client, ChannelManager &Channel_Mana
 
         if ((*Client).Logged == 0)
         {
-            if (Args[0] == "USER" || Args[0] == "PASS" || Args[0] == "NICK")
+            if (Args[0] == "USER" || Args[0] == "PASS" || Args[0] == "NICK" || Args[0] == "CAP")
             {
                 if (Cmd != NULL)
                     Cmd->Execute(Client, Args, Channel_Manager, Client_Manager);

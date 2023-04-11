@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   A_Command.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 09:03:06 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/11 09:30:19 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/11 14:58:52 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,25 +29,6 @@ void  A_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelM
 	(void)Args;
 	(void)Channel_Manager;
     (void)Client_Manager;
-}
-
-int A_Command::Send_Cmd(int client_sock, const std::string& message) 
-{
-    int bytes_sent = send(client_sock, message.c_str(), message.size(), 0);
-    if (bytes_sent == -1) 
-    {
-        std::cout << ERROR_SEND_MSG << strerror(errno) << std::endl;
-        return ERROR;
-    }
-
-	//DEBUG
-	std::cout << "\033[38;5;182m";
-    std::cout << "      <- Sent       : " << message << std::endl;
-	std::cout << "\033[m";
-	//DEBUG
-
-    // std::cout << EVENT_NEW_MSG << message ;
-    return GOOD;
 }
 
 void	A_Command::Log(std::string const &cmde, std::string const &msg) const {

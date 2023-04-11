@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 09:03:00 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/06 11:37:49 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/11 14:53:12 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,13 @@
 
 Client::Client(): 
     UserName(""), 
-    NickName("Undefined"),
+    NickName(""), //PAR DEFAULT "" COLISION ?
     Password("Undefined"),
 	HostName("Undefined"),
     Type(-1),
 	Away(0),
 	Away_Str("Undefined"),
+	Cap_End(0),
 	Logged(0)
 {
 	_Client_Address_Len = sizeof(_Client_Address);
@@ -29,20 +30,17 @@ Client::Client():
 
 Client::Client(int Serveur_Socket): 
     UserName(""), 
-    NickName("Undefined"),
+    NickName(""), //PAR DEFAULT "" COLISION ?
     Password("Undefined"),
 	HostName("Undefined"),
     Type(-1),
 	Away(0),
 	Away_Str("Undefined"),
+	Cap_End(0),
 	Logged(0)
 {
 	_Client_Address_Len = sizeof(_Client_Address);
 	Socket = accept(Serveur_Socket, (struct sockaddr *)&_Client_Address, &_Client_Address_Len);
-	
-	std::stringstream ss;
-    ss << Socket;
-    NickName = ss.str();
 	
 	return;
 }
@@ -55,7 +53,8 @@ Client& Client::operator=(const Client& other)
 		this->NickName = other.NickName;
         this->Password = other.Password;
 		this->HostName = other.HostName;
-        this->Type     = other.Type;	
+        this->Type     = other.Type;
+		this->Cap_End  = other.Cap_End;	
 		this->Logged   = other.Logged;
 		this->Away	   = other.Away;
 		this->Away_Str = other.Away_Str;
@@ -81,6 +80,7 @@ std::ostream& operator<<(std::ostream &out, const Client &Client)
 	out << "SOCK   : " << Client.Socket   		<< std::endl;
     out << "TYPE   : " << Client.Type       	<< std::endl;
 	out << "AWAY   : " << Client.Away       	<< std::endl;
+	out << "CAP    : " << Client.Cap_End       	<< std::endl;
 	out << "LOGGED : " << Client.Logged        	<< std::endl;
 	return (out);
 }

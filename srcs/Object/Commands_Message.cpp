@@ -3,56 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   Commands_Message.cpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:09:32 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/10 08:44:56 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/11 15:15:10 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../incs/Object/Commands.hpp"
-
-    // std::cout << "Args : " << std::endl;;
-    // for (unsigned i = 0; i < Args.size(); ++i) {
-    //     std::cout << "|" << Args[i].c_str() << "|" << std::endl;
-    // }
-    // std::cout << std::endl;
-    
-static std::string I_To_S(int num)
-{
-    std::stringstream ss;
-    ss << num;
-    return (ss.str());
-}
-
-static int Check_Double(std::string NickName, std::string Args)
-{
-    std::stringstream Targets(Args); 
-    std::string Target; 
-    int nb = 0;
-
-    while (std::getline(Targets, Target, ',')) 
-    {
-        if (NickName == Target)
-            nb++;
-    }
-    if (nb > 1)
-        return ERROR;
-    return GOOD;
-}
-
-static std::string Join_End(int start, std::vector<std::string> Args)
-{
-    std::vector<Client>::iterator it;
-    std::string Joined = ""; 
-
-    for (int i = start; i < (int)Args.size(); ++i)
-        Joined += Args[i] + " ";
-
-    // "REMOVE LE \n"
-
-    return Joined;
-}
 
 //=====================================Sending messages======================================
 
@@ -63,7 +21,7 @@ void  PRIVMSG_Command::Execute(Client *From_Client, std::vector<std::string> Arg
     if (Args.size() == 1)
     {
         std::string Msg = ":" + std::string(SERVER_NAME) + " "  + I_To_S(ERR_NORECIPIENT) + " " + From_Client->NickName + " " + ":No recipient given " + Args[0] + "\n";
-        this->Send_Cmd(From_Client->Socket, Msg);
+        Send_Cmd(From_Client->Socket, Msg);
         return ;
     }
     
@@ -71,7 +29,7 @@ void  PRIVMSG_Command::Execute(Client *From_Client, std::vector<std::string> Arg
     if (Args.size() == 2)
     {
         std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_NOTEXTTOSEND) + " " + From_Client->NickName + " " + ":No text to send" + "\n";
-        this->Send_Cmd(From_Client->Socket, Msg);
+        Send_Cmd(From_Client->Socket, Msg);
         return ;
     }
 
@@ -100,10 +58,10 @@ void  PRIVMSG_Command::Execute(Client *From_Client, std::vector<std::string> Arg
 
                 //Check si l'user est pas dans la channel et que channel mode = +n
                 
-                //Check si pas chanop ou mode +v et la channel en mode +m
+                //Check si pas chanop ou mode +v(voice) et la channel en mode +m (modere)
 
                 std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_CANNOTSENDTOCHAN) + " " + From_Client->NickName + " :Cannot send to channel" + "\n";
-                this->Send_Cmd(From_Client->Socket, Msg);
+                Send_Cmd(From_Client->Socket, Msg);
             
                 //Announce de la channel
 
@@ -118,7 +76,7 @@ void  PRIVMSG_Command::Execute(Client *From_Client, std::vector<std::string> Arg
             if (To_Client == NULL)
             {
                 std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_WASNOSUCHNICK) + " " + From_Client->NickName + " :There was no such nickname" + "\n";
-                this->Send_Cmd(From_Client->Socket, Msg);
+                Send_Cmd(From_Client->Socket, Msg);
                 continue;
             }
             
@@ -126,7 +84,7 @@ void  PRIVMSG_Command::Execute(Client *From_Client, std::vector<std::string> Arg
             if (Check_Double(Target, Args[1]))
             {
                 std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_TOOMANYTARGETS) + " " + From_Client->NickName + " :Duplicate recipients. No message delivered" + "\n";
-                this->Send_Cmd(From_Client->Socket, Msg);
+                Send_Cmd(From_Client->Socket, Msg);
                 continue;
             }
 
@@ -134,13 +92,13 @@ void  PRIVMSG_Command::Execute(Client *From_Client, std::vector<std::string> Arg
             if (To_Client->Away)
             {
                 std::string Msg = ":" + std::string(To_Client->NickName) + " " + I_To_S(RPL_AWAY)  + " " + From_Client->NickName + To_Client->NickName + " :" + To_Client->Away_Str + "\n";
-                this->Send_Cmd(From_Client->Socket, Msg);
+                Send_Cmd(From_Client->Socket, Msg);
                 continue;
             }
 
             //Envoi le message
             std::string Msg = ":" + From_Client->NickName + "!" + From_Client->UserName + "@" + From_Client->HostName + " PRIVMSG " + To_Client->NickName + " :" + Message_to_send + "\n";
-            this->Send_Cmd(To_Client->Socket, Msg);
+            Send_Cmd(To_Client->Socket, Msg);
         }
 
     } 
@@ -159,7 +117,7 @@ void  NOTICE_Command::Execute(Client *From_Client, std::vector<std::string> Args
         return ;
 
     std::string Msg = ":" + From_Client->NickName + "!" + From_Client->UserName + "@" + From_Client->HostName + " NOTICE " + To_Client->NickName + " :" + Args[2] + "\n";
-    this->Send_Cmd(To_Client->Socket, Msg);
+    Send_Cmd(To_Client->Socket, Msg);
 }
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-5.1
@@ -175,10 +133,10 @@ void  AWAY_Command::Execute(Client *From_Client, std::vector<std::string> Args, 
     {
         From_Client->Away = 0;
         Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(RPL_UNAWAY)  + " " + From_Client->NickName + " :You are no longer marked as being away" + "\n";
-        this->Send_Cmd(From_Client->Socket, Msg);
+        Send_Cmd(From_Client->Socket, Msg);
 
         Msg = ":" + From_Client->NickName + "!" + From_Client->UserName + "@" + From_Client->HostName + " AWAY " +  "\n";
-        this->Send_Cmd(From_Client->Socket, Msg);
+        Send_Cmd(From_Client->Socket, Msg);
     }
 
     if (Args.size() >= 2)
@@ -190,6 +148,6 @@ void  AWAY_Command::Execute(Client *From_Client, std::vector<std::string> Args, 
         From_Client->Away_Str = Message_to_send;
 
         Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(RPL_NOWAWAY)  + " " + From_Client->NickName + " :You have been marked as being away" + "\n";
-        this->Send_Cmd(From_Client->Socket, Msg);
+        Send_Cmd(From_Client->Socket, Msg);
     }
 }
