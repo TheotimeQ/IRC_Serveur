@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 09:03:06 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/10 10:27:02 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/11 09:30:19 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,12 +61,33 @@ void	A_Command::Log(std::string const &cmde, std::string const &msg) const {
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Build REP ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-// [Basic REP] -> ":IRC 332 Zel #test :This is my cool channel! \n"
+	// [Basic REP] -> ":IRC 332 Zel #test :This is my cool channel! \n"
 std::string	A_Command::BuildRep_Basic(int code, std::string const &nick, std::string const &channel, std::string const &addon) const {
 	std::ostringstream oss;
 	oss << code;
 	return (":" + std::string(SERVER_NAME) + " " + oss.str() + " " + nick + " " + channel + " " + addon + " \n");
 }
+
+	// [BasicChan REP] -> ":<server> <code> <user> <channel> :<channel : msg_to_send> \n"
+
+std::string	A_Command::BuildRep_BasicChan(int code, std::string const &nick, std::string const &channel, std::string const &addon) const {
+	std::ostringstream oss;
+	oss << code;
+	return (":" + std::string(SERVER_NAME) + " " + oss.str() + " " + nick + " " + channel + " " + channel + " : " + addon + " \n");
+}
+
+	// [Home REP] -> there is no channel to answer -> send message to 'home' with 000 code
+	// [Home REP] -> ":<server> <000> <user> <msg_to_send> \n"
+std::string	A_Command::BuildRep_Home(std::string const &nick, std::string const &addon) const {
+	return (":" + std::string(SERVER_NAME) + " 000 " + nick + " " + addon + " \n");
+}
+
+std::string	A_Command::BuildRep_HomeChan(std::string const &nick, std::string const &channel, std::string const &addon) const {
+	return (":" + std::string(SERVER_NAME) + " 000 " + nick + " " + channel + " : " + addon + " \n");
+}
+
+
+/* (a ameliorer remplacer) */
 
 	// [Cmde REP] -> ":IRC 461 <command> :Not enough parameters"
 	// [Cmde REP] -> ":<server> <code> <user> <channel> :<msg_to_send> \n"
@@ -76,8 +97,8 @@ std::string	A_Command::BuildRep_Cmde(int code, std::string const &cmde, std::str
 	return (":" + std::string(SERVER_NAME) + " " + oss.str() + " " + cmde + " :" + addon + " \n");
 }
 
-			// [Chan REP ] -> ":IRC 442 <channel> :You're not on that channel"
-			// [Chan REP ] -> ":<server> <code> <channel> :<msg_to_send> \n"
+	// [Chan REP ] -> ":IRC 442 <channel> :You're not on that channel"
+	// [Chan REP ] -> ":<server> <code> <channel> :<msg_to_send> \n"
 std::string	A_Command::BuildRep_Chan(int code, std::string const &channel, std::string const &addon) const {
 	std::ostringstream oss;
 	oss << code;

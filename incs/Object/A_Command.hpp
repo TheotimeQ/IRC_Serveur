@@ -10,7 +10,7 @@
 
 #include <string>
 #include <cstring>
-# include <sys/time.h>
+#include <sys/time.h>
 
 #include "../Irc.hpp"
 #include "../Object/Client.hpp"
@@ -20,8 +20,20 @@
 
 #define ERROR_SEND_MSG 		"Error: Can't send message : \n"
 #define EVENT_NEW_MSG 		"Log: Message sent : "
+
 #define MODE_BASIC_ARGS		"ntmsipNTMSIP"
 #define MODE_ADVANCED_ARGS	"lkLK"
+
+// Error messages from documentation => move to separate header file
+#define ERR_NOSUCHCHANNEL		"No such channel"				// 403
+#define ERR_USERNOTINCHANNEL	"They aren't on that channel"	// 441
+#define ERR_USERONCHANNEL		"Is already on channel"			// 443
+#define ERR_CHANNELISFULL		"Cannot join channel (+l)"		// 471
+#define ERR_INVITEONLYCHAN		"Cannot join channel (+i)"		// 473
+#define ERR_BANNEDFROMCHAN		"Cannot join channel (+b)"		// 474
+#define ERR_BADCHANNELKEY		"Cannot join channel (+k)"		// 475
+#define 
+
 
 class A_Command
 {
@@ -40,9 +52,21 @@ class A_Command
 
 		/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Build reponse mehod-tool ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-			// [Basic REP] -> ":IRC 332 Zel #test :This is my cool channel! \n"
-			// [Basic REP] -> ":<server> <code> <user> <channel> :<msg_to_send> \n"
+			//     [Basic REP] -> ":IRC 332 Zel #test :This is my cool channel! \n"
+			//     [Basic REP] -> ":<server> <code> <user> <channel> :<msg_to_send> \n"
+			// [BasicChan REP] -> ":<server> <code> <user> <channel> :<channel : msg_to_send> \n"
 		std::string	BuildRep_Basic(int code, std::string const &nick, std::string const &channel, std::string const &addon) const;
+		std::string	BuildRep_BasicChan(int code, std::string const &nick, std::string const &channel, std::string const &addon) const;
+
+
+			//     [Home REP] -> there is no channel to answer -> send message to 'home' with 000 code
+			//     [Home REP] -> ":<server> <000> <user> <msg_to_send> \n"
+			// [HomeChan REP] -> ":<server> <000> <user> <channel : msg_to_send> \n"
+		std::string	BuildRep_Home(std::string const &nick, std::string const &addon) const;
+		std::string	BuildRep_HomeChan(std::string const &nick, std::string const &channel, std::string const &addon) const;
+
+
+	/* (a ameliorer remplacer)*/
 
 			// [Cmde REP] -> ":IRC 461 <command> :Not enough parameters"
 			// [Cmde REP] -> ":<server> <code> <cmde> :<msg_to_send> \n"

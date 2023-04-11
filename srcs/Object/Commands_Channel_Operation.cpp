@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/10 11:29:59 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/11 09:38:53 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,27 +34,29 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 		} else { // toute forme d'erreur lie a un mauvais nom de channel
 			// [!] Je peux pas repondre avec Args[1] => puisque c'est un mauvais nom de channel, 
 			// [!] Comment on recupere le "current channel" du Client ???
-
+			// [!] Solution alternative -> repondre dans 'Home'
+		this->Send_Cmd(Client->Socket, BuildRep_HomeChan(Client->NickName, Args[1], ERR_NOSUCHCHANNEL));
 			// [A] - Si le client est dans aucun channel : fonctionne bien ainsi :
-			if (!Channel_Manager.isClientSomewhere(Client->NickName)) {
-				std::string rep = BuildRep_Basic(403, Client->NickName, Args[1], "No such channel"); // utiliser messageprv ou notice a la place ?
-				this->Send_Cmd(Client->Socket, rep);
-			} else {
+			// if (!Channel_Manager.isClientSomewhere(Client->NickName)) {
+			// 	std::string rep = BuildRep_Home(Client->NickName, Args[1] + " : No such channel");
+			// 	this->Send_Cmd(Client->Socket, rep);
+			// } else {
 				// pas ideal le PRIVMSG ==> a voir si on trouve mieux
 				// peut etre que repondre par la 403 dans tous les channs trouves
 				// a suivre  ===> pour le moment reponse dans les channels ou est le client (solution la moins pire)
-				t_mapChannel::const_iterator it;
-				std::string rep;
+				// t_mapChannel::const_iterator it;
+				// std::string rep;
 				
-				for (it = Channel_Manager.getChanList().begin(); it != Channel_Manager.getChanList().end(); ++it) {
-					if (it->second.isClientIn(Client->NickName)) {
-						rep = BuildRep_Basic(403, Client->NickName, it->first, " " + Args[1] + " : No such channel");
-						this->Send_Cmd(Client->Socket, rep);
-					}
-				}
+				// for (it = Channel_Manager.getChanList().begin(); it != Channel_Manager.getChanList().end(); ++it) {
+				// 	if (it->second.isClientIn(Client->NickName)) {
+				// 		rep = BuildRep_Basic(403, Client->NickName, it->first, " " + Args[1] + " : No such channel");
+				// 		this->Send_Cmd(Client->Socket, rep);
+				// 	}
+				// }
 				// std::string Msg = ": PRIVMSG " + Client->NickName + " :" + Args[1] + ": No such channel" + "\n";
 				// this->Send_Cmd(Client->Socket, Msg);
-			}
+			// 	this->Send_Cmd(Client->Socket, BuildRep_Home(Client->NickName, Args[1] + " : No such channel"));
+			// }
 		}
 	}
 
@@ -72,13 +74,13 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 			// si le client est deja dans le channel [facultatif HexChat a la securite]
 			//443    ERR_USERONCHANNEL  "<user> <channel> :is already on channel"
 			if (Channel_Manager.isClientIn(Client->NickName, Args[1])) {
-				this->Send_Cmd(Client->Socket, BuildRep_Basic(443, Client->NickName, Args[1], "is already on channel"));
+				this->Send_Cmd(Client->Socket, BuildRep_Basic(443, Client->NickName, Args[1], ERR_USERONCHANNEL));
 				return ;
 			}
 			// si taille user max (mode -> l)
 			// 471    ERR_CHANNELISFULL "<channel> :Cannot join channel (+l)"
 			if (!Channel_Manager.joinCheck_l(Args[1])) {
-				this->Send_Cmd(Client->Socket, BuildRep_Basic(471, Client->NickName, Args[1], Args[1] + " :Cannot join channel (+l)"));
+				this->Send_Cmd(Client->Socket, BuildRep_BasicChan(471, Client->NickName, Args[1], ERR_CHANNELISFULL));
 				// [+] A TESTER UNE FOIS MODE FAIT
 				return ;
 			}
@@ -86,7 +88,7 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 			// si besoin une cle + assez d'Args du coup (mode +k)
 			// 475    ERR_BADCHANNELKEY "<channel> :Cannot join channel (+k)
 			if (!Channel_Manager.joinCheck_k(Args[1], (Args.size() > 2 ? Args[2] : ""))) {
-				this->Send_Cmd(Client->Socket, BuildRep_Basic(475, Client->NickName, Args[1], Args[1] + " :Cannot join channel (+k)"));
+				this->Send_Cmd(Client->Socket, BuildRep_Basic(475, Client->NickName, Args[1], ERR_BADCHANNELKEY));
 				// [+] A TESTER UNE FOIS MODE FAIT
 				return ;
 			}
@@ -94,7 +96,7 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 			// si invite-only (mode +i)
 			// 473    ERR_INVITEONLYCHAN "<channel> :Cannot join channel (+i)"
 			if (!Channel_Manager.joinCheck_i(Args[1])) {
-				this->Send_Cmd(Client->Socket, BuildRep_Basic(475, Client->NickName, Args[1], Args[1] + " :Cannot join channel (+i)"));
+				this->Send_Cmd(Client->Socket, BuildRep_Basic(475, Client->NickName, Args[1], ERR_INVITEONLYCHAN));
 				// [+] A TESTER UNE FOIS MODE FAIT
 				return ;
 			}
@@ -102,7 +104,7 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 			// si l'user est dans la liste des bans/kicked
 			// 474    ERR_BANNEDFROMCHAN "<channel> :Cannot join channel (+b)
 			if (!Channel_Manager.joinCheck_bans(Client->NickName, Args[1])) {
-				this->Send_Cmd(Client->Socket, BuildRep_Basic(474, Client->NickName, Args[1], Args[1] + " :Cannot join channel (+b)"));
+				this->Send_Cmd(Client->Socket, BuildRep_Basic(474, Client->NickName, Args[1], ERR_BANNEDFROMCHAN));
 				// [+] A TESTER UNE FOIS MODE FAIT
 				return ;
 			}
@@ -130,6 +132,7 @@ void  PART_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 	std::vector<std::string>::const_iterator	it;
 	std::string 								leavingMsg;
 	
+	// this->Send_Cmd(Client->Socket, ":IRC 000 " + Client->NickName + " part command executed\n"); // test
 	showStringVector("Args", Args); //DEBUG //checking
 	/* Memo Args */
 	//	Args[0] = "PART"
@@ -147,17 +150,15 @@ void  PART_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 	//[3] try part from each channel 
 	for (it = channels.begin(); it != channels.end(); ++it) {
 		if (!Channel_Manager.isChannelExists(*it)) {
-			this->Send_Cmd(Client->Socket, BuildRep_Basic(403, Client->NickName, *it, " " + Args[1] + " : No such channel"));
-			// [!] comme dans join je sais pas afficher retour puisque le channel est pas bon (idem)
+			this->Send_Cmd(Client->Socket, BuildRep_HomeChan(Client->NickName, Args[1], ERR_NOSUCHCHANNEL));
 		} else if (!Channel_Manager.isClientIn(Client->NickName, *it)) {
-			this->Send_Cmd(Client->Socket, BuildRep_Chan(441, Client->NickName + " " + *it, "They aren't on that channel"));
-			// [!] comme dans join je sais pas afficher retour puisque le client est pas dans le channel
+			this->Send_Cmd(Client->Socket, BuildRep_Home(Client->NickName, Args[1] + " : They aren't on that channel"));
 		} else {
 			// CONTINER ici leavingProcess(...) ...
 		}
 	}
 
-
+	//[4] supprimer les channels vides
 	
 }
 
@@ -183,8 +184,9 @@ void  MODE_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 		// [2]-[1] Le channel n'existe pas ou le client n'est pas dans le channel
 		// 441    ERR_USERNOTINCHANNEL "<nick> <channel> :They aren't on that channel"
 		if (!Channel_Manager.isChannelExists(Args[1]) || !Channel_Manager.isClientIn(Client->NickName, Args[1])) {
-			this->Send_Cmd(Client->Socket, BuildRep_Chan(441, Client->NickName + " " + Args[1], "They aren't on that channel"));
+			// this->Send_Cmd(Client->Socket, BuildRep_Chan(441, Client->NickName + " " + Args[1], "They aren't on that channel"));
 			// [!] comme dans join je sais pas afficher retour puisque le channel est pas bon
+			this->Send_Cmd(Client->Socket, BuildRep_Home(Client->NickName, Args[1] + " : They aren't on that channel"));
 		}
 		// [2]-[2] L'utilisateur fait partie du channel
 		// 324    RPL_CHANNELMODEIS "<channel> <mode> <mode params>"
@@ -195,8 +197,9 @@ void  MODE_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 
 	// [3] pour aller plus loin le channel doit exister
 	if (!Channel_Manager.isChannelExists(Args[1]) || !Channel_Manager.isClientIn(Client->NickName, Args[1])) { 
-		this->Send_Cmd(Client->Socket, BuildRep_Chan(441, Client->NickName + " " + Args[1], "They aren't on that channel"));
-		// Ce bloc est idem  que + haut ==> a faire une fonction + tard
+		// this->Send_Cmd(Client->Socket, BuildRep_Chan(441, Client->NickName + " " + Args[1], "They aren't on that channel"));
+		this->Send_Cmd(Client->Socket, BuildRep_Home(Client->NickName, Args[1] + " : They aren't on that channel"));
+		// Ce bloc est idem  que + haut en [2]-[1] ==> a faire une fonction + tard
 	} 
 	// [3 -suite] et l'user doit etre chanop
 	else if (!Channel_Manager.isClientChopOf(Client->NickName, Args[1])) {
