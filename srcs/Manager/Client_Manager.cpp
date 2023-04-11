@@ -3,24 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   Client_Manager.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:32:08 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/07 08:49:47 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/11 14:55:10 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../incs/Manager/Client_Manager.hpp"
 #include "../../incs/Object/Client.hpp"
 
-Client_Manager::Client_Manager(): Nb_Clients(1)
+Client_Manager::Client_Manager(): 
+    Nb_Clients(1)
 {
-    _All_Credentials["Zel"]     	= "0000";
-    _All_Credentials["Loup"]    	= "1234";
-	_All_Credentials["Pignouf"]    	= "pouet";
-	_All_Credentials["Neopuyo"]    	= "supermdp";
-    _All_Credentials["root"]    	= "666";
-
     return;
 }
 
@@ -30,17 +25,9 @@ Client_Manager::~Client_Manager()
 	return;
 }
 
-std::string* Client_Manager::Get_Client_Pass(std::string NickName)
+void Client_Manager::Set_Password(std::string &password)
 {
-    std::map<std::string, std::string>::iterator it;
-    
-    for (it = _All_Credentials.begin(); it != _All_Credentials.end(); ++it)
-    {
-        if (it->first == NickName)
-            return (&(it->second));
-    }
-
-    return NULL;
+    _Password = password;
 }
 
 void Client_Manager::Check_Log(Client* Clt)
@@ -48,14 +35,13 @@ void Client_Manager::Check_Log(Client* Clt)
     if (Clt->UserName == "")
         return;
 
-    std::string* Pass = this->Get_Client_Pass(Clt->NickName);
-
-    if (Pass == NULL)
-    {
-        std::cout << ERROR_NICKNAME_UNKOW << Clt->NickName << std::endl;
+    if (Clt->NickName == "")
         return;
-    }
-    if (Clt->Password == *Pass)
+
+    if (Clt->Cap_End != 1)
+        return;
+
+    if (Clt->Password == this->_Password)
     {
         Clt->Logged = 1;
         std::cout << EVENT_LOGGED << Clt->NickName << std::endl;
@@ -126,21 +112,4 @@ int Client_Manager::Remove_Client(const Client& Clt)
 
     std::cout << ERROR_DEL_CLIENT << std::endl;
     return ERROR;
-}
-
-//Regarde si le client peut etre logge
-int Client_Manager::Check_If_Can_Log(const Client& Client) 
-{
-    (void)Client;
-
-    //Verifie si on conais le nickname
-    return ERROR;
-
-    //Verifie si bon mdp
-    return ERROR;
-
-    //Verifie si username a ete set
-    return ERROR;
-    
-    return GOOD;
 }

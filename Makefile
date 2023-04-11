@@ -14,14 +14,14 @@ OBJ_FILE				=   Server Client Channel A_Command Commands
 MANAGER_FILE			=   Command_Manager ChannelManager Client_Manager
 
 INC_DIR					=	incs
-INC_FILE				=	$(OBJ_INC) $(MANAGER_INC) Irc 
+INC_FILE				=	$(OBJ_INC) $(MANAGER_INC) Irc utils
 
 MANAGER_INC				=  	$(addprefix $(MANAGER_DIR)/, $(MANAGER_FILE))
 OBJ_INC					=  	$(addprefix $(OBJ_DIR)/, $(OBJ_FILE))
 INC						= 	$(addsuffix .hpp, $(addprefix $(INC_DIR)/, $(INC_FILE)))
 
 SRCS_DIR				=	srcs
-SRCS_FILE				=	$(OBJ_SRC) $(MANAGER_SRC) main Object/Commands_Channel_Operation Object/Commands_Registration Object/Commands_Message
+SRCS_FILE				=	$(OBJ_SRC) $(MANAGER_SRC) main utils Object/Commands_Channel_Operation Object/Commands_Registration Object/Commands_Message
 
 MANAGER_SRC				=  	$(addprefix $(MANAGER_DIR)/, $(MANAGER_FILE))
 OBJ_SRC					=  	$(addprefix $(OBJ_DIR)/, $(OBJ_FILE))
@@ -48,3 +48,5 @@ fclean:
 			$(RM) $(BUILD_DIR)
 
 re:			fclean all
+
+

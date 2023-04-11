@@ -26,6 +26,7 @@ class Client
         int             			Type;
 		int							Away;
 		std::string					Away_Str;
+		int							Cap_End;
 		int							Logged;
 
 		int 						Socket;

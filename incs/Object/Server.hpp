@@ -22,6 +22,11 @@
 #include "../Manager/Command_Manager.hpp"
 #include "../Manager/Client_Manager.hpp"
 
+#define ERROR_SERVER_PARAM 	"Usage: ircserv <port> <password>"
+#define ERROR_PORT_EMPTY 	"Error: port empty : "
+#define ERROR_PORT_NO_DIGIT "Error: port contain no digit caractere : "
+#define ERROR_PORT_MAX		"Error: wtf bro? What are those test.. folow the correction sheet :D"
+#define ERROR_PORT_RANGE 	"Error: 1 <= port <= 65535 : "
 #define ERROR_SOCKET 		"Error: Can't create socket"
 #define ERROR_CONF_SOCKET 	"Error: Can't configure socket "
 #define ERROR_BIND 			"Error: Can't bind socket"
@@ -41,6 +46,7 @@ class Server
 
 		std::string 		_Name;
 		int 				_Port;
+		std::string			_Password;
 
 		int					_Server_Socket;
 		struct sockaddr_in6 _Server_Address;
@@ -56,7 +62,7 @@ class Server
 
 	public:
 		
-		Server(const std::string& name, int port); 
+		Server(const std::string& name, int port, std::string password); 
 		~Server();
 
 	    int		Start_Server();

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands_Registration.cpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:09:32 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/06 11:38:12 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/11 15:02:16 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void  NICK_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
     if (Client_Manager.Get_Client(Args[1]) != NULL)
     {
         std::cout << ERROR_NICKNAME_ALREADY_USED << std::endl;
-        // this->Send_Cmd(Client.Socket,":IRC ERR_NICKCOLLISION Zel :BIENVENU SUR LE Server IRC\n ");
+        // Send_Cmd(Client.Socket,":IRC ERR_NICKCOLLISION Zel :BIENVENU SUR LE Server IRC\n ");
         return ;
     }
 
@@ -92,4 +92,23 @@ void  OPER_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
     (void )Channel_Manager;
     (void )Client_Manager;
     (void )Client;
+}
+
+void  CAP_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
+{
+    (void )Args;
+    (void )Channel_Manager;
+    (void )Client_Manager;
+
+    if (Args.size() >= 2)
+    {
+        if (Args[1] == "LS")
+        {
+            std::string Msg = ":" + std::string(SERVER_NAME) + " " + Client->NickName + " CAP * LS :" "\n";
+            Send_Cmd(Client->Socket, Msg);
+        }
+        if (Args[1] == "END")
+            Client->Cap_End = 1;
+    }
+
 }

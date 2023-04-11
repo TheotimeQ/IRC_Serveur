@@ -13,13 +13,11 @@
 #include <sys/time.h>
 
 #include "../Irc.hpp"
+#include "../utils.hpp"
 #include "../Object/Client.hpp"
 #include "../Object/Channel.hpp"
 #include "../Manager/ChannelManager.hpp"
 #include "../Manager/Client_Manager.hpp"
-
-#define ERROR_SEND_MSG 		"Error: Can't send message : \n"
-#define EVENT_NEW_MSG 		"Log: Message sent : "
 
 #define MODE_BASIC_ARGS		"ntmsipNTMSIP"
 #define MODE_ADVANCED_ARGS	"lkLK"
@@ -32,8 +30,6 @@
 #define ERR_INVITEONLYCHAN		"Cannot join channel (+i)"		// 473
 #define ERR_BANNEDFROMCHAN		"Cannot join channel (+b)"		// 474
 #define ERR_BADCHANNELKEY		"Cannot join channel (+k)"		// 475
-#define 
-
 
 class A_Command
 {
@@ -46,7 +42,6 @@ class A_Command
 		virtual ~A_Command();
 
 		virtual void	Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager);
-		int				Send_Cmd(int client_sock, const std::string& Cmd);
 
 		void			Log(std::string const &cmde, std::string const &msg) const;
 
