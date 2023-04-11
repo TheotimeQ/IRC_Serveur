@@ -10,9 +10,4 @@
 const int MAX_CLIENTS = 10;
 const int BUFFER_SIZE = 1024;
 
-// LISTE DES REPONSE SERVEUR:
-// https://modern.ircdocs.horse/#errneedmoreparams-461
-
-// https://www.rfc-editor.org/rfc/rfc1459#section-6
-
 #endif

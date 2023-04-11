@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:09:32 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/11 15:02:16 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/11 15:20:55 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,3 +112,5 @@ void  CAP_Command::Execute(Client *Client, std::vector<std::string> Args, Channe
     }
 
 }
+
+

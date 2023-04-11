@@ -60,6 +60,13 @@ int main(int argc, char **argv)
     return (GOOD);
 }
 
-//http://chi.cs.uchicago.edu/chirc/irc_examples.html
-//https://dd.ircdocs.horse/refs/commands/join
-//https://dd.ircdocs.horse/refs/commands/
+//TO DO
+//Lister les capability 
+//Finir fonction registration
+//Annonce channel dans privmsg
+
+//Notice ?
+//Cap_End = 1 par default , 0 si on recoit un debut de CAP ?
+
+//Executable de bot ?
+//Envoi de fichier

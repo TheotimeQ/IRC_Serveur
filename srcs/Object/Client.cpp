@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 09:03:00 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/11 14:53:12 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/11 16:13:53 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ Client::Client():
     UserName(""), 
     NickName(""), //PAR DEFAULT "" COLISION ?
     Password("Undefined"),
-	HostName("Undefined"),
+	HostName("localhost"),
     Type(-1),
 	Away(0),
 	Away_Str("Undefined"),
@@ -32,7 +32,7 @@ Client::Client(int Serveur_Socket):
     UserName(""), 
     NickName(""), //PAR DEFAULT "" COLISION ?
     Password("Undefined"),
-	HostName("Undefined"),
+	HostName("localhost"),
     Type(-1),
 	Away(0),
 	Away_Str("Undefined"),
