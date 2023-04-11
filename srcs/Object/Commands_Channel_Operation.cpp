@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands_Channel_Operation.cpp                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
+/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2023/04/11 14:26:10 by loumarti         ###   ########lyon.fr   */
-=======
-/*   Updated: 2023/04/11 15:06:13 by tquere           ###   ########.fr       */
->>>>>>> 230705a3054288888002399e4a32d777c226abb3
+/*   Updated: 2023/04/11 15:27:49 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,8 +162,7 @@ void  PART_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 void	PART_Command::leavingProcess(Client *Client, std::string const &channelName, ChannelManager &Channel_Manager, std::string const &leavingMsg) {
 	(void)leavingMsg;
 	Channel_Manager.rmClientToChannel(*Client, channelName);
-	const_cast<PART_Command *>(this)->Send_Cmd(Client->Socket, BuildRep_CmdEvent("PART", Client->NickName, channelName));
-	
+	Send_Cmd(Client->Socket, BuildRep_CmdEvent("PART", Client->NickName, channelName));
 	if (Channel_Manager.isChannelEmpty(channelName))
 		Channel_Manager.rmChannel(channelName);
 }
