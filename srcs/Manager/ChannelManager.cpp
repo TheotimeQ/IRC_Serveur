@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/10 08:53:55 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/11 14:57:10 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,6 +189,17 @@ bool	ChannelManager::isChannelExists(std::string const &channelName) const {
 
 	it = _chanList.find(channelName);
 	return (it != _chanList.end() ? true : false);
+}
+
+bool	ChannelManager::isChannelEmpty(std::string const &channelName) const {
+	t_mapChannel::const_iterator	it;
+
+	it = _chanList.find(channelName);
+	if (it != _chanList.end()) {
+		log("isChannelEmpty() error");
+		return false;
+	}
+	return it->second.isEmpty();
 }
 
 bool	ChannelManager::isClientIn(std::string const &nickname, std::string const &channelName) const {
@@ -402,6 +413,18 @@ Channel const		&ChannelManager::getChannel(std::string const &channelName)	const
 	} else {
 		log("[!] getChannel() : error, channel not found");
 		return _chanList.begin()->second;
+	}
+}
+
+t_mapClientStatus const	&ChannelManager::getUsersOf(std::string const &channelName)	const {
+	t_mapChannel::const_iterator	it;
+
+	it = _chanList.find(channelName);
+	if (it != _chanList.end()) {
+		return it->second.getUsers();
+	} else {
+		log("[!] getChannel() : error, channel not found");
+		return _chanList.begin()->second.getUsers();
 	}
 }
 

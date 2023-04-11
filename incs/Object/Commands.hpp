@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:12:57 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/08 10:10:37 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/11 14:08:41 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,10 @@ class JOIN_Command : public A_Command {
 
 class PART_Command : public A_Command { 
     public:
-        virtual void Execute(Client *Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager); };
+        virtual void Execute(Client *Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager);
+	private:
+		void		leavingProcess(Client *Client, std::string const &channelName, ChannelManager &Channel_Manager, std::string const &leavingMsg);
+};
 
 class MODE_Command : public A_Command { 
     public:

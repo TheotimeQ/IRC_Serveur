@@ -28,12 +28,12 @@
 #define ERR_NOSUCHCHANNEL		"No such channel"				// 403
 #define ERR_USERNOTINCHANNEL	"They aren't on that channel"	// 441
 #define ERR_USERONCHANNEL		"Is already on channel"			// 443
+#define ERR_NEEDMOREPARAMS		"Not enough parameters"			// 461
 #define ERR_CHANNELISFULL		"Cannot join channel (+l)"		// 471
 #define ERR_INVITEONLYCHAN		"Cannot join channel (+i)"		// 473
 #define ERR_BANNEDFROMCHAN		"Cannot join channel (+b)"		// 474
 #define ERR_BADCHANNELKEY		"Cannot join channel (+k)"		// 475
-#define 
-
+#define ERR_CHANOPRIVSNEEDED	"You're not channel operator"	// 482
 
 class A_Command
 {

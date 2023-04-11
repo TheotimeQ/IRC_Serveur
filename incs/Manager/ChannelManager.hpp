@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:10:11 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/10 08:46:14 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/11 14:55:29 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ class ChannelManager {
 
 	// BASIC MANAGEMENT
 	bool	isChannelExists(std::string const &channelName)			const;
+	bool	isChannelEmpty(std::string const &channelName)			const;
 	bool	isClientIn(std::string const &nickname, std::string const &channelName)	const;
 	bool	isClientSomewhere(std::string const &nickname)			const;
 	bool	isClientChopOf(std::string const &nickname, std::string const &channelName)	const;
@@ -57,8 +58,10 @@ class ChannelManager {
 	void	rmChannel(std::string const &name);
 	// void	announce(std::string const &channelName, std::string const &msg)	const;
 
-	t_mapChannel const	&getChanList()								const;
-	Channel const 		&getChannel(std::string const &channelName)	const;
+	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ getter setters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+	t_mapChannel const		&getChanList()								const;
+	Channel const 			&getChannel(std::string const &channelName)	const;
+	t_mapClientStatus const	&getUsersOf(std::string const &channelName)	const;
 
 	void	addClientToChannel(Client &user, std::string const &channelName);
 	void	rmClientToChannel(Client &user, std::string const &channelName);

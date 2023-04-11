@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/11 09:38:53 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/11 14:26:10 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,19 +147,25 @@ void  PART_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 	leavingMsg = catStringVector(Args, 2);
 	std::cout << "Leaving message -> " << leavingMsg << std::endl; //DEBUG //checking
 
-	//[3] try part from each channel 
+	//[3] try part from each channel + [4] check & supprimer les channels vides
 	for (it = channels.begin(); it != channels.end(); ++it) {
 		if (!Channel_Manager.isChannelExists(*it)) {
 			this->Send_Cmd(Client->Socket, BuildRep_HomeChan(Client->NickName, Args[1], ERR_NOSUCHCHANNEL));
 		} else if (!Channel_Manager.isClientIn(Client->NickName, *it)) {
-			this->Send_Cmd(Client->Socket, BuildRep_Home(Client->NickName, Args[1] + " : They aren't on that channel"));
+			this->Send_Cmd(Client->Socket, BuildRep_HomeChan(Client->NickName, Args[1], ERR_USERNOTINCHANNEL));
 		} else {
-			// CONTINER ici leavingProcess(...) ...
+			leavingProcess(Client, *it, Channel_Manager, leavingMsg);
 		}
 	}
+}
 
-	//[4] supprimer les channels vides
+void	PART_Command::leavingProcess(Client *Client, std::string const &channelName, ChannelManager &Channel_Manager, std::string const &leavingMsg) {
+	(void)leavingMsg;
+	Channel_Manager.rmClientToChannel(*Client, channelName);
+	const_cast<PART_Command *>(this)->Send_Cmd(Client->Socket, BuildRep_CmdEvent("PART", Client->NickName, channelName));
 	
+	if (Channel_Manager.isChannelEmpty(channelName))
+		Channel_Manager.rmChannel(channelName);
 }
 
 //. https://stackoverflow.com/questions/12886573/implementing-irc-rfc-how-to-respond-to-mode
@@ -174,7 +180,7 @@ void  MODE_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 	// [1] Si l'utilisateur fait /mode dans aucun channel sans parametre
 	// 461    ERR_NEEDMOREPARAMS "<command> :Not enough parameters"
 	if (Args.size() == 2 && Args[1].compare("") == 0) {
-		this->Send_Cmd(Client->Socket, BuildRep_Cmde(461, "MODE", "Not enough parameters"));
+		this->Send_Cmd(Client->Socket, BuildRep_Cmde(461, "MODE", ERR_NEEDMOREPARAMS));
 		return ;
 	}
 	// [2] Sinon Si l'utilisateur fait /mode #nomChannel
@@ -186,7 +192,7 @@ void  MODE_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 		if (!Channel_Manager.isChannelExists(Args[1]) || !Channel_Manager.isClientIn(Client->NickName, Args[1])) {
 			// this->Send_Cmd(Client->Socket, BuildRep_Chan(441, Client->NickName + " " + Args[1], "They aren't on that channel"));
 			// [!] comme dans join je sais pas afficher retour puisque le channel est pas bon
-			this->Send_Cmd(Client->Socket, BuildRep_Home(Client->NickName, Args[1] + " : They aren't on that channel"));
+			this->Send_Cmd(Client->Socket, BuildRep_HomeChan(Client->NickName, Args[1], ERR_USERNOTINCHANNEL));
 		}
 		// [2]-[2] L'utilisateur fait partie du channel
 		// 324    RPL_CHANNELMODEIS "<channel> <mode> <mode params>"
@@ -198,7 +204,7 @@ void  MODE_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 	// [3] pour aller plus loin le channel doit exister
 	if (!Channel_Manager.isChannelExists(Args[1]) || !Channel_Manager.isClientIn(Client->NickName, Args[1])) { 
 		// this->Send_Cmd(Client->Socket, BuildRep_Chan(441, Client->NickName + " " + Args[1], "They aren't on that channel"));
-		this->Send_Cmd(Client->Socket, BuildRep_Home(Client->NickName, Args[1] + " : They aren't on that channel"));
+		this->Send_Cmd(Client->Socket, BuildRep_HomeChan(Client->NickName, Args[1], ERR_USERNOTINCHANNEL));
 		// Ce bloc est idem  que + haut en [2]-[1] ==> a faire une fonction + tard
 	} 
 	// [3 -suite] et l'user doit etre chanop
@@ -307,7 +313,7 @@ void  TOPIC_Command::Execute(Client *Client, std::vector<std::string> Args, Chan
 
 		} else if (ret == CM_NOTOPICPERM) { 
 		// 482 ERR_CHANOPRIVSNEEDED "<channel> :You're not channel operator"
-			this->Send_Cmd(Client->Socket, BuildRep_Basic(482, Client->NickName, Args[1], "You're not channel operator"));
+			this->Send_Cmd(Client->Socket, BuildRep_Basic(482, Client->NickName, Args[1], ERR_CHANOPRIVSNEEDED));
 		}
 	}
 }
