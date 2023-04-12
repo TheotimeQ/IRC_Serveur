@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 10:18:15 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/12 10:00:02 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/12 11:08:00 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,6 @@ Channel::Channel(std::string const &name, Client &chop)
 : _name(name), _topic(""), _key("")
 {
 	log("creation in progress");
-
-	//DEBUG
-	log("user creator info :");
-	std::cout << chop << std::endl;
-	//DEBUG
-
 	initChannel();
 	dealUsersStatus(chop);
 }
@@ -84,15 +78,15 @@ t_status const		&Channel::getStatusOf(std::string const &userName) const {
 
 // Envoi d' un objet message à tout les clients connecté
 // ( Faudra bien definir l'objet message ) -> string pour l'instant
-void	Channel::announce(std::string const &msg) const {
-	t_mapClientStatus::const_iterator	it = _users.begin();
+// void	Channel::announce(std::string const &msg) const {
+// 	t_mapClientStatus::const_iterator	it = _users.begin();
 
-	while (it != _users.end()) {
-		log("sending message : " + msg + " to : " + it->first);
-		// ici utiliser la vrai classe message lorsqu'elle sera prete
-		it++;
-	}
-}
+// 	while (it != _users.end()) {
+// 		log("sending message : " + msg + " to : " + it->first);
+// 		// ici utiliser la vrai classe message lorsqu'elle sera prete
+// 		it++;
+// 	}
+// }
 
 // if user is already in channel, nothing happens
 void	Channel::addUser(Client const &newUser) {
@@ -177,6 +171,7 @@ void	Channel::dealUsersStatus(Client &chop) {
 		_name[0] = '#';
 	clientData.status.chop = true;
 	clientData.status.voice = true;
+	clientData.him = chop;
 	_users[chop.NickName] = clientData;
 }
 

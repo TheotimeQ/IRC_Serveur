@@ -6,7 +6,11 @@
 /*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2023/04/12 14:02:27 by zelinsta         ###   ########.fr       */
+=======
+/*   Updated: 2023/04/12 13:13:12 by loumarti         ###   ########lyon.fr   */
+>>>>>>> refs/remotes/origin/master
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +25,7 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 {
     (void )Client_Manager;
 
-	std::cout << *Client << std::endl; //chekcing 
+	// std::cout << *Client << std::endl; //chekcing 
 
 	
 	// [1] Le channel n'existe pas -> c'est donc une creation
@@ -39,9 +43,10 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 			Send_Cmd(Client->Socket, rep);
 			
 			// DEBUG
-			std::cout << "chan_list : " << Channel_Manager.getChanList() << std::endl; //checking
-			std::cout << "[wtf]" << std::endl;
-			Channel_Manager.getChannel(Args[1]).showUsers();
+			// std::cout << "chan_list : " << Channel_Manager.getChanList() << std::endl; //checking
+			// std::cout << "usersList :" << Channel_Manager.getUsersOf(Args[1]) << std::endl; //checking
+			// std::cout << "[wtf]" << std::endl;
+			// Channel_Manager.getChannel(Args[1]).showUsers();
 			// DEBUG
 
 		} else { // toute forme d'erreur lie a un mauvais nom de channel
@@ -81,8 +86,10 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 		std::cout << "Log :" << Client->NickName << " want to join channel : " << Args[1] << std::endl; // checking
 
 		// DEBUG
-			std::cout << "chan_list : " << Channel_Manager.getChanList() << std::endl; //checking
-			Channel_Manager.getChannel(Args[1]).showUsers();
+			// std::cout << "chan_list : " << Channel_Manager.getChanList() << std::endl; //checking
+			// std::cout << "usersList :" << Channel_Manager.getUsersOf(Args[1]) << std::endl; //checking
+			// std::cout << "[wtf]" << std::endl;
+			// Channel_Manager.getChannel(Args[1]).showUsers();
 		// DEBUG
 
 		// [2]-[1] passer les differents checks -> build msgs
@@ -179,21 +186,20 @@ void  PART_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 }
 
 void	PART_Command::leavingProcess(Client *Client, std::string const &channelName, ChannelManager &Channel_Manager, std::string const &leavingMsg) {
-	// [1] on enleve le client du channel
-	Channel_Manager.rmClientToChannel(*Client, channelName);
 
-	// [2] on customise le leaving message
+	// [1] on customise le leaving message (qui est parti etc.)
+	(void)leavingMsg;
 
-	// [3] on renseigne le channel du depart avec le leaving message
+	// [2] on renseigne le channel du depart avec le leaving message
 	Channel_Manager.channelSend(Client->NickName, channelName, leavingMsg);
 
-	// [4] on signale au client qu'il est parti du channel
+	// [3] on signale au client qu'il est parti du channel
 	Send_Cmd(Client->Socket, BuildRep_CmdEvent("PART", Client->NickName, channelName));
 
-
-	// [5] si l'user etait le dernier on detruit le chan
-	if (Channel_Manager.isChannelEmpty(channelName))
-		Channel_Manager.rmChannel(channelName);
+	// [4] on enleve le client du channel
+	Channel_Manager.rmClientToChannel(*Client, channelName);
+	// [5] si l'user etait le dernier on detruit le chan 
+	// ---> fait auto dans le [4]
 }
 
 /* ==> MODE <== */
@@ -205,7 +211,7 @@ void  MODE_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 {
     (void )Client_Manager;
 
-	showStringVector("Args", Args); //DEBUG //checking
+	//showStringVector("Args", Args); //DEBUG //checking
 
 	// [1] Si l'utilisateur fait /mode dans aucun channel sans parametre
 	// 461    ERR_NEEDMOREPARAMS "<command> :Not enough parameters"
@@ -350,7 +356,8 @@ void  TOPIC_Command::Execute(Client *Client, std::vector<std::string> Args, Chan
 	}
 }
 
-/* ==> [...] <== */
+
+/* ==> NAMES <== */
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.5
 void  NAMES_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
@@ -359,7 +366,33 @@ void  NAMES_Command::Execute(Client *Client, std::vector<std::string> Args, Chan
     (void )Channel_Manager;
     (void )Client_Manager;
     (void )Client;
+	std::vector<std::string> 					channels;
+	std::vector<std::string>::const_iterator	it;
+	std::string 								leavingMsg;
+	
+	/* Memo Args */
+	//	Args[0] = "NAMES"
+	//	Args[1] = "#channelCurrent" OU #channelAupif OU #chan1,#chan2,#chan3
+	//	Args[2 et +] --> pas a gerer : target serveur
+	
+	// [A] NAMES sans argts
+	if (Args.size() == 1) {
+		// fais un Name de tous les channels accessibles
+		// Les channels +p +s sont aussi utilise seulement l'utilisateur est dedans
+		//   vector<std::string> = Channel_Manager.getAAChannels(Client->NickName); //All Accessible 
+		// puis sur chaque vector getNamesIn(channelName,  >>>)
+		return ;
+	} 
+
+	// [B] NAMES + channels list
+
+	//[1] get Channels from Args[1] List (coma separated)
+	channels = extractComaList(Args[1]);
+	
+
 }
+
+/* ==> [...] <== */
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.6
 void  LIST_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 

@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 11:17:45 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/12 09:54:41 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/12 11:06:54 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ Parameters: <channel> {[+|-]|o|p|s|i|t|n|b|v} [<limit>] [<user>]
 # include <map>
 # include <exception>
 # include <cstring>
+# include "../utils.hpp"
 
 
 typedef struct s_status {
@@ -147,7 +148,7 @@ class Channel {
 
 	/* public methods */
 		// bases
-	void				announce(std::string const &msg)						const;
+	// void				announce(std::string const &msg)						const;
 	void				addUser(Client const &newUser);
 	void				delUser(Client const &userToDel);
 	bool				isClientIn(std::string const &nickname)			const;
