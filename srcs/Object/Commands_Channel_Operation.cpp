@@ -6,11 +6,7 @@
 /*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2023/04/12 14:02:27 by zelinsta         ###   ########.fr       */
-=======
-/*   Updated: 2023/04/12 13:13:12 by loumarti         ###   ########lyon.fr   */
->>>>>>> refs/remotes/origin/master
+/*   Updated: 2023/04/12 14:50:37 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
