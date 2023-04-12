@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:12:57 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/11 15:19:39 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/12 11:00:05 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include "../../incs/Object/A_Command.hpp"
 
+#define RPL_WELCOME             001
 #define RPL_AWAY                301
 #define RPL_UNAWAY              305                     
 #define RPL_NOWAWAY             306    
