@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/12 10:01:25 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/12 10:17:17 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 			
 			// DEBUG
 			std::cout << "chan_list : " << Channel_Manager.getChanList() << std::endl; //checking
+			std::cout << "[wtf]" << std::endl;
 			Channel_Manager.getChannel(Args[1]).showUsers();
 			// DEBUG
 
