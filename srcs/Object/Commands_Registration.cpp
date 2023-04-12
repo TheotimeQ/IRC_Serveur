@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands_Registration.cpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
+/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:09:32 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/11 15:20:55 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/12 10:51:59 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ void  CAP_Command::Execute(Client *Client, std::vector<std::string> Args, Channe
         {
             std::string Msg = ":" + std::string(SERVER_NAME) + " " + Client->NickName + " CAP * LS :" "\n";
             Send_Cmd(Client->Socket, Msg);
+            Client->Cap_End = 0;
         }
         if (Args[1] == "END")
             Client->Cap_End = 1;

@@ -3,15 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   Client_Manager.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
+/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:32:08 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/11 14:55:10 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/12 11:00:41 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../incs/Manager/Client_Manager.hpp"
 #include "../../incs/Object/Client.hpp"
+#include "../../incs/utils.hpp"
+#include "../../incs/Object/Commands.hpp"
 
 Client_Manager::Client_Manager(): 
     Nb_Clients(1)
@@ -45,6 +47,8 @@ void Client_Manager::Check_Log(Client* Clt)
     {
         Clt->Logged = 1;
         std::cout << EVENT_LOGGED << Clt->NickName << std::endl;
+        std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(RPL_WELCOME)  + " " + Clt->NickName + " :BIENVENU SUR LE SERVEUR IRC" + "\n";
+        Send_Cmd(Clt->Socket, Msg);
     }
     else
         Clt->Logged = 0;

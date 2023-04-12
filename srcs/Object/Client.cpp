@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
+/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 09:03:00 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/11 16:13:53 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/12 10:52:27 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ Client::Client():
     Type(-1),
 	Away(0),
 	Away_Str("Undefined"),
-	Cap_End(0),
+	Cap_End(1),
 	Logged(0)
 {
 	_Client_Address_Len = sizeof(_Client_Address);
@@ -36,7 +36,7 @@ Client::Client(int Serveur_Socket):
     Type(-1),
 	Away(0),
 	Away_Str("Undefined"),
-	Cap_End(0),
+	Cap_End(1),
 	Logged(0)
 {
 	_Client_Address_Len = sizeof(_Client_Address);
