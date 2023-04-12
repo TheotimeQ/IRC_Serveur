@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands_Channel_Operation.cpp                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/12 10:17:17 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/12 14:02:27 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 	// 403    ERR_NOSUCHCHANNEL "<channel name> :No such channel" 
 	//- Used to indicate the given channel name is invalid
 	if (!Channel_Manager.isChannelExists(Args[1])) {
+
+		
 		int ret = Channel_Manager.addNewChannel(Args[1], (*Client));
 		
 		if (ret == 0) { // le channel est bien ajoute

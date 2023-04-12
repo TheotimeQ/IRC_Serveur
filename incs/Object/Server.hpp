@@ -22,24 +22,6 @@
 #include "../Manager/Command_Manager.hpp"
 #include "../Manager/Client_Manager.hpp"
 
-#define ERROR_SERVER_PARAM 	"Usage: ircserv <port> <password>"
-#define ERROR_PORT_EMPTY 	"Error: port empty : "
-#define ERROR_PORT_NO_DIGIT "Error: port contain no digit caractere : "
-#define ERROR_PORT_MAX		"Error: wtf bro? What are those test.. folow the correction sheet :D"
-#define ERROR_PORT_RANGE 	"Error: 1 <= port <= 65535 : "
-#define ERROR_SOCKET 		"Error: Can't create socket"
-#define ERROR_CONF_SOCKET 	"Error: Can't configure socket "
-#define ERROR_BIND 			"Error: Can't bind socket"
-#define ERROR_LISTEN 		"Error: Can't listen on socket"
-#define ERROR_POLL 			"Error: Can't get poll event"
-#define ERROR_CONNECTION 	"Error: Can't while accept new client"
-#define ERROR_DATA 			"Error: Can't while getting data from client"
-#define ERROR_DATA 			"Error: Can't while getting data from client"
-
-#define EVENT_NEW_CLIENT 	"Log: New connection"
-#define EVENT_DECONNECTED 	"Log: Client deconnected : "
-#define EVENT_NEW_DATA 		"Log: Data received : \n"
-
 class Server
 {
 	private:

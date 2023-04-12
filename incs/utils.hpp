@@ -1,13 +1,6 @@
 #ifndef UTILS_HPP
 # define UTILS_HPP
 
-#include <iostream>
-#include <string>
-#include <cerrno>
-#include <vector>
-#include <map>
-#include <sstream>
-
 #include <string>
 #include <cstring>
 #include <sys/time.h>
@@ -39,5 +32,6 @@ int             Send_Cmd(int client_sock, const std::string& message) ;
 std::string     I_To_S(int num);
 int             Check_Double(std::string NickName, std::string Args);
 std::string     Join_End(int start, std::vector<std::string> Args);
+int             Is_Valide_Nick(const std::string& str);
 
 #endif

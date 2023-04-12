@@ -6,7 +6,7 @@
 /*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:32:08 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/12 11:00:41 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/12 14:05:47 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void Client_Manager::Check_Log(Client* Clt)
     {
         Clt->Logged = 1;
         std::cout << EVENT_LOGGED << Clt->NickName << std::endl;
-        std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(RPL_WELCOME)  + " " + Clt->NickName + " :BIENVENU SUR LE SERVEUR IRC" + "\n";
+        std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(RPL_WELCOME)  + " " + Clt->NickName + " :" + MSG_BIENVENU + "\n";
         Send_Cmd(Clt->Socket, Msg);
     }
     else

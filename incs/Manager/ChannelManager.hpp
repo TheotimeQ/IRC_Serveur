@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelManager.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:10:11 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/12 09:04:11 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/12 14:44:00 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,6 @@
 # include <climits>
 # include <cstdlib>
 # include <cerrno>
-
-# define ERRCHAN_CREATION	"channel creation error : "
-# define ERRCHAN_WRONGNAME	"[!] Channel Manager can't find : "
-
-# define LOGCHAN_NOTOPICPERM	" : has no topic set permission in channel : "
 
 // channel manager errors -> en faire une enum ?
 # define CM_ERROR 1

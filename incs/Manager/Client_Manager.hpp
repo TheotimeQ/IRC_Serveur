@@ -9,14 +9,6 @@
 #include "../Irc.hpp"
 #include "../Object/Client.hpp"
 
-#define ERROR_MAX_CLIENT			"Error: Can't add new client , max reached"
-#define ERROR_RTN_CLIENT			"Error: Can't return client , wrong index"
-#define ERROR_DEL_CLIENT			"Error: Can't add remove client , no such client"
-#define ERROR_FID_CLIENT			"Error: Can't find client , no such : "
-#define ERROR_NICKNAME_ALREADY_USED	"Error: Can't change nickname , already used"
-
-#define EVENT_LOGGED				"Log: Client logged : "
-
 class Client_Manager
 {
 	private:
