@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/11 14:57:10 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/12 09:19:20 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ ChannelManager	&ChannelManager::operator=(ChannelManager const &righty) {
 
 
 
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ public methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ BASIC MANAGEMENT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 // channel's name is [200]length prefixed by &, #, +, !
 // forbidden characters : space, comma, semi-colon
@@ -173,17 +173,6 @@ void	ChannelManager::rmChannel(std::string const &name) {
 	}
 }
 
-// void	ChannelManager::announce(std::string const &channelName, std::string const &msg)	const {
-// 	t_mapChannel::const_iterator	it;
-
-// 	it = _chanList.find(channelName);
-// 	if (it == _chanList.end()) {
-// 		log("announceAt() error");
-// 		return;
-// 	}
-// 	it->second.announce(msg);
-// }
-
 bool	ChannelManager::isChannelExists(std::string const &channelName) const {
 	t_mapChannel::const_iterator	it;
 
@@ -229,6 +218,32 @@ bool	ChannelManager::isClientChopOf(std::string const &nickname, std::string con
 	}
 	return it->second.isClientChop(nickname);
 }
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ADVANCED FEATURES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+// Send a message from user to all channel, checks if channel is +m too (moderated)
+void	ChannelManager::channelSend(std::string const &user, std::string const &channelName, std::string const &msg) const {
+	t_mapChannel::const_iterator		it;
+	t_mapClientStatus					usersStats;
+	t_mapClientStatus::const_iterator	its;
+
+	it = _chanList.find(channelName);
+	if (it == _chanList.end()) {
+		log("channelSend() error");
+		return ;
+	}
+	if (!it->second.canTalk(user))
+		return ;
+	usersStats = getUsersOf(channelName);
+	for (its = usersStats.begin(); its != usersStats.end(); ++its) {
+		// [?] secu pour par s'envoyer a lui meme ?
+
+		log("client : " + its->second.him.NickName + "socket : " + I_To_S(its->second.him.Socket));
+		
+		Send_Cmd(its->second.him.Socket, msg);
+	}
+}
+
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ join checks ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 /* ~~~~~~~~~~~~~~~~~~~~ [true] if check is ok [false] if not ~~~~~~~~~~~~~~~~~~ */

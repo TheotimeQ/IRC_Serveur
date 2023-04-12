@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/11 15:27:49 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/12 10:01:25 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,16 @@
 
 //=====================================Channel operations======================================
 
+/* ==> JOIN <== */
+
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.1
 void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
     (void )Client_Manager;
+
+	std::cout << *Client << std::endl; //chekcing 
+
+	
 	// [1] Le channel n'existe pas -> c'est donc une creation
 	// 403    ERR_NOSUCHCHANNEL "<channel name> :No such channel" 
 	//- Used to indicate the given channel name is invalid
@@ -29,7 +35,11 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 			//JOIN SUCCEED : ":Zel!~a@localhost JOIN #test \n"
 			std::string rep = BuildRep_CmdEvent(Args[0], Client->NickName, Args[1]);
 			Send_Cmd(Client->Socket, rep);
+			
+			// DEBUG
 			std::cout << "chan_list : " << Channel_Manager.getChanList() << std::endl; //checking
+			Channel_Manager.getChannel(Args[1]).showUsers();
+			// DEBUG
 
 		} else { // toute forme d'erreur lie a un mauvais nom de channel
 			// [!] Je peux pas repondre avec Args[1] => puisque c'est un mauvais nom de channel, 
@@ -66,7 +76,11 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 	// [2] Le channel existe (Args[1]), on veut le rejoindre
 	else {
 		std::cout << "Log :" << Client->NickName << " want to join channel : " << Args[1] << std::endl; // checking
-		// CONTINUER ICI -> faire rejoindre plrs user
+
+		// DEBUG
+			std::cout << "chan_list : " << Channel_Manager.getChanList() << std::endl; //checking
+			Channel_Manager.getChannel(Args[1]).showUsers();
+		// DEBUG
 
 		// [2]-[1] passer les differents checks -> build msgs
 
@@ -118,6 +132,8 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 	}
 }
 
+/* ==> PART <== */
+
 // https://www.rfc-editor.org/rfc/rfc14m59#section-4.2.2
 // ERR_NEEDMOREPARAMS - ERR_NOSUCHCHANNEL - ERR_NOTONCHANNEL
 // Parameters: <channel> *( "," <channel> ) [ <Part Message> ]
@@ -160,12 +176,24 @@ void  PART_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 }
 
 void	PART_Command::leavingProcess(Client *Client, std::string const &channelName, ChannelManager &Channel_Manager, std::string const &leavingMsg) {
-	(void)leavingMsg;
+	// [1] on enleve le client du channel
 	Channel_Manager.rmClientToChannel(*Client, channelName);
+
+	// [2] on customise le leaving message
+
+	// [3] on renseigne le channel du depart avec le leaving message
+	Channel_Manager.channelSend(Client->NickName, channelName, leavingMsg);
+
+	// [4] on signale au client qu'il est parti du channel
 	Send_Cmd(Client->Socket, BuildRep_CmdEvent("PART", Client->NickName, channelName));
+
+
+	// [5] si l'user etait le dernier on detruit le chan
 	if (Channel_Manager.isChannelEmpty(channelName))
 		Channel_Manager.rmChannel(channelName);
 }
+
+/* ==> MODE <== */
 
 //. https://stackoverflow.com/questions/12886573/implementing-irc-rfc-how-to-respond-to-mode
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.3
@@ -258,6 +286,8 @@ void	MODE_Command::Send_RPL_CHANNELMODEIS(Client *Client, std::vector<std::strin
 	Send_Cmd(Client->Socket, BuildRep_Basic(324, Client->NickName, Args[1], ModeList));
 }
 
+/* ==> TOPIC <== */
+
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.4
 
 // [+] autre code a gere une fois join fini
@@ -316,6 +346,8 @@ void  TOPIC_Command::Execute(Client *Client, std::vector<std::string> Args, Chan
 		}
 	}
 }
+
+/* ==> [...] <== */
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.5
 void  NAMES_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 

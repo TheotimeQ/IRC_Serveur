@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 10:18:15 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/10 08:34:17 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/12 10:00:02 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,12 @@ Channel::Channel(std::string const &name, Client &chop)
 : _name(name), _topic(""), _key("")
 {
 	log("creation in progress");
+
+	//DEBUG
+	log("user creator info :");
+	std::cout << chop << std::endl;
+	//DEBUG
+
 	initChannel();
 	dealUsersStatus(chop);
 }
@@ -128,7 +134,7 @@ bool	Channel::isClientChop(std::string const &nickname) const {
 }
 
 // remove an user from channel operator map -> nothing happens if not in map
-void				Channel::rmOpPrivilege(std::string const &username) {
+void	Channel::rmOpPrivilege(std::string const &username) {
 	t_mapClientStatus::iterator	it;
 
 	it = _users.find(username);
@@ -142,9 +148,24 @@ void				Channel::rmOpPrivilege(std::string const &username) {
 	}
 }
 
+bool	Channel::canTalk(std::string const &nickname)	const {
+	t_mapClientStatus::const_iterator	it;
+	
+	if (mode.m == false)
+		return true;
+	it = _users.find(nickname);
+	if (it == _users.end()) {
+		log("canTalk() error");
+		return false;
+	}
+	if (it->second.status.chop || it->second.status.creator || it->second.status.voice)
+		return true;
+	return false;
+}
+
 
 // manage status/privilege channel operator + channel creator
-void				Channel::dealUsersStatus(Client &chop) {
+void	Channel::dealUsersStatus(Client &chop) {
 	t_clientData	clientData;
 	
 
@@ -173,6 +194,20 @@ void	Channel::log(std::string const &logMsg)	const {
 }
 
 
+//~~~~~~~~~~~~~~~~~~~~~~~~~Debug~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+void	Channel::showUsers()	const {
+	t_mapClientStatus::const_iterator it;
+	t_mapClientStatus users = getUsers();
+	
+	log ("CHANNEL USERS INFOS >>");
+	std::cout << "\033[38;5;23m";
+	for( it = users.begin(); it != users.end(); ++it) {
+		std::cout << it->second.him << std::endl;
+		std::cout << "-----------------------------" << std::endl;
+	}
+	std::cout << "\033[m";
+}
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~Operators~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 std::ostream	&operator<<(std::ostream &o, t_mapClientStatus const &users) {

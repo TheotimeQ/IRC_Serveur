@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:10:11 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/11 14:55:29 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/12 09:04:11 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "../Object/Channel.hpp"
 # include "../Object/Client.hpp"
+# include "../utils.hpp"
 # include <iostream>
 # include <climits>
 # include <cstdlib>
@@ -56,7 +57,9 @@ class ChannelManager {
 	int		addNewChannel(std::string const &name, Client &chop);
 	int		checkChanName(std::string const &name)					const;
 	void	rmChannel(std::string const &name);
-	// void	announce(std::string const &channelName, std::string const &msg)	const;
+	
+	// ADVANCED FEATURES
+	void	channelSend(std::string const &user, std::string const &channelName, std::string const &msg) const;
 
 	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ getter setters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 	t_mapChannel const		&getChanList()								const;

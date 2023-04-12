@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 11:17:45 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/10 08:32:37 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/12 09:54:41 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,6 @@ class Channel {
 	
 	Channel(); // besoin pour utiliser en map avec []
 	~Channel();
-	// creation d'un channel basique => UTILISER UN TRY CATCH
 	Channel(std::string const &name, Client &chop);
 
 	/* getters setters */
@@ -152,12 +151,18 @@ class Channel {
 	void				addUser(Client const &newUser);
 	void				delUser(Client const &userToDel);
 	bool				isClientIn(std::string const &nickname)			const;
-	bool				isClientChop(std::string const &nickname)		const;
 
 		// mode management
 	void				rmOpPrivilege(std::string const &username);
+	bool				isClientChop(std::string const &nickname)		const;
+	bool				canTalk(std::string const &nickname)			const;
+
+		//debug
+	void				showUsers()										const;
+
 
 	/* exception */
+	// [!] a virer surment mais verifier avant
 	// lors du catch de l'exception -> envoi message retour d'erreur au client
 	class	ErrorMsgException : public std::exception {
 		private :
