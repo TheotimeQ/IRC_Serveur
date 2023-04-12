@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/12 12:18:34 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/12 13:13:12 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -350,7 +350,8 @@ void  TOPIC_Command::Execute(Client *Client, std::vector<std::string> Args, Chan
 	}
 }
 
-/* ==> [...] <== */
+
+/* ==> NAMES <== */
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.5
 void  NAMES_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
@@ -359,7 +360,33 @@ void  NAMES_Command::Execute(Client *Client, std::vector<std::string> Args, Chan
     (void )Channel_Manager;
     (void )Client_Manager;
     (void )Client;
+	std::vector<std::string> 					channels;
+	std::vector<std::string>::const_iterator	it;
+	std::string 								leavingMsg;
+	
+	/* Memo Args */
+	//	Args[0] = "NAMES"
+	//	Args[1] = "#channelCurrent" OU #channelAupif OU #chan1,#chan2,#chan3
+	//	Args[2 et +] --> pas a gerer : target serveur
+	
+	// [A] NAMES sans argts
+	if (Args.size() == 1) {
+		// fais un Name de tous les channels accessibles
+		// Les channels +p +s sont aussi utilise seulement l'utilisateur est dedans
+		//   vector<std::string> = Channel_Manager.getAAChannels(Client->NickName); //All Accessible 
+		// puis sur chaque vector getNamesIn(channelName,  >>>)
+		return ;
+	} 
+
+	// [B] NAMES + channels list
+
+	//[1] get Channels from Args[1] List (coma separated)
+	channels = extractComaList(Args[1]);
+	
+
 }
+
+/* ==> [...] <== */
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.6
 void  LIST_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
