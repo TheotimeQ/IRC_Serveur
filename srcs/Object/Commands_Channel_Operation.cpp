@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/12 10:17:17 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/12 11:13:36 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 {
     (void )Client_Manager;
 
-	std::cout << *Client << std::endl; //chekcing 
+	// std::cout << *Client << std::endl; //chekcing 
 
 	
 	// [1] Le channel n'existe pas -> c'est donc une creation
@@ -37,9 +37,10 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 			Send_Cmd(Client->Socket, rep);
 			
 			// DEBUG
-			std::cout << "chan_list : " << Channel_Manager.getChanList() << std::endl; //checking
-			std::cout << "[wtf]" << std::endl;
-			Channel_Manager.getChannel(Args[1]).showUsers();
+			// std::cout << "chan_list : " << Channel_Manager.getChanList() << std::endl; //checking
+			// std::cout << "usersList :" << Channel_Manager.getUsersOf(Args[1]) << std::endl; //checking
+			// std::cout << "[wtf]" << std::endl;
+			// Channel_Manager.getChannel(Args[1]).showUsers();
 			// DEBUG
 
 		} else { // toute forme d'erreur lie a un mauvais nom de channel
@@ -79,8 +80,10 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 		std::cout << "Log :" << Client->NickName << " want to join channel : " << Args[1] << std::endl; // checking
 
 		// DEBUG
-			std::cout << "chan_list : " << Channel_Manager.getChanList() << std::endl; //checking
-			Channel_Manager.getChannel(Args[1]).showUsers();
+			// std::cout << "chan_list : " << Channel_Manager.getChanList() << std::endl; //checking
+			// std::cout << "usersList :" << Channel_Manager.getUsersOf(Args[1]) << std::endl; //checking
+			// std::cout << "[wtf]" << std::endl;
+			// Channel_Manager.getChannel(Args[1]).showUsers();
 		// DEBUG
 
 		// [2]-[1] passer les differents checks -> build msgs
@@ -203,7 +206,7 @@ void  MODE_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 {
     (void )Client_Manager;
 
-	showStringVector("Args", Args); //DEBUG //checking
+	//showStringVector("Args", Args); //DEBUG //checking
 
 	// [1] Si l'utilisateur fait /mode dans aucun channel sans parametre
 	// 461    ERR_NEEDMOREPARAMS "<command> :Not enough parameters"
