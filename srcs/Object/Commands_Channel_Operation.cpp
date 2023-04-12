@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/12 11:13:36 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/12 12:18:34 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,21 +180,20 @@ void  PART_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 }
 
 void	PART_Command::leavingProcess(Client *Client, std::string const &channelName, ChannelManager &Channel_Manager, std::string const &leavingMsg) {
-	// [1] on enleve le client du channel
-	Channel_Manager.rmClientToChannel(*Client, channelName);
 
-	// [2] on customise le leaving message
+	// [1] on customise le leaving message (qui est parti etc.)
+	(void)leavingMsg;
 
-	// [3] on renseigne le channel du depart avec le leaving message
+	// [2] on renseigne le channel du depart avec le leaving message
 	Channel_Manager.channelSend(Client->NickName, channelName, leavingMsg);
 
-	// [4] on signale au client qu'il est parti du channel
+	// [3] on signale au client qu'il est parti du channel
 	Send_Cmd(Client->Socket, BuildRep_CmdEvent("PART", Client->NickName, channelName));
 
-
-	// [5] si l'user etait le dernier on detruit le chan
-	if (Channel_Manager.isChannelEmpty(channelName))
-		Channel_Manager.rmChannel(channelName);
+	// [4] on enleve le client du channel
+	Channel_Manager.rmClientToChannel(*Client, channelName);
+	// [5] si l'user etait le dernier on detruit le chan 
+	// ---> fait auto dans le [4]
 }
 
 /* ==> MODE <== */

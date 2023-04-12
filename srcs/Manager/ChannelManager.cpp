@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/12 09:19:20 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/12 12:11:30 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,10 @@ void	ChannelManager::addClientToChannel(Client &user, std::string const &channel
 
 // After removing a user, check if channel is empty to remove it
 void	ChannelManager::rmClientToChannel(Client &user, std::string const &channelName) {
-	if (!isChannelExists(channelName))
-		return; // [?] besoin de gerer erreure ici ?
+	if (!isChannelExists(channelName)) {
+		log("rmClientToChannel() error");
+		return;
+	}
 	_chanList[channelName].delUser(user);
 	if (_chanList[channelName].isEmpty())
 		rmChannel(channelName);
@@ -184,7 +186,7 @@ bool	ChannelManager::isChannelEmpty(std::string const &channelName) const {
 	t_mapChannel::const_iterator	it;
 
 	it = _chanList.find(channelName);
-	if (it != _chanList.end()) {
+	if (it == _chanList.end()) {
 		log("isChannelEmpty() error");
 		return false;
 	}
@@ -236,11 +238,12 @@ void	ChannelManager::channelSend(std::string const &user, std::string const &cha
 		return ;
 	usersStats = getUsersOf(channelName);
 	for (its = usersStats.begin(); its != usersStats.end(); ++its) {
-		// [?] secu pour par s'envoyer a lui meme ?
+		// [?] secu pour par s'envoyer a lui meme ? (voir apres)
 
 		log("client : " + its->second.him.NickName + "socket : " + I_To_S(its->second.him.Socket));
 		
-		Send_Cmd(its->second.him.Socket, msg);
+		// [!][?] quel est le foutu format pour envoyer un message a un client dans un channel !
+		Send_Cmd(its->second.him.Socket, "PRIVMSG " + channelName + " " + msg + " \n"); // [!] pkoi march pas OUIN !
 	}
 }
 
