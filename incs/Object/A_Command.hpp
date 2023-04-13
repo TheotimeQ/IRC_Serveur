@@ -64,13 +64,14 @@ class A_Command
 		// Au final Chan et Cmde sont identiques a part le nom des arguments
 
 			// [Command Event REP] -> ":Zel!~a@localhost JOIN #test \n"
-		std::string	BuildRep_CmdEvent(std::string const &cmde, std::string const &nick, std::string const &channel) const;
+		std::string	BuildRep_CmdEvent(Client const &user, std::string const &cmde, std::string const &channel) const;
 
 
 		/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Parsing precheck mehod-tool ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 		bool	Is_Channel_Name_Arg(std::string const &arg) const;
 		bool	Is_Channel_Mode_BArgs(std::string const &args) const;
 		bool	Is_Channel_Mode_AArgs(std::string const &args) const;
+		bool	Guard(Client *Client, std::vector<std::string> const &Args, std::string const &Cmde) const;
 
 		/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ other-tool ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 		std::string					getNow()	const;

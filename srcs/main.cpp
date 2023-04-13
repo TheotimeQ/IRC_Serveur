@@ -72,6 +72,12 @@ int main(int argc, char **argv)
 // - KICK .. etc (Commande operator)?
 // - NOTICE et PRIVMSG (fully functionnal) BESOIN DE LOUP
 // - notice all user in channel on : MODE KICK PART QUIT             PRIVMSG NOTICE
+// - [+] - avec netcat, si on envoie juste \n -> crash
+
+//Celui qui a une idee
+// - comment repondre a une commande entree avec un mauvais nom de chan, depuis un bon chan
+//   et que la reponse parvienne ecrite dans le bon chan ||-> tracker le dernier chan utilise ?
+// (oui c'est   s u p e r   clair ! ^_^)  ---> voir les  [!] dans JOIN
 
 //JSP 
 // - Faire des test avec plusieru client 

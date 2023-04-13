@@ -16,36 +16,37 @@ const int BUFFER_SIZE = 1024;
 //Code numeric associé à la doc IRC
 #define RPL_WELCOME             001
 #define RPL_AWAY                301
-#define RPL_UNAWAY              305                     
-#define RPL_NOWAWAY             306    
+#define RPL_UNAWAY              305
+#define RPL_NOWAWAY             306
 #define RPL_ENDOFWHO            315
 #define RPL_TOPIC               332
-#define RPL_WHOREPLY            352         
+#define RPL_WHOREPLY            352
 #define RPL_NAMREPLY            353
 #define RPL_ENDOFNAMES          366
 #define ERR_CANNOTSENDTOCHAN    404
 #define ERR_WASNOSUCHNICK       406
 #define ERR_TOOMANYTARGETS      407
-#define ERR_NORECIPIENT         411     
-#define ERR_NOTEXTTOSEND        412 
-#define ERR_NONICKNAMEGIVEN     431            
+#define ERR_NORECIPIENT         411
+#define ERR_NOTEXTTOSEND        412
+#define ERR_NONICKNAMEGIVEN     431
 #define ERR_ERRONEUSNICKNAME    432
-#define ERR_NICKNAMEINUSE       433     
+#define ERR_NICKNAMEINUSE       433
 #define ERR_NICKCOLLISION       436
 #define ERR_NOSUCHSERVER        402
 #define ERR_NEEDMOREPARAM       461
 #define ERR_ALREADYREGISTRED    462
 
 //Message d'erreur à envoyer au client ( issue de la doc )
-#define ERR_NOSUCHCHANNEL		    "No such channel"				// 403
-#define ERR_USERNOTINCHANNEL	    "They aren't on that channel"	// 441
-#define ERR_USERONCHANNEL		    "Is already on channel"			// 443
-#define ERR_NEEDMOREPARAMS		    "Not enough parameters"			// 461
-#define ERR_CHANNELISFULL		    "Cannot join channel (+l)"		// 471
-#define ERR_INVITEONLYCHAN		    "Cannot join channel (+i)"		// 473
-#define ERR_BANNEDFROMCHAN		    "Cannot join channel (+b)"		// 474
-#define ERR_BADCHANNELKEY		    "Cannot join channel (+k)"		// 475
-#define ERR_CHANOPRIVSNEEDED	    "You're not channel operator"	// 482
+#define SERR_NOSUCHCHANNEL			"No such channel"				// 403
+#define SERR_USERNOTINCHANNEL		"They aren't on that channel"	// 441
+#define SERR_USERONCHANNEL			"Is already on channel"			// 443
+#define SERR_NEEDMOREPARAMS			"Not enough parameters"			// 461
+#define SERR_CHANNELISFULL			"Cannot join channel (+l)"		// 471
+#define SERR_UNKNOWNMODE			"unknown mode asked"			// 472
+#define SERR_INVITEONLYCHAN			"Cannot join channel (+i)"		// 473
+#define SERR_BANNEDFROMCHAN			"Cannot join channel (+b)"		// 474
+#define SERR_BADCHANNELKEY			"Cannot join channel (+k)"		// 475
+#define SERR_CHANOPRIVSNEEDED		"You're not channel operator"	// 482
 
 //Message d'erreur sur le serveur
 #define ERROR_SERVER_PARAM 	        "Usage: ircserv <port> <password>"

@@ -71,3 +71,19 @@ int Is_Valide_Nick(const std::string& str)
 
     return GOOD;
 }
+
+std::string catVectString(std::vector<std::string> const &args, unsigned offset, std::string const &delim) {
+	std::vector<std::string>::const_iterator	it;
+	std::string									cat;
+
+	if (offset > args.size() - 1)
+		return "";
+	it = args.begin() + offset;
+		while (it != args.end()) {
+			if (it != args.begin() + 2)
+				cat += delim;
+			cat += *it;
+			++it;
+		}
+	return cat;
+}
