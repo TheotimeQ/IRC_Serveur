@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
+/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:12:57 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/13 11:19:35 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/13 17:35:40 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ class PART_Command : public A_Command
         virtual void    Execute(Client *Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager);
         
 	private:
-		void		    leavingProcess(Client *Client, std::string const &channelName, ChannelManager &Channel_Manager, std::string const &leavingMsg);
+		void		    leavingProcess(Client *Client, std::string const &channelName, ChannelManager &Channel_Manager, std::string &leavingMsg);
 };
 
 class MODE_Command : public A_Command 
@@ -91,7 +91,10 @@ class KICK_Command : public A_Command {
 
 class WHO_Command : public A_Command { 
     public:
-        virtual void Execute(Client *Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager); };
+        virtual void Execute(Client *Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager); 
+	private:
+		void	Send_RPL_WHOREPLY(Client *client, Client const &who, std::vector<std::string> const &Args, ChannelManager &Channel_Manager);
+};
 
 //=====================================Sending messages======================================
 
