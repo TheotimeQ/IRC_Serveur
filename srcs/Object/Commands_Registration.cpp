@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands_Registration.cpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:09:32 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/12 14:39:28 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/13 11:41:17 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,17 +127,38 @@ void  OPER_Command::Execute(Client *Clt, std::vector<std::string> Args, ChannelM
         return ;
     }
 
+    //Si deja operateur 
     // RPL_YOUREOPER
-    // ERR_NOOPERHOST                  
+
+    //Si wrong password 
     // ERR_PASSWDMISMATCH
 
+    //Si pas d'user set 
+    // ERR_NOOPERHOST                  
 
+    //    Command: OPER
+    //    Parameters: <user> <password>
 
+    //    OPER message is used by a normal user to obtain operator privileges.
+    //    The combination of <user> and <password> are required to gain
+    //    Operator privileges.
 
+    //    If the client sending the OPER command supplies the correct password
+    //    for the given user, the server then informs the rest of the network
+    //    of the new operator by issuing a "MODE +o" for the clients nickname.
 
+    //    The OPER message is client-server only.
 
+    //    Numeric Replies:
 
+    //            ERR_NEEDMOREPARAMS              RPL_YOUREOPER
+    //            ERR_NOOPERHOST                  ERR_PASSWDMISMATCH
 
+    //    Example:
+
+    //    OPER foo bar                    ; Attempt to register as an operator
+    //                                    using a username of "foo" and "bar" as
+    //                                    the password.
 
 }
 

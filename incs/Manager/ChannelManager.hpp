@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelManager.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:10:11 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/12 14:44:00 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/13 11:06:07 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "../Object/Channel.hpp"
 # include "../Object/Client.hpp"
 # include "../utils.hpp"
+
 # include <iostream>
 # include <climits>
 # include <cstdlib>
@@ -82,6 +83,9 @@ class ChannelManager {
 	void		setModesOfAs(std::string const &channelName, bool isPlus, std::string const &flags);
 	void		setLimitModeOfAsWith(std::string const &channelName, bool isPlus, std::string const &option);
 	void		setKeyModeOfAsWith(std::string const &channelName, bool isPlus, std::string const &option);
+
+	//Ajout pour fonction theotime
+	Channel		*Get_Channel(std::string &Channel_Name);
 };
 
 std::ostream& operator<<(std::ostream	&o, t_mapChannel const &ChanList);

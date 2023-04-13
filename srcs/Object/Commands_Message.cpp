@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:09:32 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/11 15:15:10 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/13 13:05:18 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,37 +34,54 @@ void  PRIVMSG_Command::Execute(Client *From_Client, std::vector<std::string> Arg
     }
 
     //Concataine les args pour former le message
-    std::string Message_to_send = Join_End(3, Args);
-
-    //Mauvais format
-    if (Args.size() != 3)
-        return ;
-
-    //Implementation des wildcard ? 
+    std::string Message_to_send = Join_End(2, Args);
 
     std::stringstream Targets(Args[1]); 
     std::string Target; 
 
     while (std::getline(Targets, Target, ',')) 
     { 
-        std::cout << Target << std::endl; 
+        //Si Target en double
+        if (Check_Double(Target, Args[1]))
+        {
+            std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_TOOMANYTARGETS) + " " + From_Client->NickName + " :Duplicate recipients. No message delivered" + "\n";
+            Send_Cmd(From_Client->Socket, Msg);
+            continue;
+        }
 
         //Si c'est une channel
         if (Target[0] == '#')
         {  
-            (void) Channel_Manager;
-            
+            //PRIVMSG #*.edu
+            if (Target == "#.localhost")
+            {
+                //Pour faire ca il faut avoir ?
+                //Annonce 2 tout les client sur localhost
+            }
+
             //Check si la channel exist 
-
-                //Check si l'user est pas dans la channel et que channel mode = +n
-                
-                //Check si pas chanop ou mode +v(voice) et la channel en mode +m (modere)
-
+            Channel *Chn = Channel_Manager.Get_Channel(Target);
+            if (Chn == NULL)
+            {
                 std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_CANNOTSENDTOCHAN) + " " + From_Client->NickName + " :Cannot send to channel" + "\n";
                 Send_Cmd(From_Client->Socket, Msg);
+                continue;
+            }
             
-                //Announce de la channel
+            //Check si l'user est pas dans la channel et que channel mode = +n
 
+//Fonction pour check si un client est dans une channel
+//Fonction pour tester si une channel a un mode 
+                
+            //Check si pas chanop ou mode +v(voice) et la channel en mode +m (modere)
+            
+//Fonction pour check si un client est chanop d'une channel
+                                                                                    //Fonction pour chekcer le mode d'un client 
+
+            //Announce de la channel
+            std::string Msg = ":" + From_Client->NickName + "!" + From_Client->UserName + "@" + From_Client->HostName + " PRIVMSG " + Target + " :" + Message_to_send + "\n";
+            Channel_Manager.sendChannel(From_Client->NickName ,Target, Msg);
+            
             continue;
         }
 
@@ -76,14 +93,6 @@ void  PRIVMSG_Command::Execute(Client *From_Client, std::vector<std::string> Arg
             if (To_Client == NULL)
             {
                 std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_WASNOSUCHNICK) + " " + From_Client->NickName + " :There was no such nickname" + "\n";
-                Send_Cmd(From_Client->Socket, Msg);
-                continue;
-            }
-            
-            //Si client en double
-            if (Check_Double(Target, Args[1]))
-            {
-                std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_TOOMANYTARGETS) + " " + From_Client->NickName + " :Duplicate recipients. No message delivered" + "\n";
                 Send_Cmd(From_Client->Socket, Msg);
                 continue;
             }
@@ -143,7 +152,6 @@ void  AWAY_Command::Execute(Client *From_Client, std::vector<std::string> Args, 
     {
         From_Client->Away = 1;
         
-        //Concataine les args pour former le message
         std::string Message_to_send = Join_End(1, Args);
         From_Client->Away_Str = Message_to_send;
 

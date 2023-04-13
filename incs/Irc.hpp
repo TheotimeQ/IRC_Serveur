@@ -18,7 +18,9 @@ const int BUFFER_SIZE = 1024;
 #define RPL_AWAY                301
 #define RPL_UNAWAY              305                     
 #define RPL_NOWAWAY             306    
+#define RPL_ENDOFWHO            315
 #define RPL_TOPIC               332
+#define RPL_WHOREPLY            352         
 #define RPL_NAMREPLY            353
 #define RPL_ENDOFNAMES          366
 #define ERR_CANNOTSENDTOCHAN    404
@@ -30,6 +32,7 @@ const int BUFFER_SIZE = 1024;
 #define ERR_ERRONEUSNICKNAME    432
 #define ERR_NICKNAMEINUSE       433     
 #define ERR_NICKCOLLISION       436
+#define ERR_NOSUCHSERVER        402
 #define ERR_NEEDMOREPARAM       461
 #define ERR_ALREADYREGISTRED    462
 
@@ -68,13 +71,21 @@ const int BUFFER_SIZE = 1024;
 #define ERROR_NICKNAME_ALREADY_USED	"Error: Can't change nickname , already used"
 #define ERROR_CMDNOTFOUND 	        "Error: Command not found : "
 
+//Channel error
+# define CHERR_FORMAT			    "channel name format : <#name>"
+# define CHERR_FORMAT_PRE		    "channel name must start with # or !"
+# define CHERR_FORMAT_TOOLONG	    "channel name can't exceed 200 character long"
+# define CHERR_FORMAT_FCHAR		    "channel name can't have spaces, coma or semicolon"
+
+// errors while maping into _users
+# define CHERR_USERNAME_NOTFOUND	"can't find the user : "
+
 //Message d'event sur le serveur
 #define EVENT_NEW_CLIENT 	        "Log: New connection"
 #define EVENT_DECONNECTED 	        "Log: Client deconnected : "
 #define EVENT_NEW_DATA 		        "Log: Data received : \n"
 #define EVENT_LOGGED				"Log: Client logged : "
 #define EVENT_CMDFOUND		        "Log: Executing : "
-
 
 // A ranger 
 # define ERRCHAN_CREATION	        "channel creation error : "
