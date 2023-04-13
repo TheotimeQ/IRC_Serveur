@@ -40,6 +40,7 @@ class Client
         Client(int Serveur_Socket); 
 		Client& operator=(const Client& other);
 		~Client();
+		std::string	makeFullName() const;
 };
 
 std::ostream& operator<<(std::ostream& out, const Client& Client);

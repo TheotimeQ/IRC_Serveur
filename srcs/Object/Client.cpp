@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
+/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 09:03:00 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/13 11:45:34 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/13 14:13:53 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,11 @@ Client& Client::operator=(const Client& other)
 Client::~Client()
 {
 	return;
+}
+
+// make a "nickname!username@hostname" name format
+std::string	Client::makeFullName() const {
+	return NickName + "!" + UserName + "@" + HostName;
 }
 
 //--------------------Operator--------------------

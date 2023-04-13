@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/13 13:05:39 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/13 14:19:15 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,7 +224,7 @@ bool	ChannelManager::isClientChopOf(std::string const &nickname, std::string con
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ADVANCED FEATURES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 // Send a message from user to all channel, checks if channel is +m too (moderated)
-void	ChannelManager::channelSend(std::string const &user, std::string const &channelName, std::string const &msg) const {
+void	ChannelManager::channelSend(std::string const &user, std::string const &channelName, std::string const &msg, bool self) const {
 	t_mapChannel::const_iterator		it;
 	t_mapClientStatus					usersStats;
 	t_mapClientStatus::const_iterator	its;
@@ -239,8 +239,10 @@ void	ChannelManager::channelSend(std::string const &user, std::string const &cha
 	usersStats = getUsersOf(channelName);
 	for (its = usersStats.begin(); its != usersStats.end(); ++its) {
 		// [?] secu pour par s'envoyer a lui meme ? (voir apres) // booleen a penser si besoin ok
+		if (!self && its->first.compare(user) == 0)
+			continue ;
 
-		log("client : " + its->second.him.NickName + "socket : " + I_To_S(its->second.him.Socket));
+		//log("client : " + its->second.him.NickName + "socket : " + I_To_S(its->second.him.Socket));
 		
 		//std::string nameFull = ":" + its->second.him.NickName + "!" + its->second.him.UserName + "@" + its->second.him.HostName + " "; 
 		Send_Cmd(its->second.him.Socket, msg + " \n"); // [!] je laisse le \n je pense

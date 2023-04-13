@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands_Message.cpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
+/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:09:32 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/13 13:05:18 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/13 14:23:04 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void  PRIVMSG_Command::Execute(Client *From_Client, std::vector<std::string> Arg
 
             //Announce de la channel
             std::string Msg = ":" + From_Client->NickName + "!" + From_Client->UserName + "@" + From_Client->HostName + " PRIVMSG " + Target + " :" + Message_to_send + "\n";
-            Channel_Manager.sendChannel(From_Client->NickName ,Target, Msg);
+            Channel_Manager.channelSend(From_Client->NickName ,Target, Msg, false);
             
             continue;
         }
