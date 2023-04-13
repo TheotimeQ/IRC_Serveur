@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:09:32 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/13 13:05:18 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/13 14:32:49 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,35 +52,23 @@ void  PRIVMSG_Command::Execute(Client *From_Client, std::vector<std::string> Arg
         //Si c'est une channel
         if (Target[0] == '#')
         {  
-            //PRIVMSG #*.edu
-            if (Target == "#.localhost")
-            {
-                //Pour faire ca il faut avoir ?
-                //Annonce 2 tout les client sur localhost
-            }
-
-            //Check si la channel exist 
             Channel *Chn = Channel_Manager.Get_Channel(Target);
             if (Chn == NULL)
             {
-                std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_CANNOTSENDTOCHAN) + " " + From_Client->NickName + " :Cannot send to channel" + "\n";
+                std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_CANNOTSENDTOCHAN) + " " + From_Client->NickName + " :Cannot send to channel, no such channel" + "\n";
                 Send_Cmd(From_Client->Socket, Msg);
                 continue;
             }
-            
-            //Check si l'user est pas dans la channel et que channel mode = +n
 
-//Fonction pour check si un client est dans une channel
-//Fonction pour tester si une channel a un mode 
-                
-            //Check si pas chanop ou mode +v(voice) et la channel en mode +m (modere)
-            
-//Fonction pour check si un client est chanop d'une channel
-                                                                                    //Fonction pour chekcer le mode d'un client 
+            if (!Chn->canTalk(From_Client->NickName))
+            {
+                std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_CANNOTSENDTOCHAN) + " " + From_Client->NickName + " :Cannot send to channel" + "\n";
+                Send_Cmd(From_Client->Socket, Msg);
+                continue ;
+            }
 
-            //Announce de la channel
-            std::string Msg = ":" + From_Client->NickName + "!" + From_Client->UserName + "@" + From_Client->HostName + " PRIVMSG " + Target + " :" + Message_to_send + "\n";
-            Channel_Manager.sendChannel(From_Client->NickName ,Target, Msg);
+            std::string Msg = ":" + From_Client->NickName + "!" + From_Client->UserName + "@" + From_Client->HostName + " PRIVMSG " + Target + " " + Message_to_send + "\n";
+            Channel_Manager.channelSend(From_Client->NickName ,Target, Msg);
             
             continue;
         }
@@ -116,17 +104,58 @@ void  PRIVMSG_Command::Execute(Client *From_Client, std::vector<std::string> Arg
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.4.2
 void  NOTICE_Command::Execute(Client *From_Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
-    (void)Channel_Manager;
-
-    if (Args.size() != 3)
-        return ;
-
     Client *To_Client = Client_Manager.Get_Client(Args[1]);
     if (To_Client == NULL)
         return ;
 
-    std::string Msg = ":" + From_Client->NickName + "!" + From_Client->UserName + "@" + From_Client->HostName + " NOTICE " + To_Client->NickName + " :" + Args[2] + "\n";
-    Send_Cmd(To_Client->Socket, Msg);
+    if (Args.size() == 1)
+        return ;
+    
+    if (Args.size() == 2)
+        return ;
+
+    std::string Message_to_send = Join_End(2, Args);
+    std::stringstream Targets(Args[1]); 
+    std::string Target; 
+
+    while (std::getline(Targets, Target, ',')) 
+    { 
+        if (Check_Double(Target, Args[1]))
+            continue;
+
+        if (Target[0] == '#')
+        {  
+            if (Target == "#.localhost")
+            {
+                //Pour faire ca il faut avoir ?
+                //Annonce 2 tout les client sur localhost
+            }
+
+            Channel *Chn = Channel_Manager.Get_Channel(Target);
+            if (Chn == NULL)
+                continue;
+
+            if (!Chn->canTalk(From_Client->NickName))
+                continue ;
+
+            std::string Msg = ":" + From_Client->NickName + "!" + From_Client->UserName + "@" + From_Client->HostName + " PRIVMSG " + Target + " " + Message_to_send + "\n";
+            Channel_Manager.channelSend(From_Client->NickName ,Target, Msg);
+            
+            continue;
+        }
+        else
+        {
+            Client *To_Client = Client_Manager.Get_Client(Target);
+            if (To_Client == NULL)
+                continue;
+                
+            if (To_Client->Away)
+                continue;
+
+            std::string Msg = ":" + From_Client->NickName + "!" + From_Client->UserName + "@" + From_Client->HostName + " PRIVMSG " + To_Client->NickName + " :" + Message_to_send + "\n";
+            Send_Cmd(To_Client->Socket, Msg);
+        }
+    } 
 }
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-5.1

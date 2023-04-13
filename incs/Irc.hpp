@@ -8,7 +8,7 @@
 //Quelques variable de configuration du serveur
 
 #define SERVER_NAME "IRC"
-#define MSG_BIENVENU 		    "Bienvenue sur le serveur IRC de Loumarti et Tquere"
+#define MSG_BIENVENU 		    "Wellcoooommmeee on 'Y AIR C' by de Loumarti & Tquere"
 
 const int MAX_CLIENTS = 10;
 const int BUFFER_SIZE = 1024;
