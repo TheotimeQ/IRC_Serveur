@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:09:32 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/13 14:34:02 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/13 14:34:44 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,14 +67,9 @@ void  PRIVMSG_Command::Execute(Client *From_Client, std::vector<std::string> Arg
                 continue ;
             }
 
-<<<<<<< HEAD
-            std::string Msg = ":" + From_Client->NickName + "!" + From_Client->UserName + "@" + From_Client->HostName + " PRIVMSG " + Target + " " + Message_to_send + "\n";
-            Channel_Manager.channelSend(From_Client->NickName ,Target, Msg);
-=======
             //Announce de la channel
             std::string Msg = ":" + From_Client->NickName + "!" + From_Client->UserName + "@" + From_Client->HostName + " PRIVMSG " + Target + " :" + Message_to_send + "\n";
             Channel_Manager.channelSend(From_Client->NickName ,Target, Msg, false);
->>>>>>> 14e31d6fa7751e85d1a6b98aa5d6dab768a707c9
             
             continue;
         }
@@ -139,7 +134,7 @@ void  NOTICE_Command::Execute(Client *From_Client, std::vector<std::string> Args
                 continue ;
 
             std::string Msg = ":" + From_Client->NickName + "!" + From_Client->UserName + "@" + From_Client->HostName + " PRIVMSG " + Target + " " + Message_to_send + "\n";
-            Channel_Manager.channelSend(From_Client->NickName ,Target, Msg);
+            Channel_Manager.channelSend(From_Client->NickName ,Target, Msg, false);
             
             continue;
         }
