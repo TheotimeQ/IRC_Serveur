@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/12 12:11:30 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/13 13:05:39 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,12 +238,12 @@ void	ChannelManager::channelSend(std::string const &user, std::string const &cha
 		return ;
 	usersStats = getUsersOf(channelName);
 	for (its = usersStats.begin(); its != usersStats.end(); ++its) {
-		// [?] secu pour par s'envoyer a lui meme ? (voir apres)
+		// [?] secu pour par s'envoyer a lui meme ? (voir apres) // booleen a penser si besoin ok
 
 		log("client : " + its->second.him.NickName + "socket : " + I_To_S(its->second.him.Socket));
 		
-		// [!][?] quel est le foutu format pour envoyer un message a un client dans un channel !
-		Send_Cmd(its->second.him.Socket, "PRIVMSG " + channelName + " " + msg + " \n"); // [!] pkoi march pas OUIN !
+		//std::string nameFull = ":" + its->second.him.NickName + "!" + its->second.him.UserName + "@" + its->second.him.HostName + " "; 
+		Send_Cmd(its->second.him.Socket, msg + " \n"); // [!] je laisse le \n je pense
 	}
 }
 

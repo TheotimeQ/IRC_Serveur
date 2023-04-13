@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/12 13:13:12 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/13 13:01:57 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,8 +131,14 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 			// SINON tout est ok -> ajoute le client au channel + build reponse ()
 			Channel_Manager.addClientToChannel(*Client, Args[1]);
 			//JOIN SUCCEED : ":Zel!~a@localhost JOIN #test \n"
-			std::string rep = BuildRep_CmdEvent(Args[0], Client->NickName, Args[1]);
-			Send_Cmd(Client->Socket, rep);
+			
+			// annonce perso 
+			// std::string rep = BuildRep_CmdEvent(Args[0], Client->NickName, Args[1]);
+			// Send_Cmd(Client->Socket, rep);
+
+			// + annonce a tte la chan
+			std::string nameFull = ":" + Client->NickName + "!" + Client->UserName + "@" + Client->HostName + " ";
+			Channel_Manager.channelSend(Client->NickName, Args[1], nameFull + " JOIN " + Args[1]);
 	}
 }
 
