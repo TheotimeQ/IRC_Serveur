@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:32:08 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/11 14:59:11 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/13 09:55:15 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ Command_Manager::Command_Manager()
     Cmd_List["NAMES"]   = new NAMES_Command(); 
     Cmd_List["LIST"]    = new LIST_Command(); 
     Cmd_List["INVITE"]  = new INVITE_Command(); 
-    Cmd_List["KICK"]    = new KICK_Command(); 
+    Cmd_List["KICK"]    = new KICK_Command();
+    Cmd_List["WHO"]     = new WHO_Command(); 
 
     //Sending messages
     Cmd_List["PRIVMSG"]   = new PRIVMSG_Command(); 

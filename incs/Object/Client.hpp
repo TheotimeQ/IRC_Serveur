@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 #include <iostream>
 #include <sstream>
 #include <unistd.h>
@@ -14,8 +15,8 @@ class Client
 
 	private:
 
-		struct sockaddr_in6 	_Client_Address;
-		socklen_t 				_Client_Address_Len;
+		struct sockaddr_in6 					_Client_Address;
+		socklen_t 								_Client_Address_Len;
 
 	public:
 
@@ -28,6 +29,7 @@ class Client
 		std::string					Away_Str;
 		int							Cap_End;
 		int							Logged;
+		int							Oper;
 
 		int 						Socket;
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:12:57 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/12 11:00:05 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/13 11:19:35 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,6 @@
 #define COMMANDS_HPP
 
 #include "../../incs/Object/A_Command.hpp"
-
-#define RPL_WELCOME             001
-#define RPL_AWAY                301
-#define RPL_UNAWAY              305                     
-#define RPL_NOWAWAY             306    
-#define RPL_TOPIC               332
-#define RPL_NAMREPLY            353
-#define RPL_ENDOFNAMES          366
-#define ERR_CANNOTSENDTOCHAN    404
-#define ERR_WASNOSUCHNICK       406
-#define ERR_TOOMANYTARGETS      407
-#define ERR_NORECIPIENT         411     
-#define ERR_NOTEXTTOSEND        412 
-
-#define ERROR_BAD_FORMAT 	"Error: Bad format \n"
 
 //=============================================TEST=================================================
 
@@ -64,20 +49,24 @@ class JOIN_Command : public A_Command {
     public:
         virtual void Execute(Client *Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager); };
 
-class PART_Command : public A_Command { 
+class PART_Command : public A_Command 
+{ 
     public:
-        virtual void Execute(Client *Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager);
+        virtual void    Execute(Client *Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager);
+        
 	private:
-		void		leavingProcess(Client *Client, std::string const &channelName, ChannelManager &Channel_Manager, std::string const &leavingMsg);
+		void		    leavingProcess(Client *Client, std::string const &channelName, ChannelManager &Channel_Manager, std::string const &leavingMsg);
 };
 
-class MODE_Command : public A_Command { 
+class MODE_Command : public A_Command 
+{ 
     public:
-        virtual void Execute(Client *Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager);
+        virtual void    Execute(Client *Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager);
+
 	private :
-		void Exe_Basic_Settings(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) const;
-		void Exe_Advanced_Settings(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) const;
-		void Send_RPL_CHANNELMODEIS(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) const;
+		void            Exe_Basic_Settings(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) const;
+		void            Exe_Advanced_Settings(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) const;
+		void            Send_RPL_CHANNELMODEIS(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) const;
 };
 
 class TOPIC_Command : public A_Command { 
@@ -97,6 +86,10 @@ class INVITE_Command : public A_Command {
         virtual void Execute(Client *Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager); };
 
 class KICK_Command : public A_Command { 
+    public:
+        virtual void Execute(Client *Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager); };
+
+class WHO_Command : public A_Command { 
     public:
         virtual void Execute(Client *Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager); };
 

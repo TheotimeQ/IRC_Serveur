@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 11:17:45 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/12 11:06:54 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/13 11:20:47 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,14 +62,6 @@ Parameters: <channel> {[+|-]|o|p|s|i|t|n|b|v} [<limit>] [<user>]
            l - set the user limit to channel;
 
 */
-# define CHERR_FORMAT			"channel name format : <#name>"
-# define CHERR_FORMAT_PRE		"channel name must start with # or !"
-# define CHERR_FORMAT_TOOLONG	"channel name can't exceed 200 character long"
-# define CHERR_FORMAT_FCHAR		"channel name can't have spaces, coma or semicolon"
-
-// errors while maping into _users
-# define CHERR_USERNAME_NOTFOUND	"can't find the user : "
-
 
 # include <iostream>
 # include "Client.hpp"
@@ -172,14 +164,9 @@ class Channel {
 			ErrorMsgException(char const *msg) : _msg(msg) {}
 			char const	*what() const throw() { return const_cast<char *>(_msg); }
 	};
-	
 };
-
-
 
 std::ostream	&operator<<(std::ostream &o, Channel const &channel);
 std::ostream	&operator<<(std::ostream &o, t_mapClientStatus const &users);
-
-
 
 #endif

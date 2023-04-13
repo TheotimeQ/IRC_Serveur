@@ -54,3 +54,20 @@ std::string Join_End(int start, std::vector<std::string> Args)
 
     return Joined;
 }
+
+int Is_Valide_Nick(const std::string& str) 
+{
+
+    if (str.length() > 9) {
+        return ERROR;
+    }
+
+    const std::string allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_{[]}\\`|";
+    for (size_t i = 0; i < str.length(); ++i) {
+        if (allowedChars.find(str[i]) == std::string::npos) {
+            return ERROR;
+        }
+    }
+
+    return GOOD;
+}

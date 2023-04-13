@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/13 13:01:57 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/13 13:06:34 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 	// 403    ERR_NOSUCHCHANNEL "<channel name> :No such channel" 
 	//- Used to indicate the given channel name is invalid
 	if (!Channel_Manager.isChannelExists(Args[1])) {
+
+		
 		int ret = Channel_Manager.addNewChannel(Args[1], (*Client));
 		
 		if (ret == 0) { // le channel est bien ajoute
@@ -411,6 +413,7 @@ void  INVITE_Command::Execute(Client *Client, std::vector<std::string> Args, Cha
     (void )Client_Manager;
     (void )Client;
 }
+
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.8
 void  KICK_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
@@ -418,4 +421,81 @@ void  KICK_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
     (void )Channel_Manager;
     (void )Client_Manager;
     (void )Client;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Channel	*ChannelManager::Get_Channel(std::string &Channel_Name)
+{
+	std::map<std::string, Channel>::iterator	it;
+
+	it = _chanList.find(Channel_Name);
+
+	if (it != _chanList.end()) 
+		return &(it->second);
+
+	else 
+		return NULL;
+}
+
+// t_mapClientStatus *ChannelManager::Get_Users(std::string const &channelName)
+// {
+// 	Channel *Chn = Channel_Manager.Get_Channel(Args[1]);
+
+// 	if (!Chn)
+// 		return NULL;
+
+// 	return &(Chn->getUsers());
+// }
+
+// https://www.rfc-editor.org/rfc/rfc1459#section-4.5.1
+void  WHO_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
+{
+	// ERR_NOSUCHSERVER 402
+    // RPL_WHOREPLY     352         
+	// RPL_ENDOFWHO     315
+
+	// if (Args.size() != 2)
+    //     return ;
+
+	// Channel *Chn = Channel_Manager.Get_Channel(Args[1]);
+	// if (Chn == NULL)
+	// {
+	// 	return ;
+	// }
+
+	// //J'ABANDONNNE
+
+	// std::map<std::string, t_clientData> Clts = Channel_Manager.Get_Users(Args[1]);
+	// std::map<std::string, t_clientData>::iterator it;
+
+
+	// std::string Users_str = "";
+	// for (it = Clts.begin(); it != Clts.end(); ++it) 
+	// {
+	// 	const t_clientData &clientData = it->second;
+	// 	Users_str += clientData.him.NickName; 
+	// }
+
+	// std::cout << "WHO REPLY : " << Users_str << std::endl;
+
+	// // std::string Msg = ":" + From_Client->NickName + "!" + From_Client->UserName + "@" + From_Client->HostName + " NOTICE " + To_Client->NickName + " :" + Args[2] + "\n";
+    // // Send_Cmd(To_Client->Socket, Msg);
+
+	
+    (void) Client_Manager;
+    (void) Channel_Manager;
+    (void) Client;
+    (void) Args;
 }

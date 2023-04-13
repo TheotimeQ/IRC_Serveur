@@ -13,10 +13,6 @@
 #include "../Object/Client.hpp"
 #include "../Object/Commands.hpp"
 
-#define ERROR_CMDNOTFOUND 	"Error: Command not found : "
-
-#define EVENT_CMDFOUND		"Log: Executing : "
-
 class Command_Manager
 {
 	private:
