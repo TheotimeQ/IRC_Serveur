@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:09:32 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/13 14:34:44 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/13 14:45:19 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,15 +105,15 @@ void  PRIVMSG_Command::Execute(Client *From_Client, std::vector<std::string> Arg
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.4.2
 void  NOTICE_Command::Execute(Client *From_Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
-    Client *To_Client = Client_Manager.Get_Client(Args[1]);
-    if (To_Client == NULL)
-        return ;
-
     if (Args.size() == 1)
+    {
         return ;
+    }
     
     if (Args.size() == 2)
+    {
         return ;
+    }
 
     std::string Message_to_send = Join_End(2, Args);
     std::stringstream Targets(Args[1]); 
@@ -121,19 +121,28 @@ void  NOTICE_Command::Execute(Client *From_Client, std::vector<std::string> Args
 
     while (std::getline(Targets, Target, ',')) 
     { 
+        //Si Target en double
         if (Check_Double(Target, Args[1]))
+        {
             continue;
+        }
 
+        //Si c'est une channel
         if (Target[0] == '#')
         {  
             Channel *Chn = Channel_Manager.Get_Channel(Target);
             if (Chn == NULL)
+            {
                 continue;
+            }
 
             if (!Chn->canTalk(From_Client->NickName))
+            {
                 continue ;
+            }
 
-            std::string Msg = ":" + From_Client->NickName + "!" + From_Client->UserName + "@" + From_Client->HostName + " PRIVMSG " + Target + " " + Message_to_send + "\n";
+            //Announce de la channel
+            std::string Msg = ":" + From_Client->NickName + "!" + From_Client->UserName + "@" + From_Client->HostName + " NOTICE " + Target + " :" + Message_to_send + "\n";
             Channel_Manager.channelSend(From_Client->NickName ,Target, Msg, false);
             
             continue;
@@ -142,14 +151,19 @@ void  NOTICE_Command::Execute(Client *From_Client, std::vector<std::string> Args
         {
             Client *To_Client = Client_Manager.Get_Client(Target);
             if (To_Client == NULL)
+            {
                 continue;
-                
-            if (To_Client->Away)
-                continue;
+            }
 
-            std::string Msg = ":" + From_Client->NickName + "!" + From_Client->UserName + "@" + From_Client->HostName + " PRIVMSG " + To_Client->NickName + " :" + Message_to_send + "\n";
+            if (To_Client->Away)
+            {
+                continue;
+            }
+
+            std::string Msg = ":" + From_Client->NickName + "!" + From_Client->UserName + "@" + From_Client->HostName + " NOTICE " + To_Client->NickName + " :" + Message_to_send + "\n";
             Send_Cmd(To_Client->Socket, Msg);
         }
+
     } 
 }
 

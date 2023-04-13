@@ -68,15 +68,17 @@ int main(int argc, char **argv)
 // - Finir les commandes sur le channel
 
 //Theo
+// - Remove client de toutes les channel a la sortie + prevenir tout le monde
 // - Ajout commande Oper 
 // - KICK .. etc (Commande operator)?
-// - NOTICE et PRIVMSG -> Ajouter 
 // - notice all user in channel on : MODE KICK PART QUIT             PRIVMSG NOTICE
 
 //JSP 
 // - Faire des test avec plusieru client 
+// - TEST BIG COMMANDE
 // - Trouver un test comparatif avec un vrai serveur ?
-// - Ajout d'un bot rapidos ? 
+// - Ajout d'un bot rapidos ?
+// - Envoi de fichier 
 // - Enlever les commentaire et clean les fichier pour le rendu 
 // - Demander a un stud de nous le casser 
 // - Rendre
@@ -101,7 +103,8 @@ int main(int argc, char **argv)
 
 //    Once a user has joined a channel, they receive notice about all
 //    commands their server receives which affect the channel.  This
-//    includes MODE, KICK, PART, QUIT and of course PRIVMSG/NOTICE.  The
+//    includes MODE, KICK, PART, QUIT and of course PRIVMSG/NOTICE.  
+
 //    JOIN command needs to be broadcast to all servers so that each server
 //    knows where to find the users who are on the channel.  This allows
 //    optimal delivery of PRIVMSG/NOTICE messages to the channel.

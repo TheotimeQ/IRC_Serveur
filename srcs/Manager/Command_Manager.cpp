@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:32:08 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/13 09:55:15 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/13 18:05:12 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,9 @@ int Command_Manager::Interpret_Data(Client *Client, ChannelManager &Channel_Mana
         if (Args[0] == "QUIT")
         {
             Log(EVENT_CMDFOUND + Args[0]);
+
+            // QUIT :Gone to have lunch 
+            
             return QUIT;
         }
             

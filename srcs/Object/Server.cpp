@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:50:43 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/11 14:00:16 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/13 18:07:24 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,13 @@ int Server::Setup_Client(const Client& Client)
 void Server::Deconnect_Client(const Client &Client, int index)
 {
     std::cout << EVENT_DECONNECTED << Client.NickName << std::endl;
+
+    //POUR TOUT LES CHANNEL OU EST LE CLIENT
+    
+        //ANNONCE QUIT + MESSAGE DE QUIT SI MSG SINON DEFAULT
+        //REMOVE LE CLIENT
+
+    // Mrclientfromall
 
     close(Client.Socket);
 
