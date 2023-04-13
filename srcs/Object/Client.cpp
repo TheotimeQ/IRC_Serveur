@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 09:03:00 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/13 14:13:53 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/13 18:20:33 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ Client::Client():
 	Away_Str("Undefined"),
 	Cap_End(1),
 	Logged(0),
-	Oper(0)
+	Oper(0),
+	Quit_Msg("JE VAIS FAIRE CACA")
 {
 	_Client_Address_Len = sizeof(_Client_Address);
 	Socket = -1;
@@ -37,7 +38,8 @@ Client::Client(int Serveur_Socket):
 	Away_Str("Undefined"),
 	Cap_End(1),
 	Logged(0),
-	Oper(0)
+	Oper(0),
+	Quit_Msg("JE VAIS FAIRE CACA")
 {
 	_Client_Address_Len = sizeof(_Client_Address);
 	Socket = accept(Serveur_Socket, (struct sockaddr *)&_Client_Address, &_Client_Address_Len);
@@ -60,6 +62,7 @@ Client& Client::operator=(const Client& other)
 		this->_Client_Address_Len 	= other._Client_Address_Len;
 		this->Socket 				= other.Socket;
 		this->Oper 					= other.Oper;
+		this->Quit_Msg				= other.Quit_Msg;
 	}
 	return *this;
 }

@@ -30,6 +30,7 @@ class Client
 		int							Cap_End;
 		int							Logged;
 		int							Oper;
+		std::string					Quit_Msg;
 
 		int 						Socket;
 

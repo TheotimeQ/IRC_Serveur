@@ -80,6 +80,7 @@ int main(int argc, char **argv)
 // (oui c'est   s u p e r   clair ! ^_^)  ---> voir les  [!] dans JOIN
 
 //JSP 
+// - SEGFAULT SUR QUIT FAUTE DE LOUP
 // - Faire des test avec plusieru client 
 // - TEST BIG COMMANDE
 // - Trouver un test comparatif avec un vrai serveur ?

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelManager.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/13 18:05:58 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/13 18:20:17 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,8 @@ void	ChannelManager::rmClientFromAll(Client &user) {
 
 	for (it = _chanList.begin(); it != _chanList.end(); ++it) {
 		if (isClientIn(user.NickName, it->first)) {
-			// [+] send a la chan que client est parti (QUIT)
-			channelSend(user.NickName, it->first, " se barre [!]", true);
+			// :<nom_utilisateur> QUIT :<motif_du_départ>
+			channelSend(user.NickName, it->first, ":" + user.NickName + " QUIT :" + user.Quit_Msg, false);
 			rmClientToChannel(user, it->first);
 		}
 	}

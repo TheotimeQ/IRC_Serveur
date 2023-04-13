@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:50:43 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/13 18:07:24 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/13 18:16:43 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,23 +127,18 @@ int Server::Setup_Client(const Client& Client)
     return GOOD;
 }
 
-void Server::Deconnect_Client(const Client &Client, int index)
+void Server::Deconnect_Client(Client &Clt, int index)
 {
-    std::cout << EVENT_DECONNECTED << Client.NickName << std::endl;
+    std::cout << EVENT_DECONNECTED << Clt.NickName << std::endl;
 
-    //POUR TOUT LES CHANNEL OU EST LE CLIENT
-    
-        //ANNONCE QUIT + MESSAGE DE QUIT SI MSG SINON DEFAULT
-        //REMOVE LE CLIENT
+    _ChnMng.rmClientFromAll(Clt);
 
-    // Mrclientfromall
-
-    close(Client.Socket);
+    close(Clt.Socket);
 
     _Poll_Set[index] = _Poll_Set[_CltMng.Nb_Clients - 1];
     memset(&_Poll_Set[_CltMng.Nb_Clients - 1], 0, sizeof(_Poll_Set[_CltMng.Nb_Clients - 1]));
 
-    _CltMng.Remove_Client(Client);
+    _CltMng.Remove_Client(Clt);
 }
 
 int Server::Get_Data(Client *Client) 
