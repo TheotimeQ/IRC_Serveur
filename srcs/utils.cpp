@@ -50,7 +50,13 @@ std::string Join_End(int start, std::vector<std::string> Args)
     for (int i = start; i < (int)Args.size(); ++i)
         Joined += Args[i] + " ";
 
-    // "REMOVE LE \n" [!]
+    if (!Joined.empty() && Joined[0] == ':') {
+        Joined.erase(0, 1);
+    }
+
+    if (!Joined.empty() && Joined[Joined.length() - 1] == '\n') {
+        Joined.erase(Joined.length() - 1);
+    }
 
     return Joined;
 }

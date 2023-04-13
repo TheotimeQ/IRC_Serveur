@@ -70,7 +70,7 @@ int main(int argc, char **argv)
 //Theo
 // - Ajout commande Oper 
 // - KICK .. etc (Commande operator)?
-// - NOTICE et PRIVMSG (fully functionnal) BESOIN DE LOUP
+// - NOTICE et PRIVMSG -> Ajouter 
 // - notice all user in channel on : MODE KICK PART QUIT             PRIVMSG NOTICE
 // - [+] - avec netcat, si on envoie juste \n -> crash
 

@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:32:08 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/13 12:15:31 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/13 14:33:02 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,6 @@ int Client_Manager::Remove_Client(const Client& Clt)
     std::cout << ERROR_DEL_CLIENT << std::endl;
     return ERROR;
 }
-
 
 
 

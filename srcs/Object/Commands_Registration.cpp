@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:09:32 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/13 11:41:17 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/13 13:19:26 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,7 +172,7 @@ void  CAP_Command::Execute(Client *Client, std::vector<std::string> Args, Channe
     {
         if (Args[1] == "LS")
         {
-            std::string Msg = ":" + std::string(SERVER_NAME) + " " + Client->NickName + " CAP * LS : Aucunes" "\n";
+            std::string Msg = ":" + std::string(SERVER_NAME) + " " + Client->NickName + " CAP * LS : None " "\n";
             Send_Cmd(Client->Socket, Msg);
             Client->Cap_End = 0;
         }

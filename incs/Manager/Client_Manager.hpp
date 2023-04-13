@@ -32,7 +32,7 @@ class Client_Manager
 
 		void			Set_Password(std::string &password);
 
-		void 			Check_Log(Client* Clt);
+		void 			Check_Log(Client *Clt);
 
 		int				Set_Client_Nickname(Client &Client, std::string New_Nickname);
 
