@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/13 13:06:34 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/13 14:25:45 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,9 +138,8 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 			// std::string rep = BuildRep_CmdEvent(Args[0], Client->NickName, Args[1]);
 			// Send_Cmd(Client->Socket, rep);
 
-			// + annonce a tte la chan
-			std::string nameFull = ":" + Client->NickName + "!" + Client->UserName + "@" + Client->HostName + " ";
-			Channel_Manager.channelSend(Client->NickName, Args[1], nameFull + " JOIN " + Args[1]);
+			// + annonce a tte la chan (lui compris)
+			Channel_Manager.channelSend(Client->NickName, Args[1], ":" + Client->makeFullName() + " JOIN " + Args[1], true);
 	}
 }
 
@@ -193,7 +192,7 @@ void	PART_Command::leavingProcess(Client *Client, std::string const &channelName
 	(void)leavingMsg;
 
 	// [2] on renseigne le channel du depart avec le leaving message
-	Channel_Manager.channelSend(Client->NickName, channelName, leavingMsg);
+	Channel_Manager.channelSend(Client->NickName, channelName, leavingMsg, false);
 
 	// [3] on signale au client qu'il est parti du channel
 	Send_Cmd(Client->Socket, BuildRep_CmdEvent("PART", Client->NickName, channelName));

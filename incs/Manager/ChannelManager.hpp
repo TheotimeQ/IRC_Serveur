@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelManager.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
+/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:10:11 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/13 11:06:07 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/13 14:17:55 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ class ChannelManager {
 	void	rmChannel(std::string const &name);
 	
 	// ADVANCED FEATURES
-	void	channelSend(std::string const &user, std::string const &channelName, std::string const &msg) const;
+	void	channelSend(std::string const &user, std::string const &channelName, std::string const &msg, bool self) const;
 
 	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ getter setters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 	t_mapChannel const		&getChanList()								const;
