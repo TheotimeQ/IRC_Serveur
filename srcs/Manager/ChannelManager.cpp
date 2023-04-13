@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/13 17:58:02 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/13 18:05:58 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,11 +82,14 @@ void	ChannelManager::rmClientToChannel(Client &user, std::string const &channelN
 		rmChannel(channelName);
 }
 
+// option 
 void	ChannelManager::rmClientFromAll(Client &user) {
 	t_mapChannel::const_iterator	it;
 
 	for (it = _chanList.begin(); it != _chanList.end(); ++it) {
 		if (isClientIn(user.NickName, it->first)) {
+			// [+] send a la chan que client est parti (QUIT)
+			channelSend(user.NickName, it->first, " se barre [!]", true);
 			rmClientToChannel(user, it->first);
 		}
 	}
