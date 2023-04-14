@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelManager.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
+/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:10:11 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/13 18:08:19 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/14 09:42:03 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,9 @@ class ChannelManager {
 	void		setModesOfAs(std::string const &channelName, bool isPlus, std::string const &flags);
 	void		setLimitModeOfAsWith(std::string const &channelName, bool isPlus, std::string const &option);
 	void		setKeyModeOfAsWith(std::string const &channelName, bool isPlus, std::string const &option);
+
+	// WHO ~ NAMES
+	std::string	makeUserStringList(std::string const &channelName)	const;
 
 	//Ajout pour fonction theotime
 	Channel		*Get_Channel(std::string &Channel_Name);

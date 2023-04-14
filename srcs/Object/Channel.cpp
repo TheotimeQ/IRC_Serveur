@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 10:18:15 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/12 11:08:00 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/14 10:55:01 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ Channel::Channel()
 }
 
 Channel::~Channel() {
-	//log(" is destroyed");
+	log(" is destroyed");
 }
 
 // Utiliser un try-catch pour creer un channel -> throw exceptions
@@ -187,7 +187,33 @@ void	Channel::log(std::string const &logMsg)	const {
 	std::cout << "Channel : " + _name + " : " << logMsg << std::endl;
 	std::cout << "\033[m";
 }
+//~~~~~~~~~~~~~~~~~~~~~ make formated string ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+// @operator   !creator   %chanop   +voice 
+std::string		Channel::makeUserStringList()	const {
+	t_mapClientStatus::const_iterator	it;
+	std::string list = "";
+
+	for (it = _users.begin(); it != _users.end(); ++it) {
+		if (it != _users.begin())
+			list += " ";
+		list += makePrefix(it->second);
+		list += it->first;
+	}
+	return list;
+}
+
+std::string		Channel::makePrefix(t_clientData const &data)	const {
+	if (data.him.Oper)
+		return "@";
+	if (data.status.creator)
+		return "!";
+	if (data.status.chop)
+		return "%";
+	if (data.status.voice)
+		return "+";
+	return "";
+}
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~Debug~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
