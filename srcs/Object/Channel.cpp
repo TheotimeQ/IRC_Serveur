@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 10:18:15 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/14 13:50:42 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/14 15:12:55 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,8 +226,8 @@ std::string	Channel::makeUserStatusList(std::string const &username)	const {
 std::string		Channel::makePrefix(t_clientData const &data)	const {
 	if (data.him.Oper)
 		return "@";
-	if (data.status.creator)
-		return "!";
+	if (data.status.creator) // '!' not interpreted by HexChat
+		return ""; 
 	if (data.status.chop)
 		return "%";
 	if (data.status.voice)
