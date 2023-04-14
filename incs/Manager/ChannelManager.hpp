@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelManager.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
+/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:10:11 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/14 11:34:10 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/14 14:55:42 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ class ChannelManager {
 	
 	// ADVANCED FEATURES
 	void	channelSend(std::string const &user, std::string const &channelName, std::string const &msg, bool self) const;
+	void	allChannelSend(std::string const &msg) const;
 
 	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ getter setters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 	t_mapChannel const		&getChanList()								const;
@@ -80,7 +81,8 @@ class ChannelManager {
 	bool	joinCheck_bans(std::string const &user, std::string const &channelName)	const;
 
 	//MODE
-	std::string	getModeAsString(std::string const &channelName)						const;
+	std::string	getUserModeAsString(std::string const &user, std::string const &channelName)	const;
+	std::string	getModeAsString(std::string const &channelName)							const;
 	void		setModesOfAs(std::string const &channelName, bool isPlus, std::string const &flags);
 	void		setLimitModeOfAsWith(std::string const &channelName, bool isPlus, std::string const &option);
 	void		setKeyModeOfAsWith(std::string const &channelName, bool isPlus, std::string const &option);
@@ -88,7 +90,7 @@ class ChannelManager {
 	// WHO ~ NAMES
 	std::string	makeUserStringList(std::string const &channelName)	const;
 
-	//Ajout pour fonction theotime
+	//Ajout pour fonction theotime <@_@') [!]
 	Channel		*Get_Channel(std::string &Channel_Name);
 };
 

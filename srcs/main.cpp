@@ -69,6 +69,11 @@ int main(int argc, char **argv)
 // - KICK -> je prend en charge ? c'est lie aux droit des op / halfop
 // - INVITE -> la commande ? + GuestList dans la channel
 // - Finir les commandes sur le channel
+// - regler le : #gogo They aren't on that channel --> message a mieux formater
+
+// - nettoyer les commandes :
+//    . decouper en petites parties (surtout MODE !)
+//    . nettoyer les build reponse : hom et homechan ne doivent plus servir
 // - notice all user in channel on : MODE KICK PART
 
 //Theo

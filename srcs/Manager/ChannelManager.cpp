@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelManager.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
+/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/14 11:30:33 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/14 15:04:47 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,6 +264,16 @@ void	ChannelManager::channelSend(std::string const &user, std::string const &cha
 	}
 }
 
+void	ChannelManager::allChannelSend(std::string const &msg) const {
+	t_mapChannel::const_iterator		it;
+
+	for (it = _chanList.begin(); it != _chanList.end(); ++it) {
+		t_mapClientStatus clientStatus = it->second.getUsers();
+		channelSend(clientStatus.begin()->first, it->first, msg, true);
+	}
+}
+
+
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ join checks ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 /* ~~~~~~~~~~~~~~~~~~~~ [true] if check is ok [false] if not ~~~~~~~~~~~~~~~~~~ */
@@ -359,6 +369,17 @@ std::string	ChannelManager::getModeAsString(std::string const &channelName) cons
 	if (it->second.mode.k)
 		modeList += "+k ";
 	return modeList;
+}
+
+std::string	ChannelManager::getUserModeAsString(std::string const &user, std::string const &channelName)	const {
+	t_mapChannel::const_iterator	it;
+
+	it = _chanList.find(channelName);
+	if (it == _chanList.end()) {
+		log("getUserModeAsString() error");
+		return "";
+	}
+	return (it->second.makeUserStatusList(user));
 }
 
 void	ChannelManager::setModesOfAs(std::string const &channelName, bool isPlus, std::string const &flags) {

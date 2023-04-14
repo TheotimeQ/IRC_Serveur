@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
+/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 10:18:15 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/14 11:30:36 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/14 13:50:42 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,6 +201,26 @@ std::string		Channel::makeUserStringList()	const {
 		list += it->first;
 	}
 	return list;
+}
+
+std::string	Channel::makeUserStatusList(std::string const &username)	const {
+	t_mapClientStatus::const_iterator	it;
+	std::string							status = "";
+
+	it = _users.find(username);
+	if (it == _users.end()) {
+		log("makeUserStatusList() error");
+		return "";
+	}
+	if (it->second.status.creator)
+		status += "channel creator(!) ";
+	if (it->second.status.chop)
+		status += "channel operator(%) ";
+	if (!it->second.status.creator && !it->second.status.chop && it->second.status.voice)
+		status += "voice(+)";
+	if (!it->second.status.creator && !it->second.status.chop && !it->second.status.voice)
+		status = "regular user";
+	return status;
 }
 
 std::string		Channel::makePrefix(t_clientData const &data)	const {
