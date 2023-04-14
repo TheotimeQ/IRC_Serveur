@@ -83,11 +83,11 @@ int main(int argc, char **argv)
 // (oui c'est   s u p e r   clair ! ^_^)  ---> voir les  [!] dans JOIN
 
 //JSP 
-// - SEGFAULT SUR QUIT FAUTE DE LOUP
+// - SEGFAULT SUR QUIT FAUTE DE LOUP -> mais euh
 // - Faire des test avec plusieru client 
 // - TEST BIG COMMANDE
 // - Trouver un test comparatif avec un vrai serveur ?
-// - Ajout d'un bot rapidos ?
+// - Ajout d'un bot rapidos ? Un Quizzbot [^_^] ??
 // - Envoi de fichier 
 // - Enlever les commentaire et clean les fichier pour le rendu 
 // - Demander a un stud de nous le casser 
