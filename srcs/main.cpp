@@ -69,6 +69,7 @@ int main(int argc, char **argv)
 // - KICK -> je prend en charge ? c'est lie aux droit des op / halfop
 // - INVITE -> la commande ? + GuestList dans la channel
 // - Finir les commandes sur le channel
+// - nettoyer les commandes ==> decouper en petites parties (surtout MODE !)
 
 //Theo
 // - Remove client de toutes les channel a la sortie + prevenir tout le monde

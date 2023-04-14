@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/14 11:02:24 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/14 11:31:12 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,14 +207,19 @@ void  MODE_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 	else if (Args.size() == 3 && Is_Channel_Name_Arg(Args[1]) && Is_Channel_Mode_BArgs(Args[2])) {
 		Exe_Basic_Settings(Client, Args, Channel_Manager, Client_Manager);
 	}
-
-
 	//[5] Sinon si l'utilisateur fait /mode #nomChannel <[+-][lkLK]> *<Unsigned/key>
 	else if ((Args.size() == 3 || Args.size() == 4) && Is_Channel_Name_Arg(Args[1]) && Is_Channel_Mode_AArgs(Args[2])) {
 		Exe_Advanced_Settings(Client, Args, Channel_Manager, Client_Manager);
 	}
 
+	//[6] Sinon si l'utilisateur fait /mode #nomChannel <nickname> *<+-| ov>
+	else if ((Args.size() > 3) && Is_Channel_Name_Arg(Args[1]) && !Is_Channel_Mode_AArgs(Args[2])) {
+		Exe_Advanced_Settings(Client, Args, Channel_Manager, Client_Manager);
+	}
+
 	// [6] Au Secours ! va t on vraiment dans le bon sens ?
+
+	else if ()
 	// [+] continuer avec mode +o +v avec client en parametre
 
 	// [7] si rien de passer message mauvais args
