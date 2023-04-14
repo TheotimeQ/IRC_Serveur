@@ -64,7 +64,10 @@ int main(int argc, char **argv)
 //TO DO
 
 //LOUP 
-// - Ajout commande Who
+// - WHO -> + symbol des channels prive secret
+// - MODE -> gerer /mode + #chan + nickname
+// - KICK -> je prend en charge ? c'est lie aux droit des op / halfop
+// - INVITE -> la commande ? + GuestList dans la channel
 // - Finir les commandes sur le channel
 
 //Theo
