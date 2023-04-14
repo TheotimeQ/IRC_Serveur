@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/14 14:01:33 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/14 14:06:44 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -274,7 +274,7 @@ void	MODE_Command::Exe_user_MODE(Client *Client, std::vector<std::string> Args, 
 	// RPL_UMODEIS (221) "<client> <user modes>"
 	if (Args.size() == 3) {
 		
-		if (Client_Manager.FUNC(Args[2]));
+		if (Client_Manager.Is_Client_Oper(Args[2]))
 			umode = "operator";
 		else
 			umode = Channel_Manager.getUserModeAsString(Args[2], Args[1]);

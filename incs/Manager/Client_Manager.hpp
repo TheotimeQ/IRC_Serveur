@@ -35,13 +35,13 @@ class Client_Manager
 		void 			Check_Log(Client *Clt);
 
 		int				Set_Client_Nickname(Client &Client, std::string New_Nickname);
+		bool			Is_Client_Oper(std::string const &NickName);
 
 		void 			Send_To_All(std::string Msg);
 
 		void			log(std::string const &logMsg) const;
 
 		std::string* 	Get_Oper_Pass(std::string NickName);
-		void 			Check_Log_Oper(Client* Clt);
 };
 
 #endif

@@ -80,13 +80,7 @@ int main(int argc, char **argv)
 // - Ajout commande Oper 
 // - KICK .. etc (Commande operator)?
 
-//Celui qui a une idee
-// - comment repondre a une commande entree avec un mauvais nom de chan, depuis un bon chan
-//   et que la reponse parvienne ecrite dans le bon chan ||-> tracker le dernier chan utilise ?
-// (oui c'est   s u p e r   clair ! ^_^)  ---> voir les  [!] dans JOIN
-
 //JSP 
-// - SEGFAULT SUR QUIT FAUTE DE LOUP -> mais euh
 // - Faire des test avec plusieru client 
 // - TEST BIG COMMANDE
 // - Trouver un test comparatif avec un vrai serveur ?
@@ -102,28 +96,6 @@ int main(int argc, char **argv)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    Once a user has joined a channel, they receive notice about all
-//    commands their server receives which affect the channel.  This
-//    includes MODE, KICK, PART, QUIT and of course PRIVMSG/NOTICE.  
-
-//    JOIN command needs to be broadcast to all servers so that each server
-//    knows where to find the users who are on the channel.  This allows
-//    optimal delivery of PRIVMSG/NOTICE messages to the channel.
 
 //    If a JOIN is successful, the user is then sent the channel's topic
 //    (using RPL_TOPIC) and the list of users who are on the channel (using

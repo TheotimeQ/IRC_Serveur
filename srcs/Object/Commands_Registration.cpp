@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:09:32 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/14 11:22:50 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/14 14:01:34 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void  NICK_Command::Execute(Client *Clt, std::vector<std::string> Args, ChannelM
     // ERR_NICKCOLLISION
     // "<nick> :Nickname collision KILL"
 
-    Log("NICK","changing nickname from " + Clt->NickName + " to " + Args[1]);
+    Log("NICK","Changing nickname from " + Clt->NickName + " to " + Args[1]);
     std::string Msg = ":"+ Clt->NickName + " NICK " + Args[1] + "\n";
     Clt->NickName = Args[1];
     Client_Manager.Send_To_All(Msg);
@@ -111,7 +111,7 @@ void  USER_Command::Execute(Client *Clt, std::vector<std::string> Args, ChannelM
         return ;
     }
     
-    Log("NICK","changing username from " + Clt->UserName + " to " + Args[1]);
+    Log("NICK","Changing username from " + Clt->UserName + " to " + Args[1]);
     Clt->UserName = Args[1];
 }
 
@@ -123,58 +123,61 @@ void  OPER_Command::Execute(Client *Clt, std::vector<std::string> Args, ChannelM
     (void )Client_Manager;
 
     // ERR_NEEDMOREPARAMS              
-    if (Args.size() < 2 || Args[1] == "")
+    if (Args.size() < 3 || Args[1] == "")
     {
         Log("OPER",ERROR_BAD_FORMAT);
-        std::string Msg = "\n";
+        std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_NEEDMOREPARAM) + " " + Clt->NickName + " " + Args[0] + " :Not enough parameters" + "\n";
         Send_Cmd(Clt->Socket, Msg);
         return ;
     }
 
-    //Si deja operateur 
-    // RPL_YOUREOPER
-    if (Clt->Oper == 1)
+    if (Clt->Oper)
     {
-        Log("OPER",ERROR_BAD_FORMAT);
-        std::string Msg = "\n";
+        Log("OPER",Clt->NickName + "already logged as operator");
+        std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_NOOPERHOST) + " " + Clt->NickName + " :Already logged as operator" + "\n";
         Send_Cmd(Clt->Socket, Msg);
+        return ;
     }
 
-    //Si wrong password 
+    if (Clt->NickName != Args[1])
+    {
+        Log("OPER",Clt->NickName + " doesn't match " + Args[1]);
+        std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_NOOPERHOST) + " " + Clt->NickName + " :Use your nickname to connect" + "\n";
+        Send_Cmd(Clt->Socket, Msg);
+        return ;
+    }
+
+    // ERR_NOOPERHOST
+    std::string* Pass = Client_Manager.Get_Oper_Pass(Clt->NickName);
+    if (Pass == NULL)
+    {
+        Log("OPER",Clt->NickName + " is not know as operator ");
+        std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_NOOPERHOST) + " " + Clt->NickName + " :No O-lines for your host" + "\n";
+        Send_Cmd(Clt->Socket, Msg);
+        return ;
+    }
+    
     // ERR_PASSWDMISMATCH
+    if (Args[2] != *Pass)
+    {
+        Log("OPER",Clt->NickName + " sent the wrong password : " + Args[2] + " (" + *Pass + ")");
+        std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_PASSWDMISMATCH) + " " + Clt->NickName + " :Password incorrect" + "\n";
+        Send_Cmd(Clt->Socket, Msg);
+        return ;
+    }
 
-    //Si pas d'user set 
-    // ERR_NOOPERHOST       
+    // RPL_YOUREOPER
+    if (Args[2] == *Pass)
+    {
+        Log("OPER",Clt->NickName + " is not now logged as operator ");
+        std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(RPL_YOUREOPER) + " " + Clt->NickName + " :You are now an IRC operator" + "\n";
+        Send_Cmd(Clt->Socket, Msg);
+        Clt->Oper = 1;
 
-
-
-
-
-
-    //    Command: OPER
-    //    Parameters: <user> <password>
-
-    //    OPER message is used by a normal user to obtain operator privileges.
-    //    The combination of <user> and <password> are required to gain
-    //    Operator privileges.
-
-    //    If the client sending the OPER command supplies the correct password
-    //    for the given user, the server then informs the rest of the network
-    //    of the new operator by issuing a "MODE +o" for the clients nickname.
-
-    //    The OPER message is client-server only.
-
-    //    Numeric Replies:
-
-    //            ERR_NEEDMOREPARAMS              RPL_YOUREOPER
-    //            ERR_NOOPERHOST                  ERR_PASSWDMISMATCH
-
-    //    Example:
-
-    //    OPER foo bar                    ; Attempt to register as an operator
-    //                                    using a username of "foo" and "bar" as
-    //                                    the password.
-
+        // Msg = ":IRC MODE #test1 +o " + Clt->NickName + "\n";
+        // Client_Manager.Send_To_All(Msg);
+        return ;
+    }
 }
 
 void  CAP_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 

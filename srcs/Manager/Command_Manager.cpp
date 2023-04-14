@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:32:08 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/14 11:29:16 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/14 13:37:52 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,11 @@ int Command_Manager::Interpret_Data(Client *Clt, ChannelManager &Channel_Manager
 		std::cout << "\033[m";
 		//DEBUG
 
-        if (Args.size() == 0 || Args[1] == "")
+        if (Args.size() == 0 || Args[0] == "")
+        {
+            Log("No command found");
             continue;
+        }
 
         if (Args[0] == "QUIT")
         {
