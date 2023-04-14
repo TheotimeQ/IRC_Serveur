@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:32:08 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/14 11:11:40 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/14 14:01:01 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,24 +146,12 @@ std::string* Client_Manager::Get_Oper_Pass(std::string NickName)
     return NULL;
 }
 
-void Client_Manager::Check_Log_Oper(Client* Clt)
+bool Client_Manager::Is_Client_Oper(std::string const &NickName)
 {
-    if (Clt->UserName == "")
-        return;
-
-    std::string* Pass = this->Get_Oper_Pass(Clt->NickName);
-
-    if (Pass == NULL)
-    {
-        log(ERROR_OPER_UNKOW + Clt->NickName);
-        return;
-    }
-    if (Clt->Password == *Pass)
-    {
-        log(EVENT_LOGGED + Clt->NickName);
-        Clt->Oper = 1;
-        //Previens tout le monde du nouvell oper [!]
-    }
+    Client *Clt = this->Get_Client(NickName);
+    if (Clt && Clt->Oper)
+        return true;
+    return false;
 }
 
 void Client_Manager::log(std::string const &logMsg)	const {

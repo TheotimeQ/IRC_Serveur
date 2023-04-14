@@ -23,6 +23,7 @@ const int BUFFER_SIZE = 1024;
 #define RPL_WHOREPLY            352
 #define RPL_NAMREPLY            353
 #define RPL_ENDOFNAMES          366
+#define RPL_YOUREOPER           381
 #define ERR_CANNOTSENDTOCHAN    404
 #define ERR_WASNOSUCHNICK       406
 #define ERR_TOOMANYTARGETS      407
@@ -35,6 +36,8 @@ const int BUFFER_SIZE = 1024;
 #define ERR_NOSUCHSERVER        402
 #define ERR_NEEDMOREPARAM       461
 #define ERR_ALREADYREGISTRED    462
+#define ERR_PASSWDMISMATCH      464
+#define ERR_NOOPERHOST          491
 
 //Message d'erreur à envoyer au client ( issue de la doc )
 #define SERR_NOSUCHCHANNEL			"No such channel"				// 403
