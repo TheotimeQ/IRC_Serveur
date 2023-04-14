@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
+/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 11:17:45 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/13 11:20:47 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/14 10:49:58 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,6 +149,10 @@ class Channel {
 	void				rmOpPrivilege(std::string const &username);
 	bool				isClientChop(std::string const &nickname)		const;
 	bool				canTalk(std::string const &nickname)			const;
+
+	/* make formated string */
+	std::string			makeUserStringList()							const;
+	std::string			makePrefix(t_clientData const &status)				const;
 
 		//debug
 	void				showUsers()										const;

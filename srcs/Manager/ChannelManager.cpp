@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/14 10:51:42 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/14 11:30:33 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -434,6 +434,19 @@ void	ChannelManager::setKeyModeOfAsWith(std::string const &channelName, bool isP
 		it->second.setKey(option);
 	}
 }
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ WHO ~ NAMES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+std::string	ChannelManager::makeUserStringList(std::string const &channelName)	const {
+	t_mapChannel::const_iterator	it;
+
+	it = _chanList.find(channelName);
+	if (it == _chanList.end()) {
+		log("makeUserStringList() error");
+		return "";
+	}
+	return it->second.makeUserStringList();
+}
+
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ getter setters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 

@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/14 11:21:41 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/14 11:30:40 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -437,28 +437,54 @@ void  WHO_Command::Execute(Client *Client, std::vector<std::string> Args, Channe
 
 	// [1] si le channel existe et que l'user en fait partie
 	if (Channel_Manager.isChannelExists(Args[1]) && Channel_Manager.isClientIn(Client->NickName, Args[1])) {
-		t_mapClientStatus::const_iterator	itCS;
+		std::string addon = Channel_Manager.makeUserStringList(Args[1]);
+		std::string symbol = "="; // [+] fction getSymbol en fonction du type de channel
 
-		t_mapClientStatus mapCS = Channel_Manager.getUsersOf(Args[1]);
-		for (itCS = mapCS.begin(); itCS != mapCS.end(); ++itCS) {
-			Send_RPL_WHOREPLY(Client, itCS->second.him, Args, Channel_Manager);
-		}
-
-
+		Send_Cmd(Client->Socket, BuildRep_Basic(353, Client->NickName, symbol + " " + Args[1], addon));
+		Send_Cmd(Client->Socket, BuildRep_Basic(366, Client->NickName, Args[1], ":E N D of who"));
 	}
 }
 
+// RPL_ENDOFWHO (315)    "<client> <mask> :End of WHO list"
+// RPL_ENDOFNAMES (366)  "<client> <channel> :End of /NAMES list"
+
+/*
+//         Send_Cmd(Client.Socket,":IRC 353 Zel = #test :@Zel Tristan\n");
+//         Send_Cmd(Client.Socket,":IRC 366 Zel #test :End of /NAMES list \n");
+ 353    RPL_NAMREPLY
+              "( "=" / "*" / "@" ) <channel>
+               :[ "@" / "+" ] <nick> *( " " [ "@" / "+" ] <nick> )
+         - "@" is used for secret channels, "*" for private
+           channels, and "=" for others (public channels).
+
+       366    RPL_ENDOFNAMES
+              "<channel> :End of NAMES list"
+
+         - To reply to a NAMES message, a reply pair consisting
+           of RPL_NAMREPLY and RPL_ENDOFNAMES is sent by the
+           server back to the client.  If there is no channel
+           found as in the query, then only RPL_ENDOFNAMES is
+           returned.  The exception to this is when a NAMES
+           message is sent with no parameters and all visible
+           channels and contents are sent back in a series of
+           RPL_NAMEREPLY messages with a RPL_ENDOFNAMES to mark
+           the end.
+*/
+
 //RPL_WHOREPLY (352) "<client> <channel> <username> <host> <server> <nick> <flags> :<hopcount> <realname>"
 void	WHO_Command::Send_RPL_WHOREPLY(Client *client, Client const &who, std::vector<std::string> const &Args, ChannelManager &Channel_Manager) {
-	std::string addon = "";
+	// std::string addon = "";
 
-	addon += who.makeFullName() + " "; // <client> ?
-	addon += Args[1] + " "; // <channel>
-	addon += who.UserName + " "; // <username>
-	addon += who.UserName + " "; // <host>
-	// http://chi.cs.uchicago.edu/chirc/irc_examples.html
+	// addon += who.makeFullName() + " "; // <client> ?
+	// addon += Args[1] + " "; // <channel>
+	// addon += who.UserName + " "; // <username>
+	// addon += who.UserName + " "; // <host>
+	// // http://chi.cs.uchicago.edu/chirc/irc_examples.html
 
+	(void) Args;
 	(void) Channel_Manager;
+	(void) who;
+	(void) client;
 
-	Send_Cmd(client->Socket, BuildRep_Basic(352, client->NickName, Args[1], addon));
+	// Send_Cmd(client->Socket, BuildRep_Basic(352, client->NickName, Args[1], addon));
 }

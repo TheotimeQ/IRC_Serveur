@@ -64,7 +64,10 @@ int main(int argc, char **argv)
 //TO DO
 
 //LOUP 
-// - Ajout commande Who
+// - WHO -> + symbol des channels prive secret
+// - MODE -> gerer /mode + #chan + nickname
+// - KICK -> je prend en charge ? c'est lie aux droit des op / halfop
+// - INVITE -> la commande ? + GuestList dans la channel
 // - Finir les commandes sur le channel
 // - notice all user in channel on : MODE KICK PART
 
@@ -78,11 +81,11 @@ int main(int argc, char **argv)
 // (oui c'est   s u p e r   clair ! ^_^)  ---> voir les  [!] dans JOIN
 
 //JSP 
-// - SEGFAULT SUR QUIT FAUTE DE LOUP
+// - SEGFAULT SUR QUIT FAUTE DE LOUP -> mais euh
 // - Faire des test avec plusieru client 
 // - TEST BIG COMMANDE
 // - Trouver un test comparatif avec un vrai serveur ?
-// - Ajout d'un bot rapidos ?
+// - Ajout d'un bot rapidos ? Un Quizzbot [^_^] ??
 // - Envoi de fichier 
 // - Enlever les commentaire et clean les fichier pour le rendu 
 // - Demander a un stud de nous le casser 
