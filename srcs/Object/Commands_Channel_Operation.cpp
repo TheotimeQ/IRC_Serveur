@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands_Channel_Operation.cpp                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/13 17:58:54 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/14 11:21:41 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,8 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 
 			// + annonce a tte la chan (lui compris)
 			Channel_Manager.channelSend(Client->NickName, Args[1], ":" + Client->makeFullName() + " JOIN " + Args[1], true);
+	
+			Log("JOIN",Client->NickName + " join " + Args[1]);
 	}
 }
 

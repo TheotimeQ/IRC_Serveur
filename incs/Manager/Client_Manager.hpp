@@ -15,7 +15,7 @@ class Client_Manager
 
 		std::vector<Client>    					_All_Clients;
 		std::string    							_Password;
-		std::map<std::string, std::string>		_All_Credentials;
+		std::map<std::string, std::string>		_Creds_Oper;
 
 	public:
 
@@ -36,8 +36,12 @@ class Client_Manager
 
 		int				Set_Client_Nickname(Client &Client, std::string New_Nickname);
 
-		// std::string* 	Get_Oper_Pass(std::string NickName);
-		// void 			Check_Log_Oper(Client* Clt);
+		void 			Send_To_All(std::string Msg);
+
+		void			log(std::string const &logMsg) const;
+
+		std::string* 	Get_Oper_Pass(std::string NickName);
+		void 			Check_Log_Oper(Client* Clt);
 };
 
 #endif

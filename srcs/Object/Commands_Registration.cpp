@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:09:32 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/13 13:19:26 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/14 11:22:50 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void  PASS_Command::Execute(Client *Clt, std::vector<std::string> Args, ChannelM
     // ERR_NEEDMOREPARAMS              
     if (Args.size() < 2 || Args[1] == "")
     {
-        std::cout << ERROR_BAD_FORMAT << std::endl;
+        Log("PASS",ERROR_BAD_FORMAT);
         std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_NEEDMOREPARAM) + " " + Clt->NickName + " " + Args[0] + " :Not enough parameters" + "\n";
         Send_Cmd(Clt->Socket, Msg);
         return ;
@@ -33,7 +33,7 @@ void  PASS_Command::Execute(Client *Clt, std::vector<std::string> Args, ChannelM
     // ERR_ALREADYREGISTRED
     if (Clt->Logged == 1)
     {
-        std::cout << ERROR_PASS_ALREADY_SET << std::endl;
+        Log("PASS",ERROR_PASS_ALREADY_SET);
         std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_ALREADYREGISTRED) + " " + Clt->NickName + " :You may not reregister" + "\n";
         Send_Cmd(Clt->Socket, Msg);
         return ;
@@ -52,7 +52,7 @@ void  NICK_Command::Execute(Client *Clt, std::vector<std::string> Args, ChannelM
     // ERR_NONICKNAMEGIVEN      
     if (Args.size() < 2 || Args[1] == "")
     {
-        std::cout << ERROR_BAD_FORMAT << std::endl;
+        Log("NICK",ERROR_BAD_FORMAT);
         std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_NONICKNAMEGIVEN) + " " + Clt->NickName + " :No nickname given   " + "\n";
         Send_Cmd(Clt->Socket, Msg);
         return ;
@@ -61,7 +61,7 @@ void  NICK_Command::Execute(Client *Clt, std::vector<std::string> Args, ChannelM
     // ERR_NICKNAMEINUSE
     if (Client_Manager.Get_Client(Args[1]) != NULL)
     {
-        std::cout << ERROR_NICKNAME_ALREADY_USED << std::endl;
+        Log("NICK",ERROR_NICKNAME_ALREADY_USED);
         std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_NICKNAMEINUSE) + " " + Clt->NickName + " " + Args[1] + " :Nickname is already in use" + "\n";
         Send_Cmd(Clt->Socket, Msg);
         return ;
@@ -70,7 +70,7 @@ void  NICK_Command::Execute(Client *Clt, std::vector<std::string> Args, ChannelM
     // ERR_ERRONEUSNICKNAME
     if (Is_Valide_Nick(Args[1]))
     {
-        std::cout << ERROR_NICKNAME_BAD_FORMAT << std::endl;
+        Log("NICK",ERROR_NICKNAME_BAD_FORMAT);
         std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_NICKNAMEINUSE) + " " + Clt->NickName + " " + Args[1] + " :Erroneus nickname" + "\n";
         Send_Cmd(Clt->Socket, Msg);
         return ;      
@@ -80,7 +80,10 @@ void  NICK_Command::Execute(Client *Clt, std::vector<std::string> Args, ChannelM
     // ERR_NICKCOLLISION
     // "<nick> :Nickname collision KILL"
 
+    Log("NICK","changing nickname from " + Clt->NickName + " to " + Args[1]);
+    std::string Msg = ":"+ Clt->NickName + " NICK " + Args[1] + "\n";
     Clt->NickName = Args[1];
+    Client_Manager.Send_To_All(Msg);
 }
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.1.3
@@ -93,7 +96,7 @@ void  USER_Command::Execute(Client *Clt, std::vector<std::string> Args, ChannelM
     // ERR_NEEDMOREPARAMS              
     if (Args.size() < 2 || Args[1] == "")
     {
-        std::cout << ERROR_BAD_FORMAT << std::endl;
+        Log("USER",ERROR_BAD_FORMAT);
         std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_NEEDMOREPARAM) + " " + Clt->NickName + " " + Args[0] + " :Not enough parameters" + "\n";
         Send_Cmd(Clt->Socket, Msg);
         return ;
@@ -102,12 +105,13 @@ void  USER_Command::Execute(Client *Clt, std::vector<std::string> Args, ChannelM
     // ERR_ALREADYREGISTRED
     if (Clt->Logged == 1)
     {
-        std::cout << ERROR_USER_ALREADY_SET << std::endl;
+        Log("USER",ERROR_USER_ALREADY_SET);
         std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_ALREADYREGISTRED) + " " + Clt->NickName + " :You may not reregister" + "\n";
         Send_Cmd(Clt->Socket, Msg);
         return ;
     }
     
+    Log("NICK","changing username from " + Clt->UserName + " to " + Args[1]);
     Clt->UserName = Args[1];
 }
 
@@ -121,20 +125,31 @@ void  OPER_Command::Execute(Client *Clt, std::vector<std::string> Args, ChannelM
     // ERR_NEEDMOREPARAMS              
     if (Args.size() < 2 || Args[1] == "")
     {
-        std::cout << ERROR_BAD_FORMAT << std::endl;
-        std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_NEEDMOREPARAM) + " " + Clt->NickName + " " + Args[0] + " :Not enough parameters" + "\n";
+        Log("OPER",ERROR_BAD_FORMAT);
+        std::string Msg = "\n";
         Send_Cmd(Clt->Socket, Msg);
         return ;
     }
 
     //Si deja operateur 
     // RPL_YOUREOPER
+    if (Clt->Oper == 1)
+    {
+        Log("OPER",ERROR_BAD_FORMAT);
+        std::string Msg = "\n";
+        Send_Cmd(Clt->Socket, Msg);
+    }
 
     //Si wrong password 
     // ERR_PASSWDMISMATCH
 
     //Si pas d'user set 
-    // ERR_NOOPERHOST                  
+    // ERR_NOOPERHOST       
+
+
+
+
+
 
     //    Command: OPER
     //    Parameters: <user> <password>
@@ -172,12 +187,16 @@ void  CAP_Command::Execute(Client *Client, std::vector<std::string> Args, Channe
     {
         if (Args[1] == "LS")
         {
+            Log("CAP ","Sending cap response");
             std::string Msg = ":" + std::string(SERVER_NAME) + " " + Client->NickName + " CAP * LS : None " "\n";
             Send_Cmd(Client->Socket, Msg);
             Client->Cap_End = 0;
         }
         if (Args[1] == "END")
+        {
+            Log("CAP ","Ended cap exchange");
             Client->Cap_End = 1;
+        }
     }
 }
 

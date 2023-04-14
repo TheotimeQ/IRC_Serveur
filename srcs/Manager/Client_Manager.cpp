@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:32:08 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/13 14:33:02 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/14 11:11:40 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@
 Client_Manager::Client_Manager(): 
     Nb_Clients(1)
 {
-    _All_Credentials["Zel"]     = "0000";
-    _All_Credentials["Loup"]    = "1234";
-    _All_Credentials["root"]    = "666";
+    _Creds_Oper["Zel"]     = "0000";
+    _Creds_Oper["Loup"]    = "1234";
+    _Creds_Oper["root"]    = "666";
 
     return;
 }
@@ -50,7 +50,7 @@ void Client_Manager::Check_Log(Client* Clt)
     if (Clt->Password == this->_Password)
     {
         Clt->Logged = 1;
-        std::cout << EVENT_LOGGED << Clt->NickName << std::endl;
+        log(EVENT_LOGGED + Clt->NickName);
         std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(RPL_WELCOME)  + " " + Clt->NickName + " :" + MSG_BIENVENU + "\n";
         Send_Cmd(Clt->Socket, Msg);
     }
@@ -94,9 +94,9 @@ Client *Client_Manager::Get_Client(std::string NickName)
 
 int Client_Manager::Add_Client(const Client& Client)
 {
-    if (this->Nb_Clients >= MAX_CLIENTS)
+    if (this->Nb_Clients > MAX_CLIENTS)
     {
-        std::cout << ERROR_MAX_CLIENT << std::endl;
+        log(ERROR_MAX_CLIENT);
         return ERROR;
     }   
     _All_Clients.push_back(Client);
@@ -114,84 +114,60 @@ int Client_Manager::Remove_Client(const Client& Clt)
         if ((*it).NickName == Clt.NickName)
         {
             _All_Clients.erase(it);
+            this->Nb_Clients--;
             return GOOD;
         }
     }
 
-    std::cout << ERROR_DEL_CLIENT << std::endl;
+    log(ERROR_DEL_CLIENT);
     return ERROR;
 }
 
+void Client_Manager::Send_To_All(std::string Msg)
+{
+    std::vector<Client>::iterator it;
 
+    for (it = _All_Clients.begin(); it != _All_Clients.end(); ++it)
+    {
+        Send_Cmd((it)->Socket, Msg);
+    }
+}
 
+std::string* Client_Manager::Get_Oper_Pass(std::string NickName)
+{
+    std::map<std::string, std::string>::iterator it;
 
+    for (it = _Creds_Oper.begin(); it != _Creds_Oper.end(); ++it)
+    {
+        if (it->first == NickName)
+            return (&(it->second));
+    }
 
+    return NULL;
+}
 
+void Client_Manager::Check_Log_Oper(Client* Clt)
+{
+    if (Clt->UserName == "")
+        return;
 
+    std::string* Pass = this->Get_Oper_Pass(Clt->NickName);
 
+    if (Pass == NULL)
+    {
+        log(ERROR_OPER_UNKOW + Clt->NickName);
+        return;
+    }
+    if (Clt->Password == *Pass)
+    {
+        log(EVENT_LOGGED + Clt->NickName);
+        Clt->Oper = 1;
+        //Previens tout le monde du nouvell oper [!]
+    }
+}
 
-
-
-
-
-
-
-
-
-// std::string* Client_Manager::Get_Oper_Pass(std::string NickName)
-// {
-//     std::map<std::string, std::string>::iterator it;
-
-//     for (it = _All_Credentials.begin(); it != _All_Credentials.end(); ++it)
-//     {
-//         if (it->first == NickName)
-//             return (&(it->second));
-//     }
-
-//     return NULL;
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-// std::string* Client_Manager::Get_Oper_Pass(std::string NickName)
-// {
-//     std::map<std::string, std::string>::iterator it;
-
-//     for (it = _All_Credentials.begin(); it != _All_Credentials.end(); ++it)
-//     {
-//         if (it->first == NickName)
-//             return (&(it->second));
-//     }
-
-//     return NULL;
-// }
-
-// void Client_Manager::Check_Log_Oper(Client* Clt)
-// {
-//     if (Clt->UserName == "")
-//         return;
-
-//     std::string* Pass = this->Get_Oper_Pass(Clt->NickName);
-
-//     if (Pass == NULL)
-//     {
-//         std::cout << ERROR_OPER_UNKOW << Clt->NickName << std::endl;
-//         return;
-//     }
-//     if (Clt->Password == *Pass)
-//     {
-//         std::cout << EVENT_LOGGED << Clt->NickName << std::endl;
-//         Clt.Oper = 1;
-//         //Previens tout le monde du nouvell oper [!]
-//     }
-// }
+void Client_Manager::log(std::string const &logMsg)	const {
+	std::cout << "\033[38;5;11m";
+	std::cout << "Client_Manager      : " << logMsg << std::endl;
+	std::cout << "\033[m";
+}

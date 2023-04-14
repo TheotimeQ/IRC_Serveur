@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 09:03:00 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/13 18:20:33 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/14 09:46:57 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 Client::Client(): 
     UserName(""), 
-    NickName(""), //PAR DEFAULT "" COLISION ?
+    NickName(""),
     Password("Undefined"),
 	HostName("localhost"),
 	Away(0),
@@ -22,7 +22,7 @@ Client::Client():
 	Cap_End(1),
 	Logged(0),
 	Oper(0),
-	Quit_Msg("JE VAIS FAIRE CACA")
+	Quit_Msg("")
 {
 	_Client_Address_Len = sizeof(_Client_Address);
 	Socket = -1;
@@ -31,7 +31,7 @@ Client::Client():
 
 Client::Client(int Serveur_Socket): 
     UserName(""), 
-    NickName(""), //PAR DEFAULT "" COLISION ?
+    NickName(""),
     Password("Undefined"),
 	HostName("localhost"),
 	Away(0),
@@ -39,7 +39,7 @@ Client::Client(int Serveur_Socket):
 	Cap_End(1),
 	Logged(0),
 	Oper(0),
-	Quit_Msg("JE VAIS FAIRE CACA")
+	Quit_Msg("")
 {
 	_Client_Address_Len = sizeof(_Client_Address);
 	Socket = accept(Serveur_Socket, (struct sockaddr *)&_Client_Address, &_Client_Address_Len);
@@ -72,7 +72,6 @@ Client::~Client()
 	return;
 }
 
-// make a "nickname!username@hostname" name format
 std::string	Client::makeFullName() const {
 	return NickName + "!" + UserName + "@" + HostName;
 }
@@ -80,14 +79,16 @@ std::string	Client::makeFullName() const {
 //--------------------Operator--------------------
 std::ostream& operator<<(std::ostream &out, const Client &Client)
 {
-    out << "USER   : " << Client.UserName     	<< std::endl;
-	out << "NICK   : " << Client.NickName   	<< std::endl;
-    out << "PASS   : " << Client.Password      	<< std::endl;
-	out << "HOST   : " << Client.HostName       << std::endl;
-	out << "SOCK   : " << Client.Socket   		<< std::endl;
-	out << "AWAY   : " << Client.Away       	<< std::endl;
-	out << "CAP    : " << Client.Cap_End       	<< std::endl;
-	out << "LOGGED : " << Client.Logged        	<< std::endl;
+    out << "USER    : " << Client.UserName     		<< std::endl;
+	out << "NICK    : " << Client.NickName   		<< std::endl;
+    out << "PASS    : " << Client.Password      	<< std::endl;
+	out << "HOST    : " << Client.HostName       	<< std::endl;
+	out << "SOCK    : " << Client.Socket   			<< std::endl;
+	out << "AWAY    : " << Client.Away       		<< std::endl;
+	out << "CAP     : " << Client.Cap_End       	<< std::endl;
+	out << "LOGGED  : " << Client.Logged        	<< std::endl;
+	out << "OPER    : " << Client.Oper        		<< std::endl;
+	out << "QUITMSG : " << Client.Quit_Msg        	<< std::endl;
 	return (out);
 }
 

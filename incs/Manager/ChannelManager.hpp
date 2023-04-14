@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:10:11 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/13 18:08:19 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/14 09:18:45 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ class ChannelManager {
 
 	void	addClientToChannel(Client &user, std::string const &channelName);
 	void	rmClientToChannel(Client &user, std::string const &channelName);
-	void	rmClientFromAll(Client &user);
+	void	rmClientFromAll(Client &user, std::string msg);
 
 	//USERS STATUS
 	t_status const &getStatusOfIn(Client const &user, std::string const &channelName) const;
