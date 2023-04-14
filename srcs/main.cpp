@@ -76,6 +76,9 @@ int main(int argc, char **argv)
 //    . nettoyer les build reponse : hom et homechan ne doivent plus servir
 // - notice all user in channel on : MODE KICK PART
 
+// - msg erreur lorsque join un channel ou on est deja
+// - WHO -> devenir oper devrait actualiser chez les autres user aussi qu'il rejoigne apres ou avant un channel
+
 //Theo
 // - Ajout commande Oper 
 // - KICK .. etc (Commande operator)?
@@ -94,6 +97,10 @@ int main(int argc, char **argv)
 // 		leavingMsg = leavingMsg.substr(0, 200);  Tronquer les message ? 
 // - Faire la liste de toutes les commande testable
 
+
+// A mettre en place + tester
+// seul les user +v (voice) peuvent parler dans un channel modere
+// les users ne peuvent pas parler dans un chan +n s'ils ne l'ont pas join
 
 
 

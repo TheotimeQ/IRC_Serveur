@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   A_Command.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
+/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 09:03:06 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/14 11:20:17 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/14 15:30:14 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,19 @@ bool	A_Command::Is_Channel_Mode_AArgs(std::string const &args) const {
 		return false;
 	if (std::string(MODE_ADVANCED_ARGS).find_first_of(args[1]) == std::string::npos)
 		return false;
+	return true;
+}
+
+//  checking if valid user mode Arguments : <[+-][ov]> (only one flag at once)
+bool	A_Command::Is_Channel_Mode_UArgs(std::string const &args) const {
+	if (args.size() < 2)
+		return false;
+	if (args[0] != '+' && args[0] != '-')
+		return false;
+	for (unsigned i = 1; i < args.size(); ++i) {
+		if (std::string(MODE_USER_ARGS).find_first_of(args[i]) == std::string::npos)
+			return false;
+	}
 	return true;
 }
 

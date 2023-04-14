@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/14 14:51:42 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/14 16:21:05 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,7 +257,7 @@ void	MODE_Command::Send_RPL_CHANNELMODEIS(Client *Client, std::vector<std::strin
 	// Send_Cmd(Client->Socket, BuildRep_Basic(324, Client->NickName, Args[1], ModeList));
 }
 
-// /mode #nomChannel <nickname> *<+-| ov>
+// /mode #nomChannel <nickname>
 void	MODE_Command::Exe_user_MODE(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) const {
 	std::string umode;
 
@@ -279,8 +279,26 @@ void	MODE_Command::Exe_user_MODE(Client *Client, std::vector<std::string> Args, 
 		return ;
 	}
 	else {
-		// Exe_user_SET_MODE(Client, Args, Channel_Manager, Client_Manager);
+		// [3] arguments, on set le mode
+		Exe_user_SET_MODE(Client, Args, Channel_Manager, Client_Manager);
 	}
+}
+
+// /mode #nomChannel <nickname> *<+-| ov>
+void	MODE_Command::Exe_user_SET_MODE(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) const {
+	(void) Args;
+	(void) Channel_Manager;
+	(void) Client_Manager;
+	(void) Client;
+	bool isPlus;
+
+	if (!Is_Channel_Mode_UArgs(Args[3])) {
+		Send_Cmd(Client->Socket, BuildRep_Basic(472, Client->NickName, Args[1], SERR_UNKNOWNMODE));
+		return ;
+	}
+	Log("MODE", "user mode setting : " + Args[3] + " to " + Args[2]);
+	isPlus = (Args[3][0] == '+' ? true : false);
+	Channel_Manager.setUserModesOfAs(Args[1], Args[2], isPlus, Args[3]);
 }
 
 

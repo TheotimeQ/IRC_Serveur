@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/14 15:04:47 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/14 16:37:59 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -413,6 +413,35 @@ void	ChannelManager::setModesOfAs(std::string const &channelName, bool isPlus, s
 					break;
 			default :
 					log("setModesOfAs() default case reached");
+		}
+	}
+}
+
+void		ChannelManager::setUserModesOfAs(std::string const &channelName, std::string const &username, bool isPlus, std::string const &flags) {
+	t_mapChannel::iterator	it;
+	t_mapClientStatus::iterator itc;
+
+	it = _chanList.find(channelName);
+	if (it == _chanList.end()) {
+		log("setUserModesOfAs() [1] error");
+		return ;
+	}
+	itc = it->second.getUsersNC().find(username);
+	if (itc == it->second.getUsersNC().end()) {
+		log("setUserModesOfAs() [2] error");
+		return ;
+	}
+	for (unsigned i = 1; i < flags.size(); ++i) { 
+		char f = toupper(flags[i]);
+		switch (f) {
+			case 'O' :
+					itc->second.status.chop = isPlus;
+					break;
+			case 'V' :
+					itc->second.status.voice = isPlus;
+					break;
+			default :
+					log("setUserModesOfAs() default case reached");
 		}
 	}
 }
