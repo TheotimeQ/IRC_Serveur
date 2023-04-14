@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelManager.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/14 10:14:54 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/14 11:30:33 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,19 +77,21 @@ void	ChannelManager::rmClientToChannel(Client &user, std::string const &channelN
 		log("rmClientToChannel() error");
 		return;
 	}
-	_chanList[channelName].delUser(user);
+	
+	_chanList[channelName].delUser(user); //[!] segfault ?
+
 	if (_chanList[channelName].isEmpty())
 		rmChannel(channelName);
 }
 
 // option 
-void	ChannelManager::rmClientFromAll(Client &user) {
+void	ChannelManager::rmClientFromAll(Client &user, std::string Msg) {
 	t_mapChannel::const_iterator	it;
 
 	for (it = _chanList.begin(); it != _chanList.end(); ++it) {
-		if (isClientIn(user.NickName, it->first)) {
-			// :<nom_utilisateur> QUIT :<motif_du_départ>
-			channelSend(user.NickName, it->first, ":" + user.NickName + " QUIT :" + user.Quit_Msg, false);
+		if (isClientIn(user.NickName, it->first)) 
+		{
+			channelSend(user.NickName, it->first, Msg, false);
 			rmClientToChannel(user, it->first);
 		}
 	}
@@ -183,8 +185,8 @@ void	ChannelManager::rmChannel(std::string const &name) {
 	
 	it = _chanList.find(name);
 	if (it != _chanList.end()) {
-		_chanList.erase(it);
 		log("Deleting channel : " + name);
+		_chanList.erase(it);
 	}
 }
 
@@ -258,7 +260,7 @@ void	ChannelManager::channelSend(std::string const &user, std::string const &cha
 		//log("client : " + its->second.him.NickName + "socket : " + I_To_S(its->second.him.Socket));
 		
 		//std::string nameFull = ":" + its->second.him.NickName + "!" + its->second.him.UserName + "@" + its->second.him.HostName + " "; 
-		Send_Cmd(its->second.him.Socket, msg + " \n"); // [!] je laisse le \n je pense
+		Send_Cmd(its->second.him.Socket, msg + "\n");
 	}
 }
 
@@ -480,7 +482,7 @@ t_mapClientStatus const	&ChannelManager::getUsersOf(std::string const &channelNa
 // to print log message from  ChannelManager class
 void	ChannelManager::log(std::string const &logMsg)	const {
 	std::cout << "\033[38;5;102m";
-	std::cout << "ChannelManager : " << logMsg << std::endl;
+	std::cout << "ChannelManager :      " << logMsg << std::endl;
 	std::cout << "\033[m";
 }
 

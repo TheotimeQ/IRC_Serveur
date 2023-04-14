@@ -70,13 +70,11 @@ int main(int argc, char **argv)
 // - INVITE -> la commande ? + GuestList dans la channel
 // - Finir les commandes sur le channel
 // - nettoyer les commandes ==> decouper en petites parties (surtout MODE !)
+// - notice all user in channel on : MODE KICK PART
 
 //Theo
-// - Remove client de toutes les channel a la sortie + prevenir tout le monde
 // - Ajout commande Oper 
 // - KICK .. etc (Commande operator)?
-// - notice all user in channel on : MODE KICK PART QUIT             PRIVMSG NOTICE
-// - [+] - avec netcat, si on envoie juste \n -> crash
 
 //Celui qui a une idee
 // - comment repondre a une commande entree avec un mauvais nom de chan, depuis un bon chan
@@ -93,7 +91,10 @@ int main(int argc, char **argv)
 // - Enlever les commentaire et clean les fichier pour le rendu 
 // - Demander a un stud de nous le casser 
 // - Rendre
-
+// - Tronquer les message qu'envoi le client
+//   if (leavingMsg.size() > 200)
+// 		leavingMsg = leavingMsg.substr(0, 200);  Tronquer les message ? 
+// - Faire la liste de toutes les commande testable
 
 
 

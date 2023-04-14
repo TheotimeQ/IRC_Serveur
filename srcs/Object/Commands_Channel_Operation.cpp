@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/14 11:31:12 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/14 11:32:47 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,8 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 
 			// + annonce a tte la chan (lui compris)
 			Channel_Manager.channelSend(Client->NickName, Args[1], ":" + Client->makeFullName() + " JOIN " + Args[1], true);
+	
+			Log("JOIN",Client->NickName + " join " + Args[1]);
 	}
 }
 

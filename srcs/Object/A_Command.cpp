@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   A_Command.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 09:03:06 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/13 16:22:56 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/14 11:20:17 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void  A_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelM
 
 void	A_Command::Log(std::string const &cmde, std::string const &msg) const {
 	std::cout << "\033[38;5;47m";
-	std::cout << cmde << " : ";
+	std::cout << "               " << cmde << " : ";
 	std::cout << "\033[38;5;49m";
 	std::cout << msg << std::endl;
 	std::cout << "\033[m";

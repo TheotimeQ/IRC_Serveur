@@ -8,7 +8,7 @@
 //Quelques variable de configuration du serveur
 
 #define SERVER_NAME "IRC"
-#define MSG_BIENVENU 		    "Wellcoooommmeee on 'Y AIR C' by de Loumarti & Tquere"
+#define MSG_BIENVENU 		    "Wellcoooommmeee on 'Y AIR C' by Loumarti & Tquere"
 
 const int MAX_CLIENTS = 10;
 const int BUFFER_SIZE = 1024;
@@ -71,6 +71,7 @@ const int BUFFER_SIZE = 1024;
 #define ERROR_FID_CLIENT			"Error: Can't find client , no such : "
 #define ERROR_NICKNAME_ALREADY_USED	"Error: Can't change nickname , already used"
 #define ERROR_CMDNOTFOUND 	        "Error: Command not found : "
+#define ERROR_OPER_UNKOW            "Error: Operator unkown : "
 
 //Channel error
 # define CHERR_FORMAT			    "channel name format : <#name>"
@@ -82,11 +83,11 @@ const int BUFFER_SIZE = 1024;
 # define CHERR_USERNAME_NOTFOUND	"can't find the user : "
 
 //Message d'event sur le serveur
-#define EVENT_NEW_CLIENT 	        "Log: New connection"
-#define EVENT_DECONNECTED 	        "Log: Client deconnected : "
-#define EVENT_NEW_DATA 		        "Log: Data received : \n"
-#define EVENT_LOGGED				"Log: Client logged : "
-#define EVENT_CMDFOUND		        "Log: Executing : "
+#define EVENT_NEW_CLIENT 	        "New connection    "
+#define EVENT_DECONNECTED 	        "Client deconnected : "
+#define EVENT_NEW_DATA 		        "Data received : \n"
+#define EVENT_LOGGED				"Client logged : "
+#define EVENT_CMDFOUND		        "Executing : "
 
 // A ranger 
 # define ERRCHAN_CREATION	        "channel creation error : "

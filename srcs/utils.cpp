@@ -11,7 +11,7 @@ int Send_Cmd(int client_sock, const std::string& message)
 
 	//DEBUG
 	std::cout << "\033[38;5;182m";
-    std::cout << "      <- Sent       : " << message << std::endl;
+    std::cout << "          <- " << client_sock << " Sent : " << message ;
 	std::cout << "\033[m";
 	//DEBUG
 
@@ -50,6 +50,10 @@ std::string Join_End(int start, std::vector<std::string> Args)
     for (int i = start; i < (int)Args.size(); ++i)
         Joined += Args[i] + " ";
 
+    if (!Joined.empty() && Joined[Joined.length() - 1] == ' ') {
+        Joined.erase(Joined.length() - 1);
+    }
+
     if (!Joined.empty() && Joined[0] == ':') {
         Joined.erase(0, 1);
     }
@@ -57,6 +61,7 @@ std::string Join_End(int start, std::vector<std::string> Args)
     if (!Joined.empty() && Joined[Joined.length() - 1] == '\n') {
         Joined.erase(Joined.length() - 1);
     }
+
 
     return Joined;
 }
