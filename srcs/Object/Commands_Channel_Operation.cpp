@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/14 11:32:47 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/14 14:01:33 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 
 			//JOIN SUCCEED : ":Zel!~a@localhost JOIN #test \n"
 			Send_Cmd(Client->Socket, BuildRep_CmdEvent(*Client, Args[0], Args[1]));
+			Log("JOIN",Client->NickName + " join " + Args[1]);
 			
 			// DEBUG
 			// std::cout << "chan_list : " << Channel_Manager.getChanList() << std::endl; //checking
@@ -46,10 +47,7 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 			// DEBUG
 
 		} else { // toute forme d'erreur lie a un mauvais nom de channel
-			// [!] Je peux pas repondre avec Args[1] => puisque c'est un mauvais nom de channel, 
-			// [!] Comment on recupere le "current channel" du Client ???
-			// [!] Solution alternative -> repondre dans 'Home'
-		Send_Cmd(Client->Socket, BuildRep_HomeChan(Client->NickName, Args[1], SERR_NOSUCHCHANNEL));
+		Send_Cmd(Client->Socket, BuildRep_Basic(403, Client->NickName, Args[1], SERR_NOSUCHCHANNEL));
 		}
 	}
 	// [2] Le channel existe (Args[1]), on veut le rejoindre
@@ -144,9 +142,9 @@ void  PART_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 	//[3] try part from each channel + [4] check & supprimer les channels vides
 	for (it = channels.begin(); it != channels.end(); ++it) {
 		if (!Channel_Manager.isChannelExists(*it)) {
-			Send_Cmd(Client->Socket, BuildRep_HomeChan(Client->NickName, Args[1], SERR_NOSUCHCHANNEL));
+			Send_Cmd(Client->Socket, BuildRep_Basic(403, Client->NickName, *it, SERR_NOSUCHCHANNEL));
 		} else if (!Channel_Manager.isClientIn(Client->NickName, *it)) {
-			Send_Cmd(Client->Socket, BuildRep_Home(Client->NickName, Args[1] + " : They aren't on that channel"));
+			Send_Cmd(Client->Socket, BuildRep_Basic(441, Client->NickName, *it, SERR_USERNOTINCHANNEL));
 		} else {
 			leavingProcess(Client, *it, Channel_Manager, leavingMsg);
 		}
@@ -167,8 +165,6 @@ void	PART_Command::leavingProcess(Client *Client, std::string const &channelName
 // Note that there is a maximum limit of three (3) changes per command for modes that take a parameter
 void  MODE_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
-    (void )Client_Manager;
-
 	// showStringVector("Args", Args); //DEBUG //checking
 
 	// [1] Si l'utilisateur fait /mode dans aucun channel sans parametre
@@ -185,7 +181,7 @@ void  MODE_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 		if (!Channel_Manager.isChannelExists(Args[1]) || !Channel_Manager.isClientIn(Client->NickName, Args[1])) {
 			// Send_Cmd(Client->Socket, BuildRep_Chan(441, Client->NickName + " " + Args[1], "They aren't on that channel"));
 			// [!] comme dans join je sais pas afficher retour puisque le channel est pas bon
-			Send_Cmd(Client->Socket, BuildRep_Home(Client->NickName, Args[1] + SERR_USERNOTINCHANNEL));
+			Send_Cmd(Client->Socket, BuildRep_Basic(441, Client->NickName, Args[1], SERR_USERNOTINCHANNEL));
 		}
 		// [2]-[2] L'utilisateur fait partie du channel
 		// 324    RPL_CHANNELMODEIS "<channel> <mode> <mode params>"
@@ -197,7 +193,7 @@ void  MODE_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 	// [3] pour aller plus loin le channel doit exister
 	if (!Channel_Manager.isChannelExists(Args[1]) || !Channel_Manager.isClientIn(Client->NickName, Args[1])) { 
 		// Send_Cmd(Client->Socket, BuildRep_Chan(441, Client->NickName + " " + Args[1], "They aren't on that channel"));
-		Send_Cmd(Client->Socket, BuildRep_Home(Client->NickName, Args[1] + SERR_USERNOTINCHANNEL));
+		Send_Cmd(Client->Socket, BuildRep_Basic(441, Client->NickName, Args[1], SERR_USERNOTINCHANNEL));
 		// Ce bloc est idem  que + haut en [2]-[1] ==> a faire une fonction + tard
 	} 
 	// [3 -suite] et l'user doit etre chanop OU OPER
@@ -215,13 +211,12 @@ void  MODE_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 	}
 
 	//[6] Sinon si l'utilisateur fait /mode #nomChannel <nickname> *<+-| ov>
-	else if ((Args.size() > 3) && Is_Channel_Name_Arg(Args[1]) && !Is_Channel_Mode_AArgs(Args[2])) {
-		Exe_Advanced_Settings(Client, Args, Channel_Manager, Client_Manager);
+	else if ((Args.size() >= 3) && Is_Channel_Name_Arg(Args[1]) && !Is_Channel_Mode_AArgs(Args[2])) {
+		Exe_user_MODE(Client, Args, Channel_Manager, Client_Manager);
 	}
 
 	// [6] Au Secours ! va t on vraiment dans le bon sens ?
 
-	else if ()
 	// [+] continuer avec mode +o +v avec client en parametre
 
 	// [7] si rien de passer message mauvais args
@@ -263,6 +258,29 @@ void	MODE_Command::Send_RPL_CHANNELMODEIS(Client *Client, std::vector<std::strin
 	std::string ModeList = Channel_Manager.getModeAsString(Args[1]);
 	Channel_Manager.channelSend(Client->NickName, Args[1], BuildRep_Basic(324, Client->NickName, Args[1], ModeList), true);
 	// Send_Cmd(Client->Socket, BuildRep_Basic(324, Client->NickName, Args[1], ModeList));
+}
+
+// /mode #nomChannel <nickname> *<+-| ov>
+void	MODE_Command::Exe_user_MODE(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) const {
+	std::string umode;
+
+	// [1] verif si le nickname/Args[2] est un user de la channel
+	if (!Channel_Manager.isClientIn(Args[2], Args[1])) {
+		Send_Cmd(Client->Socket, BuildRep_Basic(441, Client->NickName, Args[1], SERR_USERNOTINCHANNEL));
+		return ;
+	}
+
+	// [2] Si pas d'argument en plus
+	// RPL_UMODEIS (221) "<client> <user modes>"
+	if (Args.size() == 3) {
+		
+		if (Client_Manager.FUNC(Args[2]));
+			umode = "operator";
+		else
+			umode = Channel_Manager.getUserModeAsString(Args[2], Args[1]);
+		Send_Cmd(Client->Socket, BuildRep_Basic(221, Client->NickName, Args[1], Args[2] + " modes : " + umode));
+		return ;
+	}
 }
 
 /* ==> TOPIC <== */
@@ -446,7 +464,7 @@ void  WHO_Command::Execute(Client *Client, std::vector<std::string> Args, Channe
 		std::string symbol = "="; // [+] fction getSymbol en fonction du type de channel
 
 		Send_Cmd(Client->Socket, BuildRep_Basic(353, Client->NickName, symbol + " " + Args[1], addon));
-		Send_Cmd(Client->Socket, BuildRep_Basic(366, Client->NickName, Args[1], ":E N D of who"));
+		Send_Cmd(Client->Socket, BuildRep_Basic(366, Client->NickName, Args[1], ":END of who"));
 	}
 }
 

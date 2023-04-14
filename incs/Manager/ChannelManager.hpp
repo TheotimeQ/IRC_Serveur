@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:10:11 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/14 11:32:01 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/14 12:23:15 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,8 @@ class ChannelManager {
 	bool	joinCheck_bans(std::string const &user, std::string const &channelName)	const;
 
 	//MODE
-	std::string	getModeAsString(std::string const &channelName)						const;
+	std::string	getUserModeAsString(std::string const &user, std::string const &channelName)	const;
+	std::string	getModeAsString(std::string const &channelName)							const;
 	void		setModesOfAs(std::string const &channelName, bool isPlus, std::string const &flags);
 	void		setLimitModeOfAsWith(std::string const &channelName, bool isPlus, std::string const &option);
 	void		setKeyModeOfAsWith(std::string const &channelName, bool isPlus, std::string const &option);
@@ -88,7 +89,7 @@ class ChannelManager {
 	// WHO ~ NAMES
 	std::string	makeUserStringList(std::string const &channelName)	const;
 
-	//Ajout pour fonction theotime
+	//Ajout pour fonction theotime <@_@') [!]
 	Channel		*Get_Channel(std::string &Channel_Name);
 };
 
