@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:50:43 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/14 11:26:14 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/14 15:02:58 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ void Server::Deconnect_Client(Client &Clt, int index)
 	std::cout << "\033[38;5;47m";
 	std::cout << "               " << "QUIT" << " : ";
 	std::cout << "\033[38;5;49m";
-	std::cout << Clt.NickName + " is quit because : " + Clt.Quit_Msg << std::endl;
+	std::cout << Clt.NickName + " has quit because : " + Clt.Quit_Msg << std::endl;
 	std::cout << "\033[m";
         
     _ChnMng.rmClientFromAll(Clt, Msg);

@@ -72,7 +72,6 @@ int main(int argc, char **argv)
 // - notice all user in channel on : MODE KICK PART
 
 //Theo
-// - Ajout commande Oper 
 // - KICK .. etc (Commande operator)?
 
 //JSP 
