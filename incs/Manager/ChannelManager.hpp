@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:10:11 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/14 14:04:38 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/14 14:55:42 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ class ChannelManager {
 	
 	// ADVANCED FEATURES
 	void	channelSend(std::string const &user, std::string const &channelName, std::string const &msg, bool self) const;
+	void	allChannelSend(std::string const &msg) const;
 
 	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ getter setters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 	t_mapChannel const		&getChanList()								const;

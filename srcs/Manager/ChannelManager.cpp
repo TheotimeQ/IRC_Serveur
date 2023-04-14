@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/14 13:48:37 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/14 15:04:47 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -263,6 +263,16 @@ void	ChannelManager::channelSend(std::string const &user, std::string const &cha
 		Send_Cmd(its->second.him.Socket, msg + "\n");
 	}
 }
+
+void	ChannelManager::allChannelSend(std::string const &msg) const {
+	t_mapChannel::const_iterator		it;
+
+	for (it = _chanList.begin(); it != _chanList.end(); ++it) {
+		t_mapClientStatus clientStatus = it->second.getUsers();
+		channelSend(clientStatus.begin()->first, it->first, msg, true);
+	}
+}
+
 
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ join checks ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */

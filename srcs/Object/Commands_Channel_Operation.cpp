@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/14 14:06:44 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/14 14:51:42 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,9 +215,6 @@ void  MODE_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 		Exe_user_MODE(Client, Args, Channel_Manager, Client_Manager);
 	}
 
-	// [6] Au Secours ! va t on vraiment dans le bon sens ?
-
-	// [+] continuer avec mode +o +v avec client en parametre
 
 	// [7] si rien de passer message mauvais args
 	// 472    SERR_UNKNOWNMODE "<char> :is unknown mode char to me for <channel>
@@ -281,7 +278,12 @@ void	MODE_Command::Exe_user_MODE(Client *Client, std::vector<std::string> Args, 
 		Send_Cmd(Client->Socket, BuildRep_Basic(221, Client->NickName, Args[1], Args[2] + " modes : " + umode));
 		return ;
 	}
+	else {
+		// Exe_user_SET_MODE(Client, Args, Channel_Manager, Client_Manager);
+	}
 }
+
+
 
 /* ==> TOPIC <== */
 
