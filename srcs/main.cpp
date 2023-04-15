@@ -78,7 +78,7 @@ int main(int argc, char **argv)
 //    . nettoyer les build reponse : hom et homechan ne doivent plus servir
 // - notice all user in channel on : MODE KICK PART
 // - regler le : #gogo They aren't on that channel --> message a mieux formater
-
+// - ameliorer les messages erreures de mode lorsque erreures ? ex : /mode +e (existe pas)
 
 // - msg erreur lorsque join un channel ou on est deja
 // - WHO -> devenir oper devrait actualiser chez les autres user aussi qu'il rejoigne apres ou avant un channel
