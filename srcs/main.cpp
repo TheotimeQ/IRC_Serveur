@@ -81,7 +81,7 @@ int main(int argc, char **argv)
 // - ameliorer les messages erreures de mode lorsque erreures ? ex : /mode +e (existe pas)
 
 // - msg erreur lorsque join un channel ou on est deja
-// - WHO -> devenir oper devrait actualiser chez les autres user aussi qu'il rejoigne apres ou avant un channel
+// - WHO -> devenir oper devrait actualiser chez les autres user aussi qu'il rejoigne apres ou avant un channel ===> idee : forcer un WHO #channelname a tout les utilisateur lorsqu'un OPER join dans un chan ?
 
 //Theo
 // - Ajout commande Oper 
