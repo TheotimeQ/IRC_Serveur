@@ -40,6 +40,7 @@ const int BUFFER_SIZE = 1024;
 #define ERR_NOOPERHOST          491
 
 //Message d'erreur à envoyer au client ( issue de la doc )
+#define SERR_NOSUCHNICK 			"No such nickname"				// 401
 #define SERR_NOSUCHCHANNEL			"No such channel"				// 403
 #define SERR_USERNOTINCHANNEL		"They aren't on that channel"	// 441
 #define SERR_USERONCHANNEL			"Is already on channel"			// 443
@@ -50,6 +51,10 @@ const int BUFFER_SIZE = 1024;
 #define SERR_BANNEDFROMCHAN			"Cannot join channel (+b)"		// 474
 #define SERR_BADCHANNELKEY			"Cannot join channel (+k)"		// 475
 #define SERR_CHANOPRIVSNEEDED		"You're not channel operator"	// 482
+
+//Message d'erreur à envoyer au client ( custom )
+#define SERR_NOSUCHCHANNEL_KC		"No such channel, kicking process canceled"
+
 
 //Message d'erreur sur le serveur
 #define ERROR_SERVER_PARAM 	        "Usage: ircserv <port> <password>"

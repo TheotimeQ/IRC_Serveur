@@ -66,15 +66,20 @@ int main(int argc, char **argv)
 //LOUP 
 // - WHO -> + symbol des channels prive secret
 // - MODE -> gerer /mode + #chan + nickname
+// - =======> probleme syntax mode +o/v (a regler avant le ban)
+// - MODE +b -b ===> avec la banlist/guestlist
 // - KICK -> je prend en charge ? c'est lie aux droit des op / halfop
 // - INVITE -> la commande ? + GuestList dans la channel
 // - Finir les commandes sur le channel
-// - regler le : #gogo They aren't on that channel --> message a mieux formater
+// - Double message lorsque invite =. celui qui recoit l'invitation le formatage est pourris xD
 
 // - nettoyer les commandes :
 //    . decouper en petites parties (surtout MODE !)
 //    . nettoyer les build reponse : hom et homechan ne doivent plus servir
 // - notice all user in channel on : MODE KICK PART
+// - regler le : #gogo They aren't on that channel --> message a mieux formater
+// - mauvais message erreur quand on veut rejoindre un channel +i
+
 
 // - msg erreur lorsque join un channel ou on est deja
 // - WHO -> devenir oper devrait actualiser chez les autres user aussi qu'il rejoigne apres ou avant un channel

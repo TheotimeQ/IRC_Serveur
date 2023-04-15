@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:12:57 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/14 15:17:29 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/15 10:27:45 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,11 +85,17 @@ class LIST_Command : public A_Command {
 
 class INVITE_Command : public A_Command { 
     public:
-        virtual void Execute(Client *Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager); };
+        virtual void Execute(Client *Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager); 
+	private:
+		void INVITE_user(Client *client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager);
+		};
 
 class KICK_Command : public A_Command { 
     public:
-        virtual void Execute(Client *Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager); };
+        virtual void Execute(Client *Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager); 
+	private:
+				void KICK_userList(Client *Client, ChannelManager &Channel_Manager, Client_Manager &Client_Manager, std::string const &channelName, std::vector<std::string> &users, std::string const &comment);
+		};
 
 class WHO_Command : public A_Command { 
     public:

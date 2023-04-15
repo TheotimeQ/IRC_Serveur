@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/14 16:37:59 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/15 09:52:25 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -310,32 +310,39 @@ bool	ChannelManager::joinCheck_k(std::string const &channelName, std::string con
 		return (it->second.getKey().compare(key) == 0 ? true : false);
 }
 
-bool	ChannelManager::joinCheck_i(std::string const &channelName) const {
+bool	ChannelManager::joinCheck_i(std::string const &user, std::string const &channelName) const {
 	t_mapChannel::const_iterator	it;
-	t_chanmode						mode;
+	std::vector<std::string>::const_iterator		itg;
+
 
 	it = _chanList.find(channelName);
 	if (it == _chanList.end()) {
 		log("joinCheck_i() error");
 		return false;
 	}
-	mode = it->second.getChanmode();
-	return !mode.i;
+	if (it->second.mode.i == false)
+		return true;
+	for (itg = it->second.bans.begin(); itg != it->second.bans.end(); ++itg) {
+		if (itg->compare(user) == 0)
+			return true;
+	}
+	return false;
 }
 
 bool	ChannelManager::joinCheck_bans(std::string const &user, std::string const &channelName)	const {
 	t_mapChannel::const_iterator	it;
-	t_mapClient						banList;
-	t_mapClient::const_iterator		itb;
+	std::vector<std::string>::const_iterator		itb;
 
 	it = _chanList.find(channelName);
 	if (it == _chanList.end()) {
 		log("joinCheck_bans() error");
 		return false;
 	}
-	banList = it->second.getBans();
-	itb = banList.find(user);
-	return (itb == banList.end() ? true : false);
+	for (itb = it->second.bans.begin(); itb != it->second.bans.end(); ++itb) {
+		if (itb->compare(user) == 0)
+			return false;
+	}
+	return true;
 }
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MODE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
@@ -501,6 +508,7 @@ std::string	ChannelManager::makeUserStringList(std::string const &channelName)	c
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ getter setters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 t_mapChannel const	&ChannelManager::getChanList() const { return _chanList; }
+t_mapChannel		&ChannelManager::getChanListNC() { return _chanList; }
 
 Channel const		&ChannelManager::getChannel(std::string const &channelName)	const {
 	t_mapChannel::const_iterator	it;

@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:10:11 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/14 16:24:27 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/15 09:51:30 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ class ChannelManager {
 
 	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ getter setters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 	t_mapChannel const		&getChanList()								const;
+	t_mapChannel			&getChanListNC();
 	Channel const 			&getChannel(std::string const &channelName)	const;
 	t_mapClientStatus const	&getUsersOf(std::string const &channelName)	const;
 
@@ -77,7 +78,7 @@ class ChannelManager {
 	//JOIN CHECK
 	bool	joinCheck_l(std::string const &channelName)								const;
 	bool	joinCheck_k(std::string const &channelName, std::string const &key)		const;
-	bool	joinCheck_i(std::string const &channelName)								const;
+	bool	joinCheck_i(std::string const &user, std::string const &channelName)	const;
 	bool	joinCheck_bans(std::string const &user, std::string const &channelName)	const;
 
 	//MODE

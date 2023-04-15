@@ -91,10 +91,31 @@ std::string catVectString(std::vector<std::string> const &args, unsigned offset,
 		return "";
 	it = args.begin() + offset;
 		while (it != args.end()) {
-			if (it != args.begin() + 2)
+			if (it != args.begin() + offset)
 				cat += delim;
 			cat += *it;
 			++it;
 		}
 	return cat;
 }
+
+// removes all occurences of the string target into a vector of strings
+void			rmFromVectString(std::vector<std::string> &vs, std::string const &target) {
+	std::vector<std::string>::iterator	it;
+
+	it = std::find(vs.begin(), vs.end(), target);
+	while (it != vs.end()) {
+		vs.erase(it);
+		it = std::find(vs.begin(), vs.end(), target);
+	}
+}
+
+// add the sring target into a vector of strings, if target pattern is not already into it.
+void			addInVectString(std::vector<std::string> &vs, std::string const &target) {
+	std::vector<std::string>::iterator	it;
+
+	it = std::find(vs.begin(), vs.end(), target);
+	if (it == vs.end())
+		vs.push_back(target);
+}
+

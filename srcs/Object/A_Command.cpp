@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 09:03:06 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/14 15:30:14 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/15 08:51:44 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,6 +146,7 @@ bool	A_Command::Is_Channel_Mode_UArgs(std::string const &args) const {
 	return true;
 }
 
+// Make sure that we got at least two non-empty parameters
 bool	A_Command::Guard(Client *Client, std::vector<std::string> const &Args, std::string const &Cmde) const {
 	if (Args.size() == 1 || (Args.size() == 2 && Args[1].compare("") == 0)) {
 		Send_Cmd(Client->Socket, BuildRep_Cmde(461, Cmde, "Not enough parameters"));
