@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:10:23 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/15 12:28:48 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/15 13:21:12 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ void	MODE_Command::Exe_Channel_Info(Client *Client, std::vector<std::string> Arg
 		Send_Solo_RPL_CHANNELMODEIS(Client, Args, Channel_Manager, Client_Manager);
 }
 
+// CHANNEL MODE - Basic
 // when user prompt is /mode #channelName <[+-][ntmsipNTMSIP]>
 void	MODE_Command::Exe_Basic_Settings(Client *Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager) const {
 	(void)Client_Manager;
@@ -101,6 +102,7 @@ void	MODE_Command::Exe_Basic_Settings(Client *Client, std::vector<std::string> A
 	Send_RPL_CHANNELMODEIS(Client, Args, Channel_Manager, Client_Manager);
 }
 
+// CHANNEL MODE - Advanced
 // when user prompt is /mode #nomChannel <[+-][lkLK]> *<Unsigned/key> (not needed if '-')
 void	MODE_Command::Exe_Advanced_Settings(Client *Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager) const {
 	(void)Client_Manager;
@@ -124,7 +126,7 @@ void	MODE_Command::Send_RPL_CHANNELMODEIS(Client *Client, std::vector<std::strin
 	Channel_Manager.channelSend(Client->NickName, Args[1], BuildRep_Basic(324, Client->NickName, Args[1], ModeList), true);
 }
 
-// 324    RPL_CHANNELMODEIS "<channel> <mode> <mode params>" send only to requester
+// 324    RPL_CHANNELMODEIS "<channel> <mode> <mode params>" send only to client
 void	MODE_Command::Send_Solo_RPL_CHANNELMODEIS(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) const {
 	(void)Client_Manager;
 
@@ -132,20 +134,20 @@ void	MODE_Command::Send_Solo_RPL_CHANNELMODEIS(Client *Client, std::vector<std::
 	Send_Cmd(Client->Socket, BuildRep_Basic(324, Client->NickName, Args[1], ModeList));
 }
 
-// /mode #nomChannel <nickname>
+// USER MODE
+// /mode #nomChannel <nickname> <*args>
 void	MODE_Command::Exe_user_MODE(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) const {
 	std::string umode;
 
-	// [1] verif si le nickname/Args[2] est un user de la channel
+	// [1] checking that <nickname> is an user of current channel
 	if (!Channel_Manager.isClientIn(Args[2], Args[1])) {
 		Send_Cmd(Client->Socket, BuildRep_Basic(441, Client->NickName, Args[1], SERR_USERNOTINCHANNEL));
 		return ;
 	}
 
-	// [2] Si pas d'argument en plus
+	// [2] no <args>, displaying mode of a user
 	// RPL_UMODEIS (221) "<client> <user modes>"
 	if (Args.size() == 3) {
-		
 		if (Client_Manager.Is_Client_Oper(Args[2]))
 			umode = "operator";
 		else
@@ -154,22 +156,29 @@ void	MODE_Command::Exe_user_MODE(Client *Client, std::vector<std::string> Args, 
 		return ;
 	}
 	else {
-		// [3] arguments, on set le mode
+		// [3] there is <args> setting user status and guests/bans in Channel object
 		Exe_user_SET_MODE(Client, Args, Channel_Manager, Client_Manager);
 	}
 }
 
-// /mode #nomChannel <nickname> *<+-| ov>
-void	MODE_Command::Exe_user_SET_MODE(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) const {
-	(void) Channel_Manager;
-	(void) Client_Manager;
+// /mode #nomChannel <nickname> <+-| bovBOV> 
+void	MODE_Command::Exe_user_SET_MODE(Client *client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) const {
 	bool isPlus;
 
 	if (!Is_Channel_Mode_UArgs(Args[3])) {
-		Send_Cmd(Client->Socket, BuildRep_Basic(472, Client->NickName, Args[1], SERR_UNKNOWNMODE));
+		Send_Cmd(client->Socket, BuildRep_Basic(472, client->NickName, Args[1], SERR_UNKNOWNMODE));
 		return ;
 	}
 	Log("MODE", "user mode setting : " + Args[3] + " to " + Args[2]);
 	isPlus = (Args[3][0] == '+' ? true : false);
 	Channel_Manager.setUserModesOfAs(Args[1], Args[2], isPlus, Args[3]);
+	
+	// case b or B (ban) -> sending back info to client
+	if (findSetInString("bB", Args[3]) && isPlus) {
+		Client *target = Client_Manager.Get_Client(Args[2]);
+		if (target == NULL)
+			return;
+		Channel_Manager.channelSend(client->NickName, Args[1], BuildRep_CmdEvent(*target, "PART", Args[1] + " " + "BAN" + " - by " + client->NickName) , true);
+		Channel_Manager.rmClientToChannel(*target, Args[1]);
+	}
 }

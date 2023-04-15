@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/15 09:52:25 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/15 12:50:24 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -446,6 +446,14 @@ void		ChannelManager::setUserModesOfAs(std::string const &channelName, std::stri
 					break;
 			case 'V' :
 					itc->second.status.voice = isPlus;
+					break;
+			case 'B' :
+					if (isPlus) {
+						addInVectString(it->second.bans, username);
+						rmFromVectString(it->second.guests, username);
+					} else {
+						rmFromVectString(it->second.bans, username);
+					}
 					break;
 			default :
 					log("setUserModesOfAs() default case reached");

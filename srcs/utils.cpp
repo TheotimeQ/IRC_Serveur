@@ -119,3 +119,12 @@ void			addInVectString(std::vector<std::string> &vs, std::string const &target) 
 		vs.push_back(target);
 }
 
+// returns true if one or more character of set is present in string 
+bool			findSetInString(std::string const &set, std::string const &string) {
+	for (std::string::const_iterator it = set.begin(); it != set.end(); ++it) {
+		if (string.find(*it) != std::string::npos)
+			return true;
+	}
+	return false;
+}
+

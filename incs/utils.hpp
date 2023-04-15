@@ -32,6 +32,7 @@ int				Send_Cmd(int client_sock, const std::string& message) ;
 std::string		catVectString(std::vector<std::string> const &args, unsigned offset, std::string const &delim);
 void			rmFromVectString(std::vector<std::string> &vs, std::string const &target);
 void			addInVectString(std::vector<std::string> &vs, std::string const &target);
+bool			findSetInString(std::string const &set, std::string const &string);
 
 std::string     I_To_S(int num);
 int             Check_Double(std::string NickName, std::string Args);

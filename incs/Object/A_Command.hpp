@@ -21,7 +21,7 @@
 
 #define MODE_BASIC_ARGS		"ntmsipNTMSIP"
 #define MODE_ADVANCED_ARGS	"lkLK"
-#define MODE_USER_ARGS		"oOvV"
+#define MODE_USER_ARGS		"oOvVbB"
 
 class A_Command
 {

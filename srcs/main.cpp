@@ -86,6 +86,7 @@ int main(int argc, char **argv)
 //Theo
 // - Ajout commande Oper 
 // - KICK .. etc (Commande operator)?
+// - Is_Valide_Nick  ===> x)
 
 //JSP 
 // - Faire des test avec plusieru client 
