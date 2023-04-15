@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/15 10:56:22 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/15 11:06:16 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 			// si invite-only (mode +i)
 			// 473    SERR_INVITEONLYCHAN "<channel> :Cannot join channel (+i)"
 			if (!Channel_Manager.joinCheck_i(Client->NickName, Args[1])) {
-				Send_Cmd(Client->Socket, BuildRep_Basic(475, Client->NickName, Args[1], SERR_INVITEONLYCHAN));
+				Send_Cmd(Client->Socket, BuildRep_Basic(473, Client->NickName, Args[1], SERR_INVITEONLYCHAN));
 				return ;
 			}
 

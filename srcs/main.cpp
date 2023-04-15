@@ -78,7 +78,6 @@ int main(int argc, char **argv)
 //    . nettoyer les build reponse : hom et homechan ne doivent plus servir
 // - notice all user in channel on : MODE KICK PART
 // - regler le : #gogo They aren't on that channel --> message a mieux formater
-// - mauvais message erreur quand on veut rejoindre un channel +i
 
 
 // - msg erreur lorsque join un channel ou on est deja
