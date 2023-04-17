@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/17 08:58:51 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/17 11:21:21 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 {
     (void )Client_Manager;
 
-	showStringVector("Args", Args);
-	// std::cout << *Client << std::endl; //chekcing 
+	showStringVector("Args", Args); //cheking debug
 
 	if (!Guard(Client, Args, "JOIN"))
 		return ;
@@ -239,12 +238,50 @@ void  NAMES_Command::Execute(Client *Client, std::vector<std::string> Args, Chan
 /* ==> [...] <== */
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.6
-void  LIST_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
+/*
+LIST <channel> *( "," <channel> )
+
+   The list command is used to list channels and their topics.  If the
+   <channel> parameter is used, only the status of that channel is
+   displayed.
+
+   Numeric Replies:
+
+           ERR_TOOMANYMATCHES              ERR_NOSUCHSERVER
+           RPL_LIST                        RPL_LISTEND
+*/
+
+
+    //    322    RPL_LIST
+    //           "<channel> <# visible> :<topic>"
+    //    323    RPL_LISTEND
+    //           ":End of LIST"
+
+    //      - Replies RPL_LIST, RPL_LISTEND mark the actual replies
+    //        with data and end of the server's response to a LIST
+    //        command.  If there are no channels available to return,
+    //        only the end reply MUST be sent.
+void  LIST_Command::Execute(Client *client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
-    (void )Args;
-    (void )Channel_Manager;
     (void )Client_Manager;
-    (void )Client;
+	std::vector<std::pair<std::string, std::string> >::iterator it;
+	std::string topic;
+
+	std::vector<std::pair<std::string, std::string> > chanToList = getChanToList(client, Args, Channel_Manager);
+	for (it = chanToList.begin(); it != chanToList.end(); ++it) {
+		topic = (it->second == "" ? ":no topic yet" : it->second);
+		std::string nb = Channel_Manager.howManyIn(it->first) + " ";
+		Send_Cmd(client->Socket, BuildRep_Basic(322, client->NickName, it->first, nb + topic));
+	}
+	Send_Cmd(client->Socket, BuildRep_Basic(323, client->NickName, "", SRPL_LISTEND));
+}
+
+std::vector<std::pair<std::string, std::string> >	LIST_Command::getChanToList(Client *client, std::vector<std::string> const &Args,  ChannelManager &Channel_Manager) {
+	std::vector<std::pair<std::string, std::string> > list;
+	if (Args.size() == 1) {
+		list = Channel_Manager.makeChannelList(client);
+	}
+	return list;
 }
 
 // INVITE <nickname> <channel>

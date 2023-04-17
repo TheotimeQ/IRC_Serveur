@@ -40,6 +40,7 @@ const int BUFFER_SIZE = 1024;
 #define ERR_NOOPERHOST          491
 
 //Message d'erreur à envoyer au client ( issue de la doc )
+#define SRPL_LISTEND				":End of LIST"					// 323
 #define SERR_NOSUCHNICK 			"No such nickname"				// 401
 #define SERR_NOSUCHCHANNEL			"No such channel"				// 403
 #define SERR_USERNOTINCHANNEL		"They aren't on that channel"	// 441

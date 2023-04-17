@@ -128,3 +128,16 @@ bool			findSetInString(std::string const &set, std::string const &string) {
 	return false;
 }
 
+// to log the content of a std::vector<std::pair<std::string, std::string> > (list channels with topics)
+void	showVectStringPair(std::vector<std::pair<std::string, std::string> > const &list) {
+	std::vector<std::pair<std::string, std::string> >::const_iterator it;
+	
+	std::cout << "\033[38;5;199m";
+	std::cout << "== Channel List ==" << std::endl;
+	std::cout << "\033[38;5;240m";
+	for (it = list.begin(); it != list.end(); ++it) {
+		std::cout << it->first << "  |  " << it->second << std::endl; 
+	}
+	std::cout << "\033[m";
+}
+

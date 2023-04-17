@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:10:11 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/15 09:51:30 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/17 11:12:27 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,10 @@ class ChannelManager {
 
 	// WHO ~ NAMES
 	std::string	makeUserStringList(std::string const &channelName)	const;
+
+	// LIST
+	std::vector<std::pair<std::string, std::string> >	makeChannelList(Client *client) const;
+	std::string	howManyIn(std::string const &channelName) const;
 
 	//Ajout pour fonction theotime <@_@') [!]
 	Channel		*Get_Channel(std::string &Channel_Name);
