@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:10:11 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/17 13:56:08 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/17 14:21:30 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ class ChannelManager {
 
 	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ getter setters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 	t_mapChannel const		&getChanList()								const;
+	t_mapChannel			&getChanListNC();
 	Channel const 			&getChannel(std::string const &channelName)	const;
 	t_mapClientStatus const	&getUsersOf(std::string const &channelName)	const;
 

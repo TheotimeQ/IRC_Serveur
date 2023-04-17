@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/17 14:05:31 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/17 14:24:52 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -547,6 +547,8 @@ std::string	ChannelManager::howManyIn(std::string const &channelName) const {
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ getter setters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 t_mapChannel const	&ChannelManager::getChanList() const { return _chanList; }
+
+t_mapChannel		&ChannelManager::getChanListNC() { return _chanList; }
 
 Channel const		&ChannelManager::getChannel(std::string const &channelName)	const {
 	t_mapChannel::const_iterator	it;

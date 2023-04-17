@@ -53,6 +53,9 @@ const int BUFFER_SIZE = 1024;
 #define SERR_BADCHANNELKEY			"Cannot join channel (+k)"		// 475
 #define SERR_CHANOPRIVSNEEDED		"You're not channel operator"	// 482
 
+//Message d'erreur à envoyer au client ( custom )
+#define SERR_NOSUCHCHANNEL_KC		"No such channel, kicking process canceled"
+
 //Message d'erreur sur le serveur
 #define ERROR_SERVER_PARAM 	        "Usage: ircserv <port> <password>"
 #define ERROR_PORT_EMPTY 	        "Error: port empty : "

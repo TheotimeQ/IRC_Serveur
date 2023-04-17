@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/17 13:32:06 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/17 14:19:21 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,133 +157,6 @@ void	PART_Command::leavingProcess(Client *Client, std::string const &channelName
 	Channel_Manager.rmClientToChannel(*Client, channelName);
 }
 
-// /* ==> MODE <== */
-
-// //. https://stackoverflow.com/questions/12886573/implementing-irc-rfc-how-to-respond-to-mode
-// // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.3
-// // Note that there is a maximum limit of three (3) changes per command for modes that take a parameter
-// void  MODE_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
-// {
-// 	// showStringVector("Args", Args); //DEBUG //checking
-
-// 	// [1] Si l'utilisateur fait /mode dans aucun channel sans parametre
-// 	// 461    SERR_NEEDMOREPARAMS "<command> :Not enough parameters"
-// 	if (!Guard(Client, Args, "MODE"))
-// 		return ;
-
-// 	// [2] Sinon Si l'utilisateur fait /mode #nomChannel
-// 	if (Args.size() == 2 && Is_Channel_Name_Arg(Args[1])) {
-// 		Log("MODE", "get mode info from channel : " + Args[1]);
-
-// 		// [2]-[1] Le channel n'existe pas ou le client n'est pas dans le channel
-// 		// 441    SERR_USERNOTINCHANNEL "<nick> <channel> :They aren't on that channel"
-// 		if (!Channel_Manager.isChannelExists(Args[1]) || !Channel_Manager.isClientIn(Client->NickName, Args[1])) {
-// 			// Send_Cmd(Client->Socket, BuildRep_Chan(441, Client->NickName + " " + Args[1], "They aren't on that channel"));
-// 			// [!] comme dans join je sais pas afficher retour puisque le channel est pas bon
-// 			Send_Cmd(Client->Socket, BuildRep_Basic(441, Client->NickName, Args[1], SERR_USERNOTINCHANNEL));
-// 		}
-// 		// [2]-[2] L'utilisateur fait partie du channel
-// 		// 324    RPL_CHANNELMODEIS "<channel> <mode> <mode params>"
-// 		else 
-// 			Send_RPL_CHANNELMODEIS(Client, Args, Channel_Manager, Client_Manager);
-// 		return ;
-// 	}
-
-// 	// [3] pour aller plus loin le channel doit exister
-// 	if (!Channel_Manager.isChannelExists(Args[1]) || !Channel_Manager.isClientIn(Client->NickName, Args[1])) { 
-// 		// Send_Cmd(Client->Socket, BuildRep_Chan(441, Client->NickName + " " + Args[1], "They aren't on that channel"));
-// 		Send_Cmd(Client->Socket, BuildRep_Basic(441, Client->NickName, Args[1], SERR_USERNOTINCHANNEL));
-// 		// Ce bloc est idem  que + haut en [2]-[1] ==> a faire une fonction + tard
-// 	} 
-// 	// [3 -suite] et l'user doit etre chanop OU OPER
-// 	else if (!Channel_Manager.isClientChopOf(Client->NickName, Args[1]) && !Client->Oper) {
-// 		// 482    SERR_CHANOPRIVSNEEDED "<channel> :You're not channel operator"
-// 		Send_Cmd(Client->Socket, BuildRep_Basic(482, Client->NickName, Args[1], SERR_CHANOPRIVSNEEDED));
-// 	}
-// 	//[4] Sinon si l'utilisateur fait /mode #nomChannel <[+-][ntmsipNTMSIP]>
-// 	else if (Args.size() == 3 && Is_Channel_Name_Arg(Args[1]) && Is_Channel_Mode_BArgs(Args[2])) {
-// 		Exe_Basic_Settings(Client, Args, Channel_Manager, Client_Manager);
-// 	}
-// 	//[5] Sinon si l'utilisateur fait /mode #nomChannel <[+-][lkLK]> *<Unsigned/key>
-// 	else if ((Args.size() == 3 || Args.size() == 4) && Is_Channel_Name_Arg(Args[1]) && Is_Channel_Mode_AArgs(Args[2])) {
-// 		Exe_Advanced_Settings(Client, Args, Channel_Manager, Client_Manager);
-// 	}
-
-// 	//[6] Sinon si l'utilisateur fait /mode #nomChannel <nickname> *<+-| ov>
-// 	else if ((Args.size() >= 3) && Is_Channel_Name_Arg(Args[1]) && !Is_Channel_Mode_AArgs(Args[2])) {
-// 		Exe_user_MODE(Client, Args, Channel_Manager, Client_Manager);
-// 	}
-
-
-// 	// [7] si rien de passer message mauvais args
-// 	// 472    SERR_UNKNOWNMODE "<char> :is unknown mode char to me for <channel>
-// 	else {
-// 		Send_Cmd(Client->Socket, BuildRep_Basic(472, Client->NickName, Args[1], SERR_UNKNOWNMODE));
-// 	}
-// }
-
-// // when user prompt is /mode #channelName <[+-][ntmsipNTMSIP]>
-// void	MODE_Command::Exe_Basic_Settings(Client *Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager) const {
-// 	(void)Client_Manager;
-// 	bool	isPlus = (Args[2][0] == '+' ? true : false);
-
-// 	Log("MODE", "basic channel mode setting : " + Args[2]);
-// 	Channel_Manager.setModesOfAs(Args[1], isPlus, Args[2]);
-// 	Send_RPL_CHANNELMODEIS(Client, Args, Channel_Manager, Client_Manager);
-// }
-
-// // when user prompt is /mode #nomChannel <[+-][lkLK]> *<Unsigned/key> (not needed if '-')
-// void	MODE_Command::Exe_Advanced_Settings(Client *Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager) const {
-// 	(void)Client_Manager;
-	
-// 	bool	isPlus = (Args[2][0] == '+' ? true : false);
-// 	std::string option = (Args.size() == 4 ? Args[3] : "");
-// 	Log("MODE", "advanced channel mode setting : " + Args[2]);
-// 	if (toupper(Args[2][1]) == 'L') {
-// 		Channel_Manager.setLimitModeOfAsWith(Args[1], isPlus, option);
-// 	} else {
-// 		Channel_Manager.setKeyModeOfAsWith(Args[1], isPlus, option);
-// 	}
-// 	Send_RPL_CHANNELMODEIS(Client, Args, Channel_Manager, Client_Manager);
-// }
-
-// // 324    RPL_CHANNELMODEIS "<channel> <mode> <mode params>"
-// void	MODE_Command::Send_RPL_CHANNELMODEIS(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) const {
-// 	(void)Client_Manager;
-
-// 	std::string ModeList = Channel_Manager.getModeAsString(Args[1]);
-// 	Channel_Manager.channelSend(Client->NickName, Args[1], BuildRep_Basic(324, Client->NickName, Args[1], ModeList), true);
-// 	// Send_Cmd(Client->Socket, BuildRep_Basic(324, Client->NickName, Args[1], ModeList));
-// }
-
-// // /mode #nomChannel <nickname> *<+-| ov>
-// void	MODE_Command::Exe_user_MODE(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) const {
-// 	std::string umode;
-
-// 	// [1] verif si le nickname/Args[2] est un user de la channel
-// 	if (!Channel_Manager.isClientIn(Args[2], Args[1])) {
-// 		Send_Cmd(Client->Socket, BuildRep_Basic(441, Client->NickName, Args[1], SERR_USERNOTINCHANNEL));
-// 		return ;
-// 	}
-
-// 	// [2] Si pas d'argument en plus
-// 	// RPL_UMODEIS (221) "<client> <user modes>"
-// 	if (Args.size() == 3) {
-		
-// 		if (Client_Manager.Is_Client_Oper(Args[2]))
-// 			umode = "operator";
-// 		else
-// 			umode = Channel_Manager.getUserModeAsString(Args[2], Args[1]);
-// 		Send_Cmd(Client->Socket, BuildRep_Basic(221, Client->NickName, Args[1], Args[2] + " modes : " + umode));
-// 		return ;
-// 	}
-// 	else {
-// 		// Exe_user_SET_MODE(Client, Args, Channel_Manager, Client_Manager);
-// 	}
-// }
-
-
-
 /* ==> TOPIC <== */
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.4
@@ -359,32 +232,7 @@ void  NAMES_Command::Execute(Client *Client, std::vector<std::string> Args, Chan
 	who.Execute(Client, Args, Channel_Manager, Client_Manager);
 }
 
-/* ==> [...] <== */
-
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.6
-/*
-LIST <channel> *( "," <channel> )
-
-   The list command is used to list channels and their topics.  If the
-   <channel> parameter is used, only the status of that channel is
-   displayed.
-
-   Numeric Replies:
-
-           ERR_TOOMANYMATCHES              ERR_NOSUCHSERVER
-           RPL_LIST                        RPL_LISTEND
-*/
-
-
-    //    322    RPL_LIST
-    //           "<channel> <# visible> :<topic>"
-    //    323    RPL_LISTEND
-    //           ":End of LIST"
-
-    //      - Replies RPL_LIST, RPL_LISTEND mark the actual replies
-    //        with data and end of the server's response to a LIST
-    //        command.  If there are no channels available to return,
-    //        only the end reply MUST be sent.
 void  LIST_Command::Execute(Client *client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
     (void )Client_Manager;
@@ -408,26 +256,134 @@ std::vector<std::pair<std::string, std::string> >	LIST_Command::getChanToList(Cl
 	return list;
 }
 
+// INVITE <nickname> <channel>
+// 4 Recv : INVITE Boys #summerParty
+// Args       0     1     2
+// Only the user inviting and the user being invited will receive notification of the invitation.
+// invite-only flag set, only channel operators may issue INVITE command
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.7
-void  INVITE_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
+void  INVITE_Command::Execute(Client *client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
-    (void )Args;
-    (void )Channel_Manager;
-    (void )Client_Manager;
-    (void )Client;
+    // (void )Args;
+    // (void )Channel_Manager;
+    // (void )Client_Manager;
+    // (void )client;
+
+	if (!Guard(client, Args, "INVITE"))
+		return ;
+	
+	/* INVITE PROCESS */
+	// [1] Checking OPERATOR OR CHOP permission
+	if (!client->Oper && !Channel_Manager.isClientChopOf(client->NickName, Args[2])) {
+		Send_Cmd(client->Socket, BuildRep_Basic(482, client->NickName, Args[2], SERR_CHANOPRIVSNEEDED));
+		return;
+	}
+
+	// [2] Checking that Args[2] is a valid channel
+	if (!Channel_Manager.isChannelExists(Args[2])) {
+		Send_Cmd(client->Socket, BuildRep_Basic(403, client->NickName, Args[2], SERR_NOSUCHCHANNEL));
+			return ;
+	}
+
+	// [3] Checking that Args[1] is a valid user
+	Client *target = Client_Manager.Get_Client(Args[1]);
+	if (target == NULL) {
+		Send_Cmd(client->Socket, BuildRep_Basic(401, client->NickName, Args[2], Args[1] + " : " + SERR_NOSUCHNICK));
+		return;
+	}
+
+	// [4] remove user from ban list (if he's there), add him to guestlist (if not already in)
+	Log("INVITE", client->NickName + " is inviting " + Args[1] + " into " + Args[2]);
+	INVITE_user(client, Args, Channel_Manager, Client_Manager);
+	// 
 }
 
+// INVITE <nickname> <channel>
+// 4 Recv : INVITE Boys #summerParty
+// Args       0     1     2
+// 341    RPL_INVITING  "<channel> <nick>"
+void INVITE_Command::INVITE_user(Client *client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) {
+	t_mapChannel::iterator		it;
+
+	it = Channel_Manager.getChanListNC().find(Args[2]);
+	if (it == Channel_Manager.getChanListNC().end()) {
+		Log("INVITE", "INVITE_user() error");
+		return;
+	}
+	rmFromVectString(it->second.bans, Args[1]);
+	addInVectString(it->second.guests, Args[1]);
+	showStringVector(Args[2] + ">>>banlist", it->second.bans); //checking
+	showStringVector(Args[2] + ">>>guestlist", it->second.guests); //checking
+	
+	// Messages to both users, the guest and the invitation sender
+	Send_Cmd(client->Socket, BuildRep_Basic(341, client->NickName, Args[1], Args[2]));
+
+	Client *target = Client_Manager.Get_Client(Args[1]);
+	if (target == NULL)
+		return;
+	// [!] trouver la bonne syntaxe ou utiliser un message prive ou ?
+	Send_Cmd(target->Socket, BuildRep_Basic(341, Args[1], Args[1], Args[2]));
+}
+
+
+// KICK <channel> *( "," <channel> ) <user> *( "," <user> ) [<comment>]
+// -> 4 Recv : KICK #fopi pelow :c'est un malpoli
+//		Args	0     1     2         (3)
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.8
 void  KICK_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
-    (void )Args;
-    (void )Channel_Manager;
-    (void )Client_Manager;
-    (void )Client;
+	if (!Guard(Client, Args, "KICK"))
+		return ;
+	std::vector<std::string> 					channels;
+	std::vector<std::string> 					users;
+	std::vector<std::string>::const_iterator	it;
+	std::string comment = (Args.size() > 2 ? "Kicking - " + catVectString(Args, 3, " ") : "Kicking");
+	if (comment.size() > 200)
+		comment = comment.substr(0, 200);
+
+	/* KICKING PROCESS */
+	// [1] Checking OPERATOR OR CHOP permission
+	if (!Client->Oper && !Channel_Manager.isClientChopOf(Client->NickName, Args[1])) {
+		Send_Cmd(Client->Socket, BuildRep_Basic(482, Client->NickName, Args[1], SERR_CHANOPRIVSNEEDED));
+		return;
+	}
+
+	//[2] get Channels from Args[1] List (coma separated) and check if all valid
+	channels = extractComaList(Args[1]);
+	showStringVector("channels", channels); //DEBUG //checking
+	for (it = channels.begin(); it != channels.end(); ++it) {
+		if (!Channel_Manager.isChannelExists(*it)) {
+			Send_Cmd(Client->Socket, BuildRep_Basic(403, Client->NickName, *it, SERR_NOSUCHCHANNEL_KC));
+			return ;
+		}
+	}
+	
+	//[3] kicking one by one each user listed in Args[2]
+	users = extractComaList(Args[2]);
+	showStringVector("users", users); //DEBUG //checking
+	for (it = channels.begin(); it != channels.end(); ++it) {
+		Log("KICK", "Kicking from channel " + *it + " " + catStringVector(users, 0));
+		KICK_userList(Client, Channel_Manager, Client_Manager, *it, users, comment);
+	}
 }
 
+void KICK_Command::KICK_userList(Client *client, ChannelManager &Channel_Manager, Client_Manager &Client_Manager, std::string const &channelName, std::vector<std::string> &users, std::string const &comment) {
+	std::vector<std::string>::iterator	it;
 
-
+	for (it = users.begin(); it != users.end(); ++it) {
+		if (!Channel_Manager.isClientIn(*it, channelName)) {
+			Send_Cmd(client->Socket, BuildRep_Basic(441, client->NickName, *it, SERR_USERNOTINCHANNEL));
+			Log("KICK", *it + " doesn't belong to channel " + channelName);
+			continue ;
+		}
+	Client *target;
+	target = Client_Manager.Get_Client(*it);
+	if (target == NULL)
+		return;
+	Channel_Manager.channelSend(client->NickName, channelName, BuildRep_CmdEvent(*target, "PART", channelName + " " + comment + " - by " + client->NickName) , true);
+	Channel_Manager.rmClientToChannel(*target, channelName);
+	}
+}
 
 Channel	*ChannelManager::Get_Channel(std::string &Channel_Name)
 {
