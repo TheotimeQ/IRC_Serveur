@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/15 13:17:34 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/17 08:58:51 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,41 +228,12 @@ void  TOPIC_Command::Execute(Client *Client, std::vector<std::string> Args, Chan
 
 /* ==> NAMES <== */
 
+// HexChat seems using NAMES rather than WHO (/names works in a channel whereas /who doesn't without exact syntax)
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.5
 void  NAMES_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
-    (void )Args;
-    (void )Channel_Manager;
-    (void )Client_Manager;
-    (void )Client;
-	// std::vector<std::string> 					channels;
-	// std::vector<std::string>::const_iterator	it;
-	// std::string 								leavingMsg;
-	
-	// if (!Guard(Client, Args, "NAMES"))
-	// 	return ;
-	// /* Memo Args */
-	// //	Args[0] = "NAMES"
-	// //	Args[1] = "#channelCurrent" OU #channelAupif OU #chan1,#chan2,#chan3
-	// //	Args[2 et +] --> pas a gerer : target serveur
-	
-	// // [A] NAMES sans argts
-	// if (Args.size() == 1) {
-	// 	// fais un Name de tous les channels accessibles
-	// 	// Les channels +p +s sont aussi utilise seulement l'utilisateur est dedans
-	// 	//   vector<std::string> = Channel_Manager.getAAChannels(Client->NickName); //All Accessible 
-	// 	// puis sur chaque vector getNamesIn(channelName,  >>>)
-	// 	return ;
-	// } 
-
-	// [!] pas fini ! on vire/ou fait tout une fois WHO finie, je garde pour m'inspirer
-
-	// [B] NAMES + channels list
-
-	//[1] get Channels from Args[1] List (coma separated)
-	// channels = extractComaList(Args[1]);
-	
-
+	WHO_Command who;
+	who.Execute(Client, Args, Channel_Manager, Client_Manager);
 }
 
 /* ==> [...] <== */
@@ -431,72 +402,16 @@ Channel	*ChannelManager::Get_Channel(std::string &Channel_Name)
 // }
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.5.1
-
-
 void  WHO_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
-    (void) Client_Manager;
-    (void) Channel_Manager;
-    (void) Client;
-    (void) Args;
-	// SERR_NOSUCHSERVER 402
-    // RPL_WHOREPLY     352
-	// RPL_ENDOFWHO     315
+	(void) Client_Manager;
 
 	if (!Guard(Client, Args, "WHO"))
 		return ;
-
-	// [1] si le channel existe et que l'user en fait partie
 	if (Channel_Manager.isChannelExists(Args[1]) && Channel_Manager.isClientIn(Client->NickName, Args[1])) {
 		std::string addon = Channel_Manager.makeUserStringList(Args[1]);
 		std::string symbol = "="; // [+] fction getSymbol en fonction du type de channel
-
 		Send_Cmd(Client->Socket, BuildRep_Basic(353, Client->NickName, symbol + " " + Args[1], addon));
 		Send_Cmd(Client->Socket, BuildRep_Basic(366, Client->NickName, Args[1], ":END of who"));
 	}
-}
-
-// RPL_ENDOFWHO (315)    "<client> <mask> :End of WHO list"
-// RPL_ENDOFNAMES (366)  "<client> <channel> :End of /NAMES list"
-
-/*
-//         Send_Cmd(Client.Socket,":IRC 353 Zel = #test :@Zel Tristan\n");
-//         Send_Cmd(Client.Socket,":IRC 366 Zel #test :End of /NAMES list \n");
- 353    RPL_NAMREPLY
-              "( "=" / "*" / "@" ) <channel>
-               :[ "@" / "+" ] <nick> *( " " [ "@" / "+" ] <nick> )
-         - "@" is used for secret channels, "*" for private
-           channels, and "=" for others (public channels).
-
-       366    RPL_ENDOFNAMES
-              "<channel> :End of NAMES list"
-
-         - To reply to a NAMES message, a reply pair consisting
-           of RPL_NAMREPLY and RPL_ENDOFNAMES is sent by the
-           server back to the client.  If there is no channel
-           found as in the query, then only RPL_ENDOFNAMES is
-           returned.  The exception to this is when a NAMES
-           message is sent with no parameters and all visible
-           channels and contents are sent back in a series of
-           RPL_NAMEREPLY messages with a RPL_ENDOFNAMES to mark
-           the end.
-*/
-
-//RPL_WHOREPLY (352) "<client> <channel> <username> <host> <server> <nick> <flags> :<hopcount> <realname>"
-// [!] a virer d'ici + dans le .hpp
-void	WHO_Command::Send_RPL_WHOREPLY(Client *client, Client const &who, std::vector<std::string> const &Args, ChannelManager &Channel_Manager) {
-	// std::string addon = "";
-
-	// addon += who.makeFullName() + " "; // <client> ?
-	// addon += Args[1] + " "; // <channel>
-	// addon += who.UserName + " "; // <username>
-	// addon += who.UserName + " "; // <host>
-	// // http://chi.cs.uchicago.edu/chirc/irc_examples.html
-
-	(void) Args;
-	(void) Channel_Manager;
-	(void) who;
-	(void) client;
-
-	// Send_Cmd(client->Socket, BuildRep_Basic(352, client->NickName, Args[1], addon));
 }
