@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands_User_Query.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:09:32 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/03 16:24:57 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/13 17:02:21 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void  WHO_Command::Execute(Client *Client, std::vector<std::string> Args, Channe
     (void )Channel_Manager;
     (void )Client_Manager;
     (void )Client;Channel_Manager, Client_Manager);
-                //CHECK IF CAN LOG
+
             }
 return GOOD;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client_Manager.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:32:08 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/12 14:05:47 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/14 14:01:01 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@
 Client_Manager::Client_Manager(): 
     Nb_Clients(1)
 {
+    _Creds_Oper["Zel"]     = "0000";
+    _Creds_Oper["Loup"]    = "1234";
+    _Creds_Oper["root"]    = "666";
+
     return;
 }
 
@@ -46,7 +50,7 @@ void Client_Manager::Check_Log(Client* Clt)
     if (Clt->Password == this->_Password)
     {
         Clt->Logged = 1;
-        std::cout << EVENT_LOGGED << Clt->NickName << std::endl;
+        log(EVENT_LOGGED + Clt->NickName);
         std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(RPL_WELCOME)  + " " + Clt->NickName + " :" + MSG_BIENVENU + "\n";
         Send_Cmd(Clt->Socket, Msg);
     }
@@ -90,9 +94,9 @@ Client *Client_Manager::Get_Client(std::string NickName)
 
 int Client_Manager::Add_Client(const Client& Client)
 {
-    if (this->Nb_Clients >= MAX_CLIENTS)
+    if (this->Nb_Clients > MAX_CLIENTS)
     {
-        std::cout << ERROR_MAX_CLIENT << std::endl;
+        log(ERROR_MAX_CLIENT);
         return ERROR;
     }   
     _All_Clients.push_back(Client);
@@ -110,10 +114,48 @@ int Client_Manager::Remove_Client(const Client& Clt)
         if ((*it).NickName == Clt.NickName)
         {
             _All_Clients.erase(it);
+            this->Nb_Clients--;
             return GOOD;
         }
     }
 
-    std::cout << ERROR_DEL_CLIENT << std::endl;
+    log(ERROR_DEL_CLIENT);
     return ERROR;
+}
+
+void Client_Manager::Send_To_All(std::string Msg)
+{
+    std::vector<Client>::iterator it;
+
+    for (it = _All_Clients.begin(); it != _All_Clients.end(); ++it)
+    {
+        Send_Cmd((it)->Socket, Msg);
+    }
+}
+
+std::string* Client_Manager::Get_Oper_Pass(std::string NickName)
+{
+    std::map<std::string, std::string>::iterator it;
+
+    for (it = _Creds_Oper.begin(); it != _Creds_Oper.end(); ++it)
+    {
+        if (it->first == NickName)
+            return (&(it->second));
+    }
+
+    return NULL;
+}
+
+bool Client_Manager::Is_Client_Oper(std::string const &NickName)
+{
+    Client *Clt = this->Get_Client(NickName);
+    if (Clt && Clt->Oper)
+        return true;
+    return false;
+}
+
+void Client_Manager::log(std::string const &logMsg)	const {
+	std::cout << "\033[38;5;11m";
+	std::cout << "Client_Manager      : " << logMsg << std::endl;
+	std::cout << "\033[m";
 }

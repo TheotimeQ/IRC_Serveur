@@ -11,7 +11,7 @@ int Send_Cmd(int client_sock, const std::string& message)
 
 	//DEBUG
 	std::cout << "\033[38;5;182m";
-    std::cout << "      <- Sent       : " << message << std::endl;
+    std::cout << "          <- " << client_sock << " Sent : " << message ;
 	std::cout << "\033[m";
 	//DEBUG
 
@@ -50,7 +50,18 @@ std::string Join_End(int start, std::vector<std::string> Args)
     for (int i = start; i < (int)Args.size(); ++i)
         Joined += Args[i] + " ";
 
-    // "REMOVE LE \n" [!]
+    if (!Joined.empty() && Joined[Joined.length() - 1] == ' ') {
+        Joined.erase(Joined.length() - 1);
+    }
+
+    if (!Joined.empty() && Joined[0] == ':') {
+        Joined.erase(0, 1);
+    }
+
+    if (!Joined.empty() && Joined[Joined.length() - 1] == '\n') {
+        Joined.erase(Joined.length() - 1);
+    }
+
 
     return Joined;
 }
@@ -70,4 +81,20 @@ int Is_Valide_Nick(const std::string& str)
     }
 
     return GOOD;
+}
+
+std::string catVectString(std::vector<std::string> const &args, unsigned offset, std::string const &delim) {
+	std::vector<std::string>::const_iterator	it;
+	std::string									cat;
+
+	if (offset > args.size() - 1)
+		return "";
+	it = args.begin() + offset;
+		while (it != args.end()) {
+			if (it != args.begin() + 2)
+				cat += delim;
+			cat += *it;
+			++it;
+		}
+	return cat;
 }

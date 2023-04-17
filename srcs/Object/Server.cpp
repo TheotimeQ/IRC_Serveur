@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:50:43 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/11 14:00:16 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/14 15:02:58 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	Server::Start_Server()
 {
     _Server_Socket = socket(AF_INET6, SOCK_STREAM, 0);
     if (_Server_Socket < 0) {
-        std::cout << ERROR_SOCKET << std::endl;
+        log(ERROR_SOCKET);
         return ERROR;
     }
 
@@ -45,17 +45,17 @@ int	Server::Start_Server()
 
     int yes = 1;
     if (setsockopt(_Server_Socket, SOL_SOCKET, SO_REUSEADDR, &(yes), sizeof(int)) == -1) {
-        std::cout << ERROR_CONF_SOCKET << strerror(errno) << std::endl;
+        log(ERROR_CONF_SOCKET);
         return ERROR;
     }
 
     if (bind(_Server_Socket, (struct sockaddr *)&_Server_Address, sizeof(_Server_Address)) < 0) {
-        std::cout << ERROR_BIND << std::endl;
+        log(ERROR_BIND);
         return ERROR;
     }
 
     if (listen(_Server_Socket, MAX_CLIENTS) < 0) {
-        std::cout << ERROR_LISTEN << std::endl;
+        log(ERROR_LISTEN);
         return ERROR;
     }
 
@@ -75,7 +75,7 @@ int	Server::Run()
         int ret = poll(_Poll_Set, _CltMng.Nb_Clients, -1);
         if (ret < 0) 
         {
-            std::cout << ERROR_POLL << std::endl;
+            log(ERROR_POLL);
             break;
         }
 
@@ -112,7 +112,7 @@ int Server::Setup_Client(const Client& Client)
 {    
     if (Client.Socket < 0) 
     {
-        std::cout << ERROR_CONNECTION << std::endl;
+        log(ERROR_CONNECTION);
         return ERROR;
     }
 
@@ -122,21 +122,35 @@ int Server::Setup_Client(const Client& Client)
     _Poll_Set[_CltMng.Nb_Clients - 1].fd = Client.Socket;
     _Poll_Set[_CltMng.Nb_Clients - 1].events = POLLIN;
     
-    std::cout << EVENT_NEW_CLIENT << std::endl;
+    log(EVENT_NEW_CLIENT + I_To_S(_CltMng.Nb_Clients - 1) + "/" + I_To_S(MAX_CLIENTS));
 
     return GOOD;
 }
 
-void Server::Deconnect_Client(const Client &Client, int index)
+void Server::Deconnect_Client(Client &Clt, int index)
 {
-    std::cout << EVENT_DECONNECTED << Client.NickName << std::endl;
+    log(EVENT_DECONNECTED + Clt.NickName + "  " + I_To_S(_CltMng.Nb_Clients - 2) + "/" + I_To_S(MAX_CLIENTS));
 
-    close(Client.Socket);
+    std::string Msg = ":" + Clt.NickName + " QUIT";
+    if (Clt.Quit_Msg != "")
+    {
+        Msg += " :" + Clt.Quit_Msg;
+    }
+
+	std::cout << "\033[38;5;47m";
+	std::cout << "               " << "QUIT" << " : ";
+	std::cout << "\033[38;5;49m";
+	std::cout << Clt.NickName + " has quit because : " + Clt.Quit_Msg << std::endl;
+	std::cout << "\033[m";
+        
+    _ChnMng.rmClientFromAll(Clt, Msg);
+
+    close(Clt.Socket);
 
     _Poll_Set[index] = _Poll_Set[_CltMng.Nb_Clients - 1];
     memset(&_Poll_Set[_CltMng.Nb_Clients - 1], 0, sizeof(_Poll_Set[_CltMng.Nb_Clients - 1]));
 
-    _CltMng.Remove_Client(Client);
+    _CltMng.Remove_Client(Clt);
 }
 
 int Server::Get_Data(Client *Client) 
@@ -173,4 +187,10 @@ int	Server::Stop_Server()
 {
     close(_Server_Socket);
     return GOOD;
+}
+
+void	Server::log(std::string const &logMsg)	const {
+	std::cout << "\033[38;5;160m";
+	std::cout << "Server              : " << logMsg << std::endl;
+	std::cout << "\033[m";
 }

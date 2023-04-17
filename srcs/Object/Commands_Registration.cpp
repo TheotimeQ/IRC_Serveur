@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands_Registration.cpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:09:32 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/17 10:44:43 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/14 15:20:16 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void  PASS_Command::Execute(Client *Clt, std::vector<std::string> Args, ChannelM
     // ERR_NEEDMOREPARAMS              
     if (Args.size() < 2 || Args[1] == "")
     {
-        std::cout << ERROR_BAD_FORMAT << std::endl;
+        Log("PASS",ERROR_BAD_FORMAT);
         std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_NEEDMOREPARAM) + " " + Clt->NickName + " " + Args[0] + " :Not enough parameters" + "\n";
         Send_Cmd(Clt->Socket, Msg);
         return ;
@@ -33,7 +33,7 @@ void  PASS_Command::Execute(Client *Clt, std::vector<std::string> Args, ChannelM
     // ERR_ALREADYREGISTRED
     if (Clt->Logged == 1)
     {
-        std::cout << ERROR_PASS_ALREADY_SET << std::endl;
+        Log("PASS",ERROR_PASS_ALREADY_SET);
         std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_ALREADYREGISTRED) + " " + Clt->NickName + " :You may not reregister" + "\n";
         Send_Cmd(Clt->Socket, Msg);
         return ;
@@ -52,7 +52,7 @@ void  NICK_Command::Execute(Client *Clt, std::vector<std::string> Args, ChannelM
     // ERR_NONICKNAMEGIVEN      
     if (Args.size() < 2 || Args[1] == "")
     {
-        std::cout << ERROR_BAD_FORMAT << std::endl;
+        Log("NICK",ERROR_BAD_FORMAT);
         std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_NONICKNAMEGIVEN) + " " + Clt->NickName + " :No nickname given   " + "\n";
         Send_Cmd(Clt->Socket, Msg);
         return ;
@@ -61,7 +61,7 @@ void  NICK_Command::Execute(Client *Clt, std::vector<std::string> Args, ChannelM
     // ERR_NICKNAMEINUSE
     if (Client_Manager.Get_Client(Args[1]) != NULL)
     {
-        std::cout << ERROR_NICKNAME_ALREADY_USED << std::endl;
+        Log("NICK",ERROR_NICKNAME_ALREADY_USED);
         std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_NICKNAMEINUSE) + " " + Clt->NickName + " " + Args[1] + " :Nickname is already in use" + "\n";
         Send_Cmd(Clt->Socket, Msg);
         return ;
@@ -70,21 +70,20 @@ void  NICK_Command::Execute(Client *Clt, std::vector<std::string> Args, ChannelM
     // ERR_ERRONEUSNICKNAME
     if (Is_Valide_Nick(Args[1]))
     {
-        std::cout << ERROR_NICKNAME_BAD_FORMAT << std::endl;
+        Log("NICK",ERROR_NICKNAME_BAD_FORMAT);
         std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_NICKNAMEINUSE) + " " + Clt->NickName + " " + Args[1] + " :Erroneus nickname" + "\n";
         Send_Cmd(Clt->Socket, Msg);
-        return ;   
+        return ;      
     }
 
     //NOT USED -> Its for server to server communication
     // ERR_NICKCOLLISION
     // "<nick> :Nickname collision KILL"
 
-    //Previent les autres clients que le client a changer de pseudo
-
-    // :WiZ NICK Kilroy                ; WiZ changed his nickname to Kilroy.
-
+    Log("NICK","Changing nickname from " + Clt->NickName + " to " + Args[1]);
+    std::string Msg = ":"+ Clt->NickName + " NICK " + Args[1] + "\n";
     Clt->NickName = Args[1];
+    Client_Manager.Send_To_All(Msg);
 }
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.1.3
@@ -97,7 +96,7 @@ void  USER_Command::Execute(Client *Clt, std::vector<std::string> Args, ChannelM
     // ERR_NEEDMOREPARAMS              
     if (Args.size() < 2 || Args[1] == "")
     {
-        std::cout << ERROR_BAD_FORMAT << std::endl;
+        Log("USER",ERROR_BAD_FORMAT);
         std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_NEEDMOREPARAM) + " " + Clt->NickName + " " + Args[0] + " :Not enough parameters" + "\n";
         Send_Cmd(Clt->Socket, Msg);
         return ;
@@ -106,12 +105,13 @@ void  USER_Command::Execute(Client *Clt, std::vector<std::string> Args, ChannelM
     // ERR_ALREADYREGISTRED
     if (Clt->Logged == 1)
     {
-        std::cout << ERROR_USER_ALREADY_SET << std::endl;
+        Log("USER",ERROR_USER_ALREADY_SET);
         std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_ALREADYREGISTRED) + " " + Clt->NickName + " :You may not reregister" + "\n";
         Send_Cmd(Clt->Socket, Msg);
         return ;
     }
     
+    Log("NICK","Changing username from " + Clt->UserName + " to " + Args[1]);
     Clt->UserName = Args[1];
 }
 
@@ -123,26 +123,62 @@ void  OPER_Command::Execute(Client *Clt, std::vector<std::string> Args, ChannelM
     (void )Client_Manager;
 
     // ERR_NEEDMOREPARAMS              
-    if (Args.size() < 2 || Args[1] == "")
+    if (Args.size() < 3 || Args[1] == "")
     {
-        std::cout << ERROR_BAD_FORMAT << std::endl;
+        Log("OPER",ERROR_BAD_FORMAT);
         std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_NEEDMOREPARAM) + " " + Clt->NickName + " " + Args[0] + " :Not enough parameters" + "\n";
         Send_Cmd(Clt->Socket, Msg);
         return ;
     }
 
-    // RPL_YOUREOPER
-    // ERR_NOOPERHOST                  
+    if (Clt->Oper)
+    {
+        Log("OPER",Clt->NickName + "already logged as operator");
+        std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_NOOPERHOST) + " " + Clt->NickName + " :Already logged as operator" + "\n";
+        Send_Cmd(Clt->Socket, Msg);
+        return ;
+    }
+
+    if (Clt->NickName != Args[1])
+    {
+        Log("OPER",Clt->NickName + " doesn't match " + Args[1]);
+        std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_NOOPERHOST) + " " + Clt->NickName + " :Use your nickname to connect" + "\n";
+        Send_Cmd(Clt->Socket, Msg);
+        return ;
+    }
+
+    // ERR_NOOPERHOST
+    std::string* Pass = Client_Manager.Get_Oper_Pass(Clt->NickName);
+    if (Pass == NULL)
+    {
+        Log("OPER",Clt->NickName + " is not know as operator ");
+        std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_NOOPERHOST) + " " + Clt->NickName + " :No O-lines for your host" + "\n";
+        Send_Cmd(Clt->Socket, Msg);
+        return ;
+    }
+    
     // ERR_PASSWDMISMATCH
+    if (Args[2] != *Pass)
+    {
+        Log("OPER",Clt->NickName + " sent the wrong password : " + Args[2] + " (" + *Pass + ")");
+        std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_PASSWDMISMATCH) + " " + Clt->NickName + " :Password incorrect" + "\n";
+        Send_Cmd(Clt->Socket, Msg);
+        return ;
+    }
 
+    // RPL_YOUREOPER
+    if (Args[2] == *Pass)
+    {
+        Log("OPER",Clt->NickName + " is not now logged as operator ");
+        std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(RPL_YOUREOPER) + " " + Clt->NickName + " :You are now an IRC operator" + "\n";
+        Send_Cmd(Clt->Socket, Msg);
+        Clt->Oper = 1;
 
-
-
-
-
-
-
-
+        // Msg = ":IRC MODE #test1 " +o " + Clt->NickName + "\n";
+        Channel_Manager.allChannelSend(":IRC MODE ", " +o " + Clt->NickName + "\n");
+        // Client_Manager.Send_To_All_Channel(Msg);
+        return ;
+    }
 }
 
 void  CAP_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
@@ -155,12 +191,16 @@ void  CAP_Command::Execute(Client *Client, std::vector<std::string> Args, Channe
     {
         if (Args[1] == "LS")
         {
-            std::string Msg = ":" + std::string(SERVER_NAME) + " " + Client->NickName + " CAP * LS : Aucunes" "\n";
+            Log("CAP ","Sending cap response");
+            std::string Msg = ":" + std::string(SERVER_NAME) + " " + Client->NickName + " CAP * LS : None " "\n";
             Send_Cmd(Client->Socket, Msg);
             Client->Cap_End = 0;
         }
         if (Args[1] == "END")
+        {
+            Log("CAP ","Ended cap exchange");
             Client->Cap_End = 1;
+        }
     }
 }
 

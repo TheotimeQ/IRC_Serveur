@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 09:03:00 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/12 10:52:27 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/14 09:46:57 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,15 @@
 
 Client::Client(): 
     UserName(""), 
-    NickName(""), //PAR DEFAULT "" COLISION ?
+    NickName(""),
     Password("Undefined"),
 	HostName("localhost"),
-    Type(-1),
 	Away(0),
 	Away_Str("Undefined"),
 	Cap_End(1),
-	Logged(0)
+	Logged(0),
+	Oper(0),
+	Quit_Msg("")
 {
 	_Client_Address_Len = sizeof(_Client_Address);
 	Socket = -1;
@@ -30,14 +31,15 @@ Client::Client():
 
 Client::Client(int Serveur_Socket): 
     UserName(""), 
-    NickName(""), //PAR DEFAULT "" COLISION ?
+    NickName(""),
     Password("Undefined"),
 	HostName("localhost"),
-    Type(-1),
 	Away(0),
 	Away_Str("Undefined"),
 	Cap_End(1),
-	Logged(0)
+	Logged(0),
+	Oper(0),
+	Quit_Msg("")
 {
 	_Client_Address_Len = sizeof(_Client_Address);
 	Socket = accept(Serveur_Socket, (struct sockaddr *)&_Client_Address, &_Client_Address_Len);
@@ -49,18 +51,18 @@ Client& Client::operator=(const Client& other)
 {
 	if (this != &other) 
     {
-		this->UserName = other.UserName;
-		this->NickName = other.NickName;
-        this->Password = other.Password;
-		this->HostName = other.HostName;
-        this->Type     = other.Type;
-		this->Cap_End  = other.Cap_End;	
-		this->Logged   = other.Logged;
-		this->Away	   = other.Away;
-		this->Away_Str = other.Away_Str;
-
-		this->_Client_Address_Len = other._Client_Address_Len;
-		this->Socket = other.Socket;
+		this->UserName 				= other.UserName;
+		this->NickName 				= other.NickName;
+        this->Password 				= other.Password;
+		this->HostName 				= other.HostName;
+		this->Cap_End  				= other.Cap_End;	
+		this->Logged   				= other.Logged;
+		this->Away	   				= other.Away;
+		this->Away_Str 				= other.Away_Str;
+		this->_Client_Address_Len 	= other._Client_Address_Len;
+		this->Socket 				= other.Socket;
+		this->Oper 					= other.Oper;
+		this->Quit_Msg				= other.Quit_Msg;
 	}
 	return *this;
 }
@@ -70,17 +72,23 @@ Client::~Client()
 	return;
 }
 
+std::string	Client::makeFullName() const {
+	return NickName + "!" + UserName + "@" + HostName;
+}
+
 //--------------------Operator--------------------
 std::ostream& operator<<(std::ostream &out, const Client &Client)
 {
-    out << "USER   : " << Client.UserName     	<< std::endl;
-	out << "NICK   : " << Client.NickName   	<< std::endl;
-    out << "PASS   : " << Client.Password      	<< std::endl;
-	out << "HOST   : " << Client.HostName       << std::endl;
-	out << "SOCK   : " << Client.Socket   		<< std::endl;
-    out << "TYPE   : " << Client.Type       	<< std::endl;
-	out << "AWAY   : " << Client.Away       	<< std::endl;
-	out << "CAP    : " << Client.Cap_End       	<< std::endl;
-	out << "LOGGED : " << Client.Logged        	<< std::endl;
+    out << "USER    : " << Client.UserName     		<< std::endl;
+	out << "NICK    : " << Client.NickName   		<< std::endl;
+    out << "PASS    : " << Client.Password      	<< std::endl;
+	out << "HOST    : " << Client.HostName       	<< std::endl;
+	out << "SOCK    : " << Client.Socket   			<< std::endl;
+	out << "AWAY    : " << Client.Away       		<< std::endl;
+	out << "CAP     : " << Client.Cap_End       	<< std::endl;
+	out << "LOGGED  : " << Client.Logged        	<< std::endl;
+	out << "OPER    : " << Client.Oper        		<< std::endl;
+	out << "QUITMSG : " << Client.Quit_Msg        	<< std::endl;
 	return (out);
 }
+

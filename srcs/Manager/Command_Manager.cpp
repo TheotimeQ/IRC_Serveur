@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:32:08 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/11 14:59:11 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/14 13:37:52 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ Command_Manager::Command_Manager()
     Cmd_List["NAMES"]   = new NAMES_Command(); 
     Cmd_List["LIST"]    = new LIST_Command(); 
     Cmd_List["INVITE"]  = new INVITE_Command(); 
-    Cmd_List["KICK"]    = new KICK_Command(); 
+    Cmd_List["KICK"]    = new KICK_Command();
+    Cmd_List["WHO"]     = new WHO_Command(); 
 
     //Sending messages
     Cmd_List["PRIVMSG"]   = new PRIVMSG_Command(); 
@@ -83,50 +84,60 @@ void Command_Manager::Tokenize(std::string const &str, const char delim, std::ve
     } 
 } 
 
-int Command_Manager::Interpret_Data(Client *Client, ChannelManager &Channel_Manager, Client_Manager &Client_Manager)
+int Command_Manager::Interpret_Data(Client *Clt, ChannelManager &Channel_Manager, Client_Manager &Client_Manager)
 {
-    for (std::vector<std::string>::const_iterator it = (*Client).All_Cmd.begin(); it != (*Client).All_Cmd.end(); ++it) 
+    for (std::vector<std::string>::const_iterator it = (*Clt).All_Cmd.begin(); it != (*Clt).All_Cmd.end(); ++it) 
     {
         std::vector<std::string> Args;
         Tokenize(*it, ' ', Args); 
         
         //DEBUG
 		std::cout << "\033[38;5;180m";
-        std::cout << "      -> Received   : "<< *it << std::endl;
+        std::cout << "          -> " << Clt->Socket << " Recv : " << *it << std::endl;
 		std::cout << "\033[m";
 		//DEBUG
+
+        if (Args.size() == 0 || Args[0] == "")
+        {
+            Log("No command found");
+            continue;
+        }
 
         if (Args[0] == "QUIT")
         {
             Log(EVENT_CMDFOUND + Args[0]);
+
+            if (Args.size() >= 2)
+                Clt->Quit_Msg = Join_End(1, Args);
+            
             return QUIT;
         }
             
         A_Command *Cmd = this->Get_Command(Args[0]);
 
-        if ((*Client).Logged == 0)
+        if ((*Clt).Logged == 0)
         {
             if (Args[0] == "USER" || Args[0] == "PASS" || Args[0] == "NICK" || Args[0] == "CAP")
             {
                 if (Cmd != NULL)
-                    Cmd->Execute(Client, Args, Channel_Manager, Client_Manager);
-                Client_Manager.Check_Log(Client);
+                    Cmd->Execute(Clt, Args, Channel_Manager, Client_Manager);
+                Client_Manager.Check_Log(Clt);
             }
             else
                 Log("Can't , not logged yet");
         }
         else   
             if (Cmd != NULL)
-                Cmd->Execute(Client, Args, Channel_Manager, Client_Manager);
+                Cmd->Execute(Clt, Args, Channel_Manager, Client_Manager);
     }
     
-    (*Client).All_Cmd.clear();
+    (*Clt).All_Cmd.clear();
 
     return GOOD;
 }
 
 void		Command_Manager::Log(std::string const &msg)	const {
 	std::cout << "\033[38;5;108m";
-	std::cout << "CommandManager : " << msg << std::endl;
+	std::cout << "CommandManager      : " << msg << std::endl;
 	std::cout << "\033[m";
 }

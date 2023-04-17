@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 09:03:06 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/11 14:58:52 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/14 11:20:17 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void  A_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelM
 
 void	A_Command::Log(std::string const &cmde, std::string const &msg) const {
 	std::cout << "\033[38;5;47m";
-	std::cout << cmde << " : ";
+	std::cout << "               " << cmde << " : ";
 	std::cout << "\033[38;5;49m";
 	std::cout << msg << std::endl;
 	std::cout << "\033[m";
@@ -87,11 +87,8 @@ std::string	A_Command::BuildRep_Chan(int code, std::string const &channel, std::
 }
 
 // [Command Event REP] -> ":Zel!~a@localhost JOIN #test \n"
-std::string	A_Command::BuildRep_CmdEvent(std::string const &cmde, std::string const &nick, std::string const &channel) const {
-	std::string host = "~a@localhost"; // surment a passer en arg pour que ce soit pas fixe
-	// lie au client->Hostname ?
-
-	return (":" + nick + "!" + host + " " + cmde + " " + channel + " \n");
+std::string	A_Command::BuildRep_CmdEvent(Client const &user, std::string const &cmde, std::string const &channel) const {
+	return (":" + user.makeFullName() + " " + cmde + " " + channel + "\n");
 }
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Parsing precheck mehod-tool ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
@@ -133,6 +130,14 @@ bool	A_Command::Is_Channel_Mode_AArgs(std::string const &args) const {
 		return false;
 	if (std::string(MODE_ADVANCED_ARGS).find_first_of(args[1]) == std::string::npos)
 		return false;
+	return true;
+}
+
+bool	A_Command::Guard(Client *Client, std::vector<std::string> const &Args, std::string const &Cmde) const {
+	if (Args.size() == 1 || (Args.size() == 2 && Args[1].compare("") == 0)) {
+		Send_Cmd(Client->Socket, BuildRep_Cmde(461, Cmde, "Not enough parameters"));
+		return false;
+	}
 	return true;
 }
 

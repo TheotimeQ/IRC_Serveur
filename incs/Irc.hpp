@@ -8,7 +8,7 @@
 //Quelques variable de configuration du serveur
 
 #define SERVER_NAME "IRC"
-#define MSG_BIENVENU 		    "Bienvenue sur le serveur IRC de Loumarti et Tquere"
+#define MSG_BIENVENU 		    "Wellcoooommmeee on 'Y AIR C' by Loumarti & Tquere"
 
 const int MAX_CLIENTS = 10;
 const int BUFFER_SIZE = 1024;
@@ -16,33 +16,40 @@ const int BUFFER_SIZE = 1024;
 //Code numeric associé à la doc IRC
 #define RPL_WELCOME             001
 #define RPL_AWAY                301
-#define RPL_UNAWAY              305                     
-#define RPL_NOWAWAY             306    
+#define RPL_UNAWAY              305
+#define RPL_NOWAWAY             306
+#define RPL_ENDOFWHO            315
 #define RPL_TOPIC               332
+#define RPL_WHOREPLY            352
 #define RPL_NAMREPLY            353
 #define RPL_ENDOFNAMES          366
+#define RPL_YOUREOPER           381
 #define ERR_CANNOTSENDTOCHAN    404
 #define ERR_WASNOSUCHNICK       406
 #define ERR_TOOMANYTARGETS      407
-#define ERR_NORECIPIENT         411     
-#define ERR_NOTEXTTOSEND        412 
-#define ERR_NONICKNAMEGIVEN     431            
+#define ERR_NORECIPIENT         411
+#define ERR_NOTEXTTOSEND        412
+#define ERR_NONICKNAMEGIVEN     431
 #define ERR_ERRONEUSNICKNAME    432
-#define ERR_NICKNAMEINUSE       433     
+#define ERR_NICKNAMEINUSE       433
 #define ERR_NICKCOLLISION       436
+#define ERR_NOSUCHSERVER        402
 #define ERR_NEEDMOREPARAM       461
 #define ERR_ALREADYREGISTRED    462
+#define ERR_PASSWDMISMATCH      464
+#define ERR_NOOPERHOST          491
 
 //Message d'erreur à envoyer au client ( issue de la doc )
-#define ERR_NOSUCHCHANNEL		    "No such channel"				// 403
-#define ERR_USERNOTINCHANNEL	    "They aren't on that channel"	// 441
-#define ERR_USERONCHANNEL		    "Is already on channel"			// 443
-#define ERR_NEEDMOREPARAMS		    "Not enough parameters"			// 461
-#define ERR_CHANNELISFULL		    "Cannot join channel (+l)"		// 471
-#define ERR_INVITEONLYCHAN		    "Cannot join channel (+i)"		// 473
-#define ERR_BANNEDFROMCHAN		    "Cannot join channel (+b)"		// 474
-#define ERR_BADCHANNELKEY		    "Cannot join channel (+k)"		// 475
-#define ERR_CHANOPRIVSNEEDED	    "You're not channel operator"	// 482
+#define SERR_NOSUCHCHANNEL			"No such channel"				// 403
+#define SERR_USERNOTINCHANNEL		"They aren't on that channel"	// 441
+#define SERR_USERONCHANNEL			"Is already on channel"			// 443
+#define SERR_NEEDMOREPARAMS			"Not enough parameters"			// 461
+#define SERR_CHANNELISFULL			"Cannot join channel (+l)"		// 471
+#define SERR_UNKNOWNMODE			"unknown mode asked"			// 472
+#define SERR_INVITEONLYCHAN			"Cannot join channel (+i)"		// 473
+#define SERR_BANNEDFROMCHAN			"Cannot join channel (+b)"		// 474
+#define SERR_BADCHANNELKEY			"Cannot join channel (+k)"		// 475
+#define SERR_CHANOPRIVSNEEDED		"You're not channel operator"	// 482
 
 //Message d'erreur sur le serveur
 #define ERROR_SERVER_PARAM 	        "Usage: ircserv <port> <password>"
@@ -67,14 +74,23 @@ const int BUFFER_SIZE = 1024;
 #define ERROR_FID_CLIENT			"Error: Can't find client , no such : "
 #define ERROR_NICKNAME_ALREADY_USED	"Error: Can't change nickname , already used"
 #define ERROR_CMDNOTFOUND 	        "Error: Command not found : "
+#define ERROR_OPER_UNKOW            "Error: Operator unkown : "
+
+//Channel error
+# define CHERR_FORMAT			    "channel name format : <#name>"
+# define CHERR_FORMAT_PRE		    "channel name must start with # or !"
+# define CHERR_FORMAT_TOOLONG	    "channel name can't exceed 200 character long"
+# define CHERR_FORMAT_FCHAR		    "channel name can't have spaces, coma or semicolon"
+
+// errors while maping into _users
+# define CHERR_USERNAME_NOTFOUND	"can't find the user : "
 
 //Message d'event sur le serveur
-#define EVENT_NEW_CLIENT 	        "Log: New connection"
-#define EVENT_DECONNECTED 	        "Log: Client deconnected : "
-#define EVENT_NEW_DATA 		        "Log: Data received : \n"
-#define EVENT_LOGGED				"Log: Client logged : "
-#define EVENT_CMDFOUND		        "Log: Executing : "
-
+#define EVENT_NEW_CLIENT 	        "New connection    "
+#define EVENT_DECONNECTED 	        "Client deconnected : "
+#define EVENT_NEW_DATA 		        "Data received : \n"
+#define EVENT_LOGGED				"Client logged : "
+#define EVENT_CMDFOUND		        "Executing : "
 
 // A ranger 
 # define ERRCHAN_CREATION	        "channel creation error : "
