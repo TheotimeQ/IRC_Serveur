@@ -6,7 +6,7 @@
 /*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 11:17:45 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/17 11:39:32 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/17 11:44:16 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,7 @@ class Channel {
 	t_status const			&getStatusOf(std::string const &userName)	const;
 	// setter du chanmode un par un ?? a voir ...
 
+	t_mapClient const		&getBans()	const;
 
 	/* public methods */
 		// bases
