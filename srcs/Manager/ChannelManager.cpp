@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelManager.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/14 15:04:47 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/14 15:18:37 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,11 +264,13 @@ void	ChannelManager::channelSend(std::string const &user, std::string const &cha
 	}
 }
 
-void	ChannelManager::allChannelSend(std::string const &msg) const {
+void	ChannelManager::allChannelSend(std::string const &msg_1, std::string const &msg_2) const
+{
 	t_mapChannel::const_iterator		it;
 
 	for (it = _chanList.begin(); it != _chanList.end(); ++it) {
 		t_mapClientStatus clientStatus = it->second.getUsers();
+		std::string msg = msg_1 + it->first + msg_2;
 		channelSend(clientStatus.begin()->first, it->first, msg, true);
 	}
 }

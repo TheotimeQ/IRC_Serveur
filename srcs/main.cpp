@@ -75,11 +75,10 @@ int main(int argc, char **argv)
 //    . decouper en petites parties (surtout MODE !)
 //    . nettoyer les build reponse : hom et homechan ne doivent plus servir
 // - notice all user in channel on : MODE KICK PART
+//    If a JOIN is successful, the user is then sent the channel's topic
+//    (using RPL_TOPIC)
 
 //Theo
-// - KICK .. etc (Commande operator)?
-
-//JSP 
 // - Faire des test avec plusieru client 
 // - TEST BIG COMMANDE
 // - Trouver un test comparatif avec un vrai serveur ?
@@ -95,10 +94,14 @@ int main(int argc, char **argv)
 
 
 
+//kick
+//mode
+//invite +i
+//tout les modes (voice , invite , +n )
 
-//    If a JOIN is successful, the user is then sent the channel's topic
-//    (using RPL_TOPIC) and the list of users who are on the channel (using
-//    RPL_NAMREPLY), which must include the user joining.
+
+
+
 
 
 //CHANNEL MODE : 

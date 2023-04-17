@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:09:32 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/14 14:52:02 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/14 15:20:16 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,8 @@ void  OPER_Command::Execute(Client *Clt, std::vector<std::string> Args, ChannelM
         Send_Cmd(Clt->Socket, Msg);
         Clt->Oper = 1;
 
-        Msg = ":IRC MODE #test1 +o " + Clt->NickName + "\n";
+        // Msg = ":IRC MODE #test1 " +o " + Clt->NickName + "\n";
+        Channel_Manager.allChannelSend(":IRC MODE ", " +o " + Clt->NickName + "\n");
         // Client_Manager.Send_To_All_Channel(Msg);
         return ;
     }

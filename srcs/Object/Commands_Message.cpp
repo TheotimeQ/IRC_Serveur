@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:09:32 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/13 14:45:19 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/14 15:52:49 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,14 +151,10 @@ void  NOTICE_Command::Execute(Client *From_Client, std::vector<std::string> Args
         {
             Client *To_Client = Client_Manager.Get_Client(Target);
             if (To_Client == NULL)
-            {
                 continue;
-            }
 
             if (To_Client->Away)
-            {
                 continue;
-            }
 
             std::string Msg = ":" + From_Client->NickName + "!" + From_Client->UserName + "@" + From_Client->HostName + " NOTICE " + To_Client->NickName + " :" + Message_to_send + "\n";
             Send_Cmd(To_Client->Socket, Msg);
