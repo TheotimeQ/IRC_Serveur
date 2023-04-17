@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands_Message.cpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
+/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:09:32 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/11 15:15:10 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/12 15:10:43 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,21 @@ void  PRIVMSG_Command::Execute(Client *From_Client, std::vector<std::string> Arg
         return ;
     }
 
+    // std::cout << "MESSAGE à ENVOYER : " << Args[2] << std::endl;
+
+
+    //ENLEVER LE : au debut du message
+
+    //Enelever le /n à la fin
+
     //Concataine les args pour former le message
-    std::string Message_to_send = Join_End(3, Args);
+    std::string Message_to_send = Join_End(2, Args);
+
+    std::cout << "MESSAGE à ENVOYER : " << Message_to_send << std::endl;
 
     //Mauvais format
-    if (Args.size() != 3)
-        return ;
+    // if (Args.size() != 3)
+    //     return ;
 
     //Implementation des wildcard ? 
 
@@ -47,7 +56,7 @@ void  PRIVMSG_Command::Execute(Client *From_Client, std::vector<std::string> Arg
 
     while (std::getline(Targets, Target, ',')) 
     { 
-        std::cout << Target << std::endl; 
+        // std::cout << Target << std::endl; 
 
         //Si c'est une channel
         if (Target[0] == '#')

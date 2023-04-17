@@ -6,7 +6,7 @@
 /*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:09:32 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/12 14:39:28 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/17 10:44:31 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,10 @@ void  NICK_Command::Execute(Client *Clt, std::vector<std::string> Args, ChannelM
     //NOT USED -> Its for server to server communication
     // ERR_NICKCOLLISION
     // "<nick> :Nickname collision KILL"
+
+    //Previent les autres clients que le client a changer de pseudo
+
+    // :WiZ NICK Kilroy                ; WiZ changed his nickname to Kilroy.
 
     Clt->NickName = Args[1];
 }
