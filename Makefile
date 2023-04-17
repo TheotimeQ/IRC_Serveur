@@ -21,7 +21,7 @@ OBJ_INC					=  	$(addprefix $(OBJ_DIR)/, $(OBJ_FILE))
 INC						= 	$(addsuffix .hpp, $(addprefix $(INC_DIR)/, $(INC_FILE)))
 
 SRCS_DIR				=	srcs
-SRCS_FILE				=	$(OBJ_SRC) $(MANAGER_SRC) main utils Object/Commands_Channel_Operation Object/Commands_Registration Object/Commands_Message
+SRCS_FILE				=	$(OBJ_SRC) $(MANAGER_SRC) main utils Object/Commands_Channel_Operation Object/Commands_MODE Object/Commands_Registration Object/Commands_Message
 
 MANAGER_SRC				=  	$(addprefix $(MANAGER_DIR)/, $(MANAGER_FILE))
 OBJ_SRC					=  	$(addprefix $(OBJ_DIR)/, $(OBJ_FILE))

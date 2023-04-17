@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 10:18:15 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/17 11:39:16 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/17 14:10:32 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ std::string const	&Channel::getName() const { return _name; }
 
 t_mapClientStatus const	&Channel::getUsers() const { return _users; }
 
-t_mapClient const		&Channel::getBans()	const { return _banlist; }
+t_mapClientStatus	&Channel::getUsersNC() { return _users; }
 
 std::string const	&Channel::getTopic() const { return _topic; }
 
