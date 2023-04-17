@@ -6,7 +6,7 @@
 /*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:09:32 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/17 10:44:31 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/17 10:44:43 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void  NICK_Command::Execute(Client *Clt, std::vector<std::string> Args, ChannelM
         std::cout << ERROR_NICKNAME_BAD_FORMAT << std::endl;
         std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_NICKNAMEINUSE) + " " + Clt->NickName + " " + Args[1] + " :Erroneus nickname" + "\n";
         Send_Cmd(Clt->Socket, Msg);
-        return ;      
+        return ;   
     }
 
     //NOT USED -> Its for server to server communication
