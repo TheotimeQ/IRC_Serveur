@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 11:17:45 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/17 12:04:48 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/17 13:59:02 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,6 @@ class Channel {
 	
 	std::string					_name;
 	t_mapClientStatus			_users;
-	t_mapClient					_banlist;	//le chan garde en memoire les utilisateurs bans
 	std::string					_topic;
 	std::string					_key; // password to join (-> if +k mode is on)
 
@@ -118,6 +117,8 @@ class Channel {
  public :
 	/* public attribute */
 	t_chanmode			mode; // all mode data
+	std::vector<std::string>	bans;	// le chan garde en memoire les utilisateurs nickname bans
+	std::vector<std::string>	guests;	// 
 	
 	Channel(); // besoin pour utiliser en map avec []
 	~Channel();
@@ -128,7 +129,6 @@ class Channel {
 	std::string const		&getName()									const;
 	t_mapClientStatus const	&getUsers()									const;
 	t_mapClientStatus		&getUsersNC();
-	t_mapClient const		&getBans()									const;
 	int						countUsers()								const;
 	std::string const		&getTopic()									const;
 	std::string const		&getKey()									const;
@@ -142,7 +142,6 @@ class Channel {
 
 	/* public methods */
 		// bases
-	// void				announce(std::string const &msg)						const;
 	void				addUser(Client const &newUser);
 	void				delUser(Client const &userToDel);
 	bool				isClientIn(std::string const &nickname)			const;

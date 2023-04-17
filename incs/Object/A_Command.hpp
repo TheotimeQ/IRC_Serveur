@@ -21,6 +21,7 @@
 
 #define MODE_BASIC_ARGS		"ntmsipNTMSIP"
 #define MODE_ADVANCED_ARGS	"lkLK"
+#define MODE_USER_ARGS		"oOvVbB"
 
 class A_Command
 {
@@ -71,6 +72,7 @@ class A_Command
 		bool	Is_Channel_Name_Arg(std::string const &arg) const;
 		bool	Is_Channel_Mode_BArgs(std::string const &args) const;
 		bool	Is_Channel_Mode_AArgs(std::string const &args) const;
+		bool	Is_Channel_Mode_UArgs(std::string const &args) const;
 		bool	Guard(Client *Client, std::vector<std::string> const &Args, std::string const &Cmde) const;
 
 		/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ other-tool ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelManager.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/17 11:40:55 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/17 14:05:31 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -327,17 +327,18 @@ bool	ChannelManager::joinCheck_i(std::string const &channelName) const {
 
 bool	ChannelManager::joinCheck_bans(std::string const &user, std::string const &channelName)	const {
 	t_mapChannel::const_iterator	it;
-	t_mapClient						banList;
-	t_mapClient::const_iterator		itb;
+	std::vector<std::string>::const_iterator		itb;
 
 	it = _chanList.find(channelName);
 	if (it == _chanList.end()) {
 		log("joinCheck_bans() error");
 		return false;
 	}
-	banList = it->second.getBans();
-	itb = banList.find(user);
-	return (itb == banList.end() ? true : false);
+	for (itb = it->second.bans.begin(); itb != it->second.bans.end(); ++itb) {
+		if (itb->compare(user) == 0)
+			return false;
+	}
+	return true;
 }
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MODE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
@@ -415,6 +416,43 @@ void	ChannelManager::setModesOfAs(std::string const &channelName, bool isPlus, s
 					break;
 			default :
 					log("setModesOfAs() default case reached");
+		}
+	}
+}
+
+void		ChannelManager::setUserModesOfAs(std::string const &channelName, std::string const &username, bool isPlus, std::string const &flags) {
+	t_mapChannel::iterator	it;
+	t_mapClientStatus::iterator itc;
+
+	it = _chanList.find(channelName);
+	if (it == _chanList.end()) {
+		log("setUserModesOfAs() [1] error");
+		return ;
+	}
+	itc = it->second.getUsersNC().find(username);
+	if (itc == it->second.getUsersNC().end()) {
+		log("setUserModesOfAs() [2] error");
+		return ;
+	}
+	for (unsigned i = 1; i < flags.size(); ++i) { 
+		char f = toupper(flags[i]);
+		switch (f) {
+			case 'O' :
+					itc->second.status.chop = isPlus;
+					break;
+			case 'V' :
+					itc->second.status.voice = isPlus;
+					break;
+			case 'B' :
+					if (isPlus) {
+						addInVectString(it->second.bans, username);
+						rmFromVectString(it->second.guests, username);
+					} else {
+						rmFromVectString(it->second.bans, username);
+					}
+					break;
+			default :
+					log("setUserModesOfAs() default case reached");
 		}
 	}
 }

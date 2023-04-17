@@ -137,9 +137,7 @@ int main(int argc, char **argv)
 // - LIST 
 //        LIST [<channel>{,<channel>}] [<target>]
 
-// Mode
-
-// ---------------------------------------------------------------
+// Mode implémenté
 
 //CHANNEL MODE : 
 // +m (modéré) : Ce mode restreint la capacité des utilisateurs à envoyer des messages dans le salon de discussion. Seuls les utilisateurs avec le statut d'opérateur ou de voix peuvent envoyer des messages, tandis que les autres utilisateurs ne peuvent que les lire.
@@ -153,5 +151,7 @@ int main(int argc, char **argv)
 // +o (opérateur) : Ce mode accorde à un utilisateur les privilèges d'opérateur dans un salon de discussion. Les opérateurs ont généralement des pouvoirs spéciaux, tels que l'expulsion d'autres utilisateurs, la modification des paramètres du salon de discussion, etc.
 // +v (voix) : Ce mode permet à un utilisateur de parler dans un salon de discussion même s'il est normalement muet. Cela peut être utile pour donner la parole à des utilisateurs spécifiques, même s'ils ne sont pas des opérateurs.
 // +b (banni) : Ce mode interdit à un utilisateur d'accéder à un salon de discussion. L'utilisateur banni ne peut pas envoyer de messages dans le salon de discussion tant que le bannissement est en vigueur.
+
+// ---------------------------------------------------------------
 
 
