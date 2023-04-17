@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 11:17:45 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/17 11:39:32 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/17 12:04:48 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@ class Channel {
 	std::string const		&getName()									const;
 	t_mapClientStatus const	&getUsers()									const;
 	t_mapClientStatus		&getUsersNC();
+	t_mapClient const		&getBans()									const;
 	int						countUsers()								const;
 	std::string const		&getTopic()									const;
 	std::string const		&getKey()									const;

@@ -20,6 +20,7 @@
 #include <sstream>
 
 //[!]
+#include <algorithm>
 
 #include "../incs/Irc.hpp"
 #include "../incs/Object/Client.hpp"
