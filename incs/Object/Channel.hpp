@@ -6,7 +6,7 @@
 /*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 11:17:45 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/17 11:44:16 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/17 12:09:05 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@ class Channel {
 	std::string const		&getName()									const;
 	t_mapClientStatus const	&getUsers()									const;
 	t_mapClientStatus		&getUsersNC();
+	t_mapClient const		&getBans()									const;
 	int						countUsers()								const;
 	std::string const		&getTopic()									const;
 	std::string const		&getKey()									const;
