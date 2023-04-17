@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelManager.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
+/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/14 15:18:37 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/17 11:40:55 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -470,6 +470,41 @@ std::string	ChannelManager::makeUserStringList(std::string const &channelName)	c
 	return it->second.makeUserStringList();
 }
 
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ LIST ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+// List all channel wich are not secret for the client in a vector<pair<#channelName, topic>>
+std::vector<std::pair<std::string, std::string> >	ChannelManager::makeChannelList(Client *client) const {
+	std::vector<std::pair<std::string, std::string> > list;
+	t_mapChannel::const_iterator	it;
+	std::string						topic; // stamp-topic
+
+	it = _chanList.begin();
+	while (it != _chanList.end()) {
+		if (it->second.mode.s && !isClientIn(client->NickName, it->first) && !client->Oper) {
+			++it;
+			continue;
+		}
+		if (it->second.mode.p && !isClientIn(client->NickName, it->first) && !client->Oper)
+			topic = ":private topic";
+		else
+			topic = it->second.getTopic();
+		std::pair<std::string, std::string>	pair(it->first, topic);
+		list.push_back(pair);
+		++it;
+	}
+	showVectStringPair(list); //checking - debug
+	return list;
+}
+
+std::string	ChannelManager::howManyIn(std::string const &channelName) const {
+	t_mapChannel::const_iterator	it;
+
+	it = _chanList.find(channelName);
+	if (it == _chanList.end()) {
+		log("howManyIn() error");
+		return "0";
+	}
+	return I_To_S(it->second.countUsers());
+}
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ getter setters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 

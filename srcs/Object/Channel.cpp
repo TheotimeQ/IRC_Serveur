@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 10:18:15 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/14 15:12:55 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/17 11:39:16 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,17 +76,10 @@ t_status const		&Channel::getStatusOf(std::string const &userName) const {
 
 //////////////////////* methods *//////////////////////////
 
-// Envoi d' un objet message à tout les clients connecté
-// ( Faudra bien definir l'objet message ) -> string pour l'instant
-// void	Channel::announce(std::string const &msg) const {
-// 	t_mapClientStatus::const_iterator	it = _users.begin();
-
-// 	while (it != _users.end()) {
-// 		log("sending message : " + msg + " to : " + it->first);
-// 		// ici utiliser la vrai classe message lorsqu'elle sera prete
-// 		it++;
-// 	}
-// }
+// Might be updated if implementing invisible mode for users
+int	Channel::countUsers() const {
+	return _users.size();
+}
 
 // if user is already in channel, nothing happens
 void	Channel::addUser(Client const &newUser) {
