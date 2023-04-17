@@ -61,7 +61,7 @@ int main(int argc, char **argv)
     return (GOOD);
 }
 
-//TO DO
+// ---------------------------------------------------------------
 
 //LOUP 
 // - WHO -> + symbol des channels prive secret
@@ -77,32 +77,67 @@ int main(int argc, char **argv)
 // - notice all user in channel on : MODE KICK PART
 //    If a JOIN is successful, the user is then sent the channel's topic
 //    (using RPL_TOPIC)
-
-//Theo
-// - Faire des test avec plusieru client 
-// - TEST BIG COMMANDE
-// - Trouver un test comparatif avec un vrai serveur ?
-// - Ajout d'un bot rapidos ? Un Quizzbot [^_^] ??
-// - Envoi de fichier 
-// - Enlever les commentaire et clean les fichier pour le rendu 
-// - Demander a un stud de nous le casser 
-// - Rendre
-// - Tronquer les message qu'envoi le client
-//   if (leavingMsg.size() > 200)
-// 		leavingMsg = leavingMsg.substr(0, 200);  Tronquer les message ? 
-// - Faire la liste de toutes les commande testable
-
-
-
 //kick
 //mode
 //invite +i
 //tout les modes (voice , invite , +n )
 
 
+// ---------------------------------------------------------------
+
+//Theo
+// - USER ajout recuperation hostname ?
+// - Ameliorer le bot
+// - Test avec big commande
+
+    //   if (leavingMsg.size() > 200)
+    // 		leavingMsg = leavingMsg.substr(0, 200);
+
+// - Enlever les commentaire et clean les fichier pour le rendu 
+// - Demander a un stud de nous le casser 
+// - Rendre
+
+// ---------------------------------------------------------------
+
+//Implementation fontionnelles
 
 
+// - USER
+//         USER <username> <hostname> <servername> <realname>
+// - NICK
+//         NICK <nickname>
+// - QUIT
+//         QUIT [<quit message>]
+// - PASS
+//         PASS <password>
+// - CAP 
+//       CAP <subcommand> [<subcommand parameters>]   ( Pas géré , CAP LS + CAP END )
+// - PRIVMSG
+//         PRIVMSG <receiver>{,<receiver>} <text to be sent>
+// - NOTICE
+//         NOTICE <receiver>{,<receiver>} <text to be sent>
+// - OPER
+//         OPER <name> <password>
+// - AWAY 
+//         AWAY [<message>]
 
+
+// - TOPIC
+//         TOPIC <channel> [<topic>]
+// - WHO
+//         WHO [<mask>[,<mask>...]]         Mask ??
+// - JOIN
+//         JOIN <channel>{,<channel>} [<key>{,<key>}]    Key ??
+// - MODE
+//         MODE <channel/user> <mode> [<mode parameters>]
+// - PART
+//         PART <channel>{,<channel>} [<part message>]
+// - KICK
+//         KICK <channel>{,<channel>} <user>{,<user>} [<comment>]
+// - LIST 
+//        LIST [<channel>{,<channel>}] [<target>]
+
+// Mode implémenté
 
 //CHANNEL MODE : 
 // +m (modéré) : Ce mode restreint la capacité des utilisateurs à envoyer des messages dans le salon de discussion. Seuls les utilisateurs avec le statut d'opérateur ou de voix peuvent envoyer des messages, tandis que les autres utilisateurs ne peuvent que les lire.
@@ -116,5 +151,7 @@ int main(int argc, char **argv)
 // +o (opérateur) : Ce mode accorde à un utilisateur les privilèges d'opérateur dans un salon de discussion. Les opérateurs ont généralement des pouvoirs spéciaux, tels que l'expulsion d'autres utilisateurs, la modification des paramètres du salon de discussion, etc.
 // +v (voix) : Ce mode permet à un utilisateur de parler dans un salon de discussion même s'il est normalement muet. Cela peut être utile pour donner la parole à des utilisateurs spécifiques, même s'ils ne sont pas des opérateurs.
 // +b (banni) : Ce mode interdit à un utilisateur d'accéder à un salon de discussion. L'utilisateur banni ne peut pas envoyer de messages dans le salon de discussion tant que le bannissement est en vigueur.
+
+// ---------------------------------------------------------------
 
 

@@ -61,6 +61,8 @@ int	Bot::Start_Bot()
     send(_Bot_Socket, nick_cmd.c_str(), nick_cmd.length(), 0);
     send(_Bot_Socket, pass_cmd.c_str(), pass_cmd.length(), 0);
 
+    //Attend le message de bienvenu
+
     // Rejoindre le canal #bot
     std::string join_cmd = "JOIN #bot\r\n";
     send(_Bot_Socket, join_cmd.c_str(), join_cmd.length(), 0);
