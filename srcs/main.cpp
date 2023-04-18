@@ -81,6 +81,7 @@ int main(int argc, char **argv)
 
 //Theo
 // - USER ajout recuperation hostname ?
+// - Away message pas bon  + /back pour remetter le away a false
 // - Ameliorer le bot
 // - Test avec big commande
 
@@ -105,7 +106,7 @@ int main(int argc, char **argv)
 // - PASS
 //         PASS <password>
 // - CAP 
-//       CAP <subcommand> [<subcommand parameters>]   ( Pas géré , CAP LS + CAP END )
+//         CAP <subcommand> [<subcommand parameters>]   ( Pas géré , CAP LS + CAP END )
 // - PRIVMSG
 //         PRIVMSG <receiver>{,<receiver>} <text to be sent>
 // - NOTICE
@@ -131,7 +132,7 @@ int main(int argc, char **argv)
 // - LIST 
 //        LIST [<channel>{,<channel>}] [<target>]
 
-// Mode implémenté
+// Mode implémentés
 
 //CHANNEL MODE : 
 // +m (modéré) : Ce mode restreint la capacité des utilisateurs à envoyer des messages dans le salon de discussion. Seuls les utilisateurs avec le statut d'opérateur ou de voix peuvent envoyer des messages, tandis que les autres utilisateurs ne peuvent que les lire.

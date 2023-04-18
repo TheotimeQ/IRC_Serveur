@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands_Message.cpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
+/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:09:32 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/14 15:52:49 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/17 14:59:04 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void  PRIVMSG_Command::Execute(Client *From_Client, std::vector<std::string> Arg
             //Si le client est away
             if (To_Client->Away)
             {
-                std::string Msg = ":" + std::string(To_Client->NickName) + " " + I_To_S(RPL_AWAY)  + " " + From_Client->NickName + To_Client->NickName + " :" + To_Client->Away_Str + "\n";
+                std::string Msg = ":" + std::string(To_Client->NickName) + " " + I_To_S(RPL_AWAY)  + " " + From_Client->NickName + " " + To_Client->NickName + " :" + To_Client->Away_Str + "\n";
                 Send_Cmd(From_Client->Socket, Msg);
                 continue;
             }
@@ -170,7 +170,6 @@ void  AWAY_Command::Execute(Client *From_Client, std::vector<std::string> Args, 
     (void)Client_Manager;
 
     std::string Msg = "";
-
 
     if (Args.size() == 1)
     {
