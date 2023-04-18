@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:10:23 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/17 14:31:51 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/18 11:59:52 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,8 @@ void	MODE_Command::Hub(Client *client, std::vector<std::string> Args, ChannelMan
 	}
 
 	//USER MODE
-	//[3] /mode #nomChannel <nickname> *<+-| ov> 
+	//[3]  /mode #nomChannel <nickname> *<+-| ov> 
+	//[3+] /mode #nomChannel <+-| ov> <nickname>
 	else if ((Args.size() >= 3) && Is_Channel_Name_Arg(Args[1]) && !Is_Channel_Mode_AArgs(Args[2])) {
 		Exe_user_MODE(client, Args, Channel_Manager, Client_Manager);
 	}
@@ -139,7 +140,13 @@ void	MODE_Command::Exe_user_MODE(Client *Client, std::vector<std::string> Args, 
 	std::string umode;
 
 	// [1] checking that <nickname> is an user of current channel
-	if (!Channel_Manager.isClientIn(Args[2], Args[1])) {
+	if (Args.size() == 3 && !Channel_Manager.isClientIn(Args[2], Args[1])) {
+		Send_Cmd(Client->Socket, BuildRep_Basic(441, Client->NickName, Args[1], SERR_USERNOTINCHANNEL));
+		return ;
+	}
+
+	// [1] same
+	if (Args.size() == 4 && !Channel_Manager.isClientIn(Args[2], Args[1]) && !Channel_Manager.isClientIn(Args[3], Args[1])) {
 		Send_Cmd(Client->Socket, BuildRep_Basic(441, Client->NickName, Args[1], SERR_USERNOTINCHANNEL));
 		return ;
 	}
@@ -156,6 +163,8 @@ void	MODE_Command::Exe_user_MODE(Client *Client, std::vector<std::string> Args, 
 	}
 	else {
 		// [3] there is <args> setting user status and guests/bans in Channel object
+		if (Is_Channel_Mode_UArgs(Args[2]))
+			Args[2].swap(Args[3]);
 		Exe_user_SET_MODE(Client, Args, Channel_Manager, Client_Manager);
 	}
 }

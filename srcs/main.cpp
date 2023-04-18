@@ -65,11 +65,10 @@ int main(int argc, char **argv)
 
 //LOUP 
 
-// - un OPERATOR qui join un channel proc un WHO de tous les users ? => update pastille
-//    If a JOIN is successful, the user is then sent the channel's topic
-//    (using RPL_TOPIC)
 // - le mode user est prevu dans le sens ==> MODE #channel +o Pignouf
 // -					  pour le moment ==> MODE #channel Pignouf +o
+//    If a JOIN is successful, the user is then sent the channel's topic
+//    (using RPL_TOPIC)
 
 
 // - regler le : #gogo They aren't on that channel --> message a mieux formater
