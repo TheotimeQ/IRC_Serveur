@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/18 12:18:15 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/18 13:06:34 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -429,16 +429,21 @@ Channel	*ChannelManager::Get_Channel(std::string &Channel_Name)
 // }
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.5.1
-void  WHO_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
+void  WHO_Command::Execute(Client *client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
 	(void) Client_Manager;
 
-	if (!Guard(Client, Args, "WHO"))
+	if (!Guard(client, Args, "WHO"))
 		return ;
-	if (Channel_Manager.isChannelExists(Args[1]) && Channel_Manager.isClientIn(Client->NickName, Args[1])) {
+	if (!Channel_Manager.isChannelExists(Args[1])) {
+		Send_Cmd(client->Socket, BuildRep_Basic(403, client->NickName, Args[1], SERR_NOSUCHCHANNEL));
+		return ;
+	}
+	if (Channel_Manager.isClientIn(client->NickName, Args[1])) {
 		std::string addon = Channel_Manager.makeUserStringList(Args[1]);
 		std::string symbol = "=";
-		Send_Cmd(Client->Socket, BuildRep_Basic(353, Client->NickName, symbol + " " + Args[1], addon));
-		Send_Cmd(Client->Socket, BuildRep_Basic(366, Client->NickName, Args[1], ":END of who"));
-	}
+		Send_Cmd(client->Socket, BuildRep_Basic(353, client->NickName, symbol + " " + Args[1], addon));
+		Send_Cmd(client->Socket, BuildRep_Basic(366, client->NickName, Args[1], ":END of who"));
+	} else
+		Send_Cmd(client->Socket, BuildRep_Basic(441, client->NickName, Args[1], SERR_USERNOTINCHANNEL));
 }

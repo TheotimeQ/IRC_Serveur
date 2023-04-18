@@ -65,19 +65,17 @@ int main(int argc, char **argv)
 
 //LOUP 
 
-//    If a JOIN is successful, the user is then sent the channel's topic
-//    (using RPL_TOPIC)
-
-
-// - regler le : #gogo They aren't on that channel --> message a mieux formater
 // - decouper le code ~> le wallcheck de JOIN
 // - nettoyer ~> comments, les  //debug et //checking
+
+// - regler le : #gogo They aren't on that channel --> message a mieux formater : HUm /U_U/
 
 
 // ---------------------------------------------------------------
 
 //Theo
-// - Client->Oper >> prioritaire par rapport a >> canTalk() || tu peux gerer comme ca ? (pas acces au clientManager dans channel simplement)
+// - [+]Client->Oper >> prioritaire par rapport a >> canTalk() || tu peux gerer comme ca ? (pas acces au clientManager dans channel simplement)
+// - [+]si on utilise AWAY avec netcat (sans arguments, le comportement est pas bon, il lui manque la raison d'afk par defaut) J'utilise la fonction Guard() contre ca dans mes cmdes
 // - USER ajout recuperation hostname ?
 // - Away message pas bon  + /back pour remetter le away a false
 // - Ameliorer le bot
@@ -100,6 +98,7 @@ int main(int argc, char **argv)
 // ---------------------------------------------------------------
 
 //Implementation fontionnelles
+// JE ferais ce doc sur papier pour les correcteurs
 
 
 // - USER
@@ -124,10 +123,13 @@ int main(int argc, char **argv)
 
 // - TOPIC
 //         TOPIC <channel> [<topic>]
-// - WHO
-//         WHO [<mask>[,<mask>...]]         Mask ??
+// - WHO || NAMES
+//         WHO [<mask>[,<mask>...]]         Mask ?? c'est #channelName
+//         On fait pas un vrai WHO, on utilise les RPL NAMES c'est hybride-custom-hexchat
+//         
 // - JOIN
-//         JOIN <channel>{,<channel>} [<key>{,<key>}]    Key ??
+//         JOIN <channel> <*key>    Key ?? --> oui si le chan est en mode +k
+//         mon join ne fais qu'un seul channel a la fois en argt
 // - MODE
 //         MODE <channel/user> <mode> [<mode parameters>]
 // - PART
@@ -135,7 +137,7 @@ int main(int argc, char **argv)
 // - KICK
 //         KICK <channel>{,<channel>} <user>{,<user>} [<comment>]
 // - LIST 
-//        LIST [<channel>{,<channel>}] [<target>]
+//        LIST          ---> pas d'args [<channel>{,<channel>}] [<target>]
 
 // Mode implémentés
 
