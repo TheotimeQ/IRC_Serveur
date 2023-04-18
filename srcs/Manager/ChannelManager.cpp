@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/17 14:24:52 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/18 08:54:39 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -312,17 +312,19 @@ bool	ChannelManager::joinCheck_k(std::string const &channelName, std::string con
 		return (it->second.getKey().compare(key) == 0 ? true : false);
 }
 
-bool	ChannelManager::joinCheck_i(std::string const &channelName) const {
+bool	ChannelManager::joinCheck_i(std::string const &channelName, std::string const &user) const {
 	t_mapChannel::const_iterator	it;
-	t_chanmode						mode;
 
 	it = _chanList.find(channelName);
 	if (it == _chanList.end()) {
 		log("joinCheck_i() error");
 		return false;
 	}
-	mode = it->second.getChanmode();
-	return !mode.i;
+	if (it->second.mode.i == false)
+		return true;
+	else {
+		return (it->second.isAGuest(user));
+	}
 }
 
 bool	ChannelManager::joinCheck_bans(std::string const &user, std::string const &channelName)	const {

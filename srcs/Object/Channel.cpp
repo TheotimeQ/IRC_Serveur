@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 10:18:15 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/17 14:10:32 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/18 09:14:10 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,6 +148,17 @@ bool	Channel::canTalk(std::string const &nickname)	const {
 	if (it->second.status.chop || it->second.status.creator || it->second.status.voice)
 		return true;
 	return false;
+}
+
+// To be a guest, user must be in guests AND musn't be in bans
+bool	Channel::isAGuest(std::string const &username)	const {
+	std::vector<std::string>::const_iterator itgb;
+
+	itgb = std::find(bans.begin(), bans.end(), username);
+	if (itgb != bans.end())
+		return false;
+	itgb = std::find(guests.begin(), guests.end(), username);
+	return (itgb != guests.end() ? true : false);
 }
 
 

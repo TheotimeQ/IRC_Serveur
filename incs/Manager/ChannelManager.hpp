@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:10:11 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/17 14:21:30 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/18 08:52:12 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ class ChannelManager {
 	//JOIN CHECK
 	bool	joinCheck_l(std::string const &channelName)								const;
 	bool	joinCheck_k(std::string const &channelName, std::string const &key)		const;
-	bool	joinCheck_i(std::string const &channelName)								const;
+	bool	joinCheck_i(std::string const &channelName, std::string const &user)	const;
 	bool	joinCheck_bans(std::string const &user, std::string const &channelName)	const;
 
 	//MODE

@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 11:17:45 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/17 13:59:02 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/18 08:55:17 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,6 +150,7 @@ class Channel {
 	void				rmOpPrivilege(std::string const &username);
 	bool				isClientChop(std::string const &nickname)		const;
 	bool				canTalk(std::string const &nickname)			const;
+	bool				isAGuest(std::string const &username)			const;
 
 	/* make formated string */
 	std::string			makeUserStringList()							const;

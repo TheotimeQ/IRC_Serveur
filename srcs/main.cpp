@@ -66,6 +66,7 @@ int main(int argc, char **argv)
 //LOUP 
 
 
+// - KICK doit enlever de la guestlist et INVITE enlever de la banlist
 // - JOIN bug -> rejoindre un channel +m  impossible
 // - canTalk() ---> voir comment gerer le +n de la meme facon
 

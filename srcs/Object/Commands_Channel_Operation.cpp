@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/17 14:55:45 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/18 09:09:45 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,14 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 			// si le client est deja dans le channel [facultatif HexChat a la securite]
 			//443    SERR_USERONCHANNEL  "<user> <channel> :is already on channel"
 			if (Channel_Manager.isClientIn(Client->NickName, Args[1])) {
+				Log("JOIN", "join refused client already in the channel");
 				Send_Cmd(Client->Socket, BuildRep_Basic(443, Client->NickName, Args[1], SERR_USERONCHANNEL));
 				return ;
 			}
 			// si taille user max (mode -> l)
 			// 471    SERR_CHANNELISFULL "<channel> :Cannot join channel (+l)"
 			if (!Channel_Manager.joinCheck_l(Args[1])) {
+				Log("JOIN", "join refused joinCheck_l");
 				Send_Cmd(Client->Socket, BuildRep_BasicChan(471, Client->NickName, Args[1], SERR_CHANNELISFULL));
 				return ;
 			}
@@ -78,14 +80,16 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 			// si besoin une cle + assez d'Args du coup (mode +k)
 			// 475    SERR_BADCHANNELKEY "<channel> :Cannot join channel (+k)
 			if (!Channel_Manager.joinCheck_k(Args[1], (Args.size() > 2 ? Args[2] : ""))) {
+				Log("JOIN", "join refused joinCheck_k");
 				Send_Cmd(Client->Socket, BuildRep_Basic(475, Client->NickName, Args[1], SERR_BADCHANNELKEY));
 				return ;
 			}
 
 			// si invite-only (mode +i)
 			// 473    SERR_INVITEONLYCHAN "<channel> :Cannot join channel (+i)"
-			if (!Channel_Manager.joinCheck_i(Args[1])) {
-				Send_Cmd(Client->Socket, BuildRep_Basic(475, Client->NickName, Args[1], SERR_INVITEONLYCHAN));
+			if (!Channel_Manager.joinCheck_i(Args[1], Client->NickName)) {
+				Log("JOIN", "join refused joinCheck_i");
+				Send_Cmd(Client->Socket, BuildRep_Basic(473, Client->NickName, Args[1], SERR_INVITEONLYCHAN));
 				return ;
 			}
 
