@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 10:18:15 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/18 10:29:16 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/18 11:17:44 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -242,6 +242,15 @@ std::string		Channel::makePrefix(t_clientData const &data)	const {
 	if (data.status.voice)
 		return "+";
 	return "";
+}
+
+std::vector<std::string>	Channel::makeUserList()	const {
+	t_mapClientStatus::const_iterator	it;
+	std::vector<std::string> userList;
+
+	for (it = _users.begin(); it != _users.end(); ++it)
+		userList.push_back(it->first);
+	return userList;
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~Debug~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:10:11 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/18 09:38:21 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/18 11:09:48 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,11 +75,13 @@ class ChannelManager {
 	std::string	getTopicOf(std::string const &channelName) const;
 	int			setTopicOf(std::string const &channelName, std::string const &newTopic, Client const &user);
 
-	//JOIN CHECK
+	//JOIN
 	bool	joinCheck_l(std::string const &channelName)								const;
 	bool	joinCheck_k(std::string const &channelName, std::string const &key)		const;
 	bool	joinCheck_i(std::string const &channelName, std::string const &user)	const;
 	bool	joinCheck_bans(std::string const &user, std::string const &channelName)	const;
+
+	std::vector<std::string> makeUserListOf(std::string const &channelName)			const;
 
 	//MODE
 	std::string	getUserModeAsString(std::string const &user, std::string const &channelName)	const;

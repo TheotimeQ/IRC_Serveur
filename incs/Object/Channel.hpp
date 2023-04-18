@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 11:17:45 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/18 08:55:17 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/18 11:14:25 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,7 @@ class Channel {
 	std::string			makeUserStringList()							const;
 	std::string			makeUserStatusList(std::string const &username)	const;
 	std::string			makePrefix(t_clientData const &status)			const;
+	std::vector<std::string>	makeUserList()							const;
 
 		//debug
 	void				showUsers()										const;

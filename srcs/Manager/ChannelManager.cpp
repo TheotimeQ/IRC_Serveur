@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/18 10:07:00 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/18 11:13:05 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -276,8 +276,7 @@ void	ChannelManager::allChannelSend(std::string const &msg_1, std::string const 
 }
 
 
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ join checks ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-/* ~~~~~~~~~~~~~~~~~~~~ [true] if check is ok [false] if not ~~~~~~~~~~~~~~~~~~ */
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ JOIN ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 bool	ChannelManager::joinCheck_l(std::string const &channelName) const {
 	t_mapChannel::const_iterator	it;
@@ -340,6 +339,19 @@ bool	ChannelManager::joinCheck_bans(std::string const &user, std::string const &
 			return false;
 	}
 	return true;
+}
+
+std::vector<std::string> ChannelManager::makeUserListOf(std::string const &channelName)	const {
+	std::vector<std::string> userList;
+	t_mapChannel::const_iterator	it;
+
+	it = _chanList.find(channelName);
+	if (it == _chanList.end()) {
+		log("makeUserListOf() error");
+	} else {
+		userList = it->second.makeUserList();
+	}
+	return userList;
 }
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MODE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */

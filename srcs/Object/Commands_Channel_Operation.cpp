@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/18 10:47:10 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/18 11:26:15 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,26 +17,24 @@
 /* ==> JOIN <== */
 
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.1
-void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
+void  JOIN_Command::Execute(Client *client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
-    (void )Client_Manager;
-
 	showStringVector("Args", Args); //cheking debug
 
-	if (!Guard(Client, Args, "JOIN"))
+	if (!Guard(client, Args, "JOIN"))
 		return ;
 	// [1] Le channel n'existe pas -> c'est donc une creation
 	// 403    SERR_NOSUCHCHANNEL "<channel name> :No such channel" 
 	//- Used to indicate the given channel name is invalid
 	if (!Channel_Manager.isChannelExists(Args[1])) {
 
-		int ret = Channel_Manager.addNewChannel(Args[1], (*Client));
+		int ret = Channel_Manager.addNewChannel(Args[1], (*client));
 		
 		if (ret == 0) { // le channel est bien ajoute
 
 			//JOIN SUCCEED : ":Zel!~a@localhost JOIN #test \n"
-			Send_Cmd(Client->Socket, BuildRep_CmdEvent(*Client, Args[0], Args[1]));
-			Log("JOIN",Client->NickName + " join " + Args[1]);
+			Send_Cmd(client->Socket, BuildRep_CmdEvent(*client, Args[0], Args[1]));
+			Log("JOIN",client->NickName + " join " + Args[1]);
 			
 			// DEBUG
 			// std::cout << "chan_list : " << Channel_Manager.getChanList() << std::endl; //checking
@@ -46,7 +44,7 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 			// DEBUG
 
 		} else { // toute forme d'erreur lie a un mauvais nom de channel
-		Send_Cmd(Client->Socket, BuildRep_Basic(403, Client->NickName, Args[1], SERR_NOSUCHCHANNEL));
+		Send_Cmd(client->Socket, BuildRep_Basic(403, client->NickName, Args[1], SERR_NOSUCHCHANNEL));
 		}
 	}
 	// [2] Le channel existe (Args[1]), on veut le rejoindre
@@ -64,16 +62,16 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CHECKS WALL ~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 			// si le client est deja dans le channel [facultatif HexChat a la securite]
 			//443    SERR_USERONCHANNEL  "<user> <channel> :is already on channel"
-			if (Channel_Manager.isClientIn(Client->NickName, Args[1])) {
+			if (Channel_Manager.isClientIn(client->NickName, Args[1])) {
 				Log("JOIN", "join refused client already in the channel");
-				Send_Cmd(Client->Socket, BuildRep_Basic(443, Client->NickName, Args[1], SERR_USERONCHANNEL));
+				Send_Cmd(client->Socket, BuildRep_Basic(443, client->NickName, Args[1], SERR_USERONCHANNEL));
 				return ;
 			}
 			// si taille user max (mode -> l)
 			// 471    SERR_CHANNELISFULL "<channel> :Cannot join channel (+l)"
 			if (!Channel_Manager.joinCheck_l(Args[1])) {
 				Log("JOIN", "join refused joinCheck_l");
-				Send_Cmd(Client->Socket, BuildRep_BasicChan(471, Client->NickName, Args[1], SERR_CHANNELISFULL));
+				Send_Cmd(client->Socket, BuildRep_BasicChan(471, client->NickName, Args[1], SERR_CHANNELISFULL));
 				return ;
 			}
 
@@ -81,33 +79,48 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 			// 475    SERR_BADCHANNELKEY "<channel> :Cannot join channel (+k)
 			if (!Channel_Manager.joinCheck_k(Args[1], (Args.size() > 2 ? Args[2] : ""))) {
 				Log("JOIN", "join refused joinCheck_k");
-				Send_Cmd(Client->Socket, BuildRep_Basic(475, Client->NickName, Args[1], SERR_BADCHANNELKEY));
+				Send_Cmd(client->Socket, BuildRep_Basic(475, client->NickName, Args[1], SERR_BADCHANNELKEY));
 				return ;
 			}
 
 			// si invite-only (mode +i)
 			// 473    SERR_INVITEONLYCHAN "<channel> :Cannot join channel (+i)"
-			if (!Channel_Manager.joinCheck_i(Args[1], Client->NickName)) {
+			if (!Channel_Manager.joinCheck_i(Args[1], client->NickName)) {
 				Log("JOIN", "join refused joinCheck_i");
-				Send_Cmd(Client->Socket, BuildRep_Basic(473, Client->NickName, Args[1], SERR_INVITEONLYCHAN));
+				Send_Cmd(client->Socket, BuildRep_Basic(473, client->NickName, Args[1], SERR_INVITEONLYCHAN));
 				return ;
 			}
 
 			// si l'user est dans la liste des bans/kicked
 			// 474    SERR_BANNEDFROMCHAN "<channel> :Cannot join channel (+b)
-			if (!Channel_Manager.joinCheck_bans(Client->NickName, Args[1])) {
-				Send_Cmd(Client->Socket, BuildRep_Basic(474, Client->NickName, Args[1], SERR_BANNEDFROMCHAN));
+			if (!Channel_Manager.joinCheck_bans(client->NickName, Args[1])) {
+				Send_Cmd(client->Socket, BuildRep_Basic(474, client->NickName, Args[1], SERR_BANNEDFROMCHAN));
 				return ;
 			}
 
 	/* ~~~~~~~~~~~~~~~~~~~~~~~~ CHECKS WALL DONE ~~~~~~~~~~~~~~~~~~~~~~ */
 			// SINON tout est ok -> ajoute le client au channel + build reponse ()
-			Channel_Manager.addClientToChannel(*Client, Args[1]);
+			Channel_Manager.addClientToChannel(*client, Args[1]);
 
 			// + annonce a tte la chan (lui compris)
-			Channel_Manager.channelSend(Client->NickName, Args[1], ":" + Client->makeFullName() + " JOIN " + Args[1], true);
+			Channel_Manager.channelSend(client->NickName, Args[1], ":" + client->makeFullName() + " JOIN " + Args[1], true);
 	
-			Log("JOIN",Client->NickName + " join " + Args[1]);
+			Log("JOIN",client->NickName + " join " + Args[1]);
+
+			// [+] update hexchat users pannel if the joinning client is an Oper
+			if (client->Oper) {
+				std::vector<std::string> userList = Channel_Manager.makeUserListOf(Args[1]);
+				std::vector<std::string>::iterator it;
+				for (it = userList.begin(); it != userList.end(); ++it) {
+					Client *target;
+					target = Client_Manager.Get_Client(*it);
+					if (target != NULL) {
+						WHO_Command who;
+						who.Execute(target, Args, Channel_Manager, Client_Manager);
+					}
+				}
+			}
+
 	}
 }
 
