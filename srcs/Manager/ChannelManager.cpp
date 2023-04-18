@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/18 09:52:17 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/18 10:07:00 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,8 +249,8 @@ void	ChannelManager::channelSend(std::string const &user, std::string const &cha
 		log("channelSend() error");
 		return ;
 	}
-	if (!it->second.canTalk(user))
-		return ;
+	// if (!it->second.canTalk(user)) // [!] ------> probleme peut pas joindre +m ne pas gerer ca ici mais dans privmsg
+	// 	return ;
 	usersStats = getUsersOf(channelName);
 	for (its = usersStats.begin(); its != usersStats.end(); ++its) {
 		// [?] secu pour par s'envoyer a lui meme ? (voir apres) // booleen a penser si besoin ok

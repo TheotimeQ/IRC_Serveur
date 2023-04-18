@@ -65,9 +65,6 @@ int main(int argc, char **argv)
 
 //LOUP 
 
-// - JOIN bug -> rejoindre un channel +m  impossible
-// - canTalk() ---> voir comment gerer le +n de la meme facon cantalkFromOut()
-
 // - un OPERATOR qui join un channel proc un WHO de tous les users ? => update pastille
 //    If a JOIN is successful, the user is then sent the channel's topic
 //    (using RPL_TOPIC)
@@ -80,6 +77,7 @@ int main(int argc, char **argv)
 // ---------------------------------------------------------------
 
 //Theo
+// - Client->Oper >> prioritaire par rapport a >> canTalk() || tu peux gerer comme ca ? (pas acces au clientManager dans channel simplement)
 // - USER ajout recuperation hostname ?
 // - Away message pas bon  + /back pour remetter le away a false
 // - Ameliorer le bot
@@ -91,6 +89,13 @@ int main(int argc, char **argv)
 // - Enlever les commentaire et clean les fichier pour le rendu 
 // - Demander a un stud de nous le casser 
 // - Rendre
+
+// ---------------------------------------------------------------
+
+// *** petits bugs ~ Anomalies ~ a reparer ou assumer ***
+// Dans un channel +m (modere), hexchat permet d'ecrire mais ce n'est pas envoye aux autres users du channel
+// HexChat choppe des sauts de ligne dans le 'home' 
+
 
 // ---------------------------------------------------------------
 

@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 10:18:15 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/18 09:14:10 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/18 10:29:16 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,16 +138,21 @@ void	Channel::rmOpPrivilege(std::string const &username) {
 bool	Channel::canTalk(std::string const &nickname)	const {
 	t_mapClientStatus::const_iterator	it;
 	
-	if (mode.m == false)
+	if (mode.m == false && mode.n == false)
 		return true;
-	it = _users.find(nickname);
-	if (it == _users.end()) {
-		log("canTalk() error");
+	if (mode.n == true && _users.find(nickname) == _users.end())
+		return false;
+	if (mode.m == true) {
+		it = _users.find(nickname);
+		if (it == _users.end()) {
+			log("canTalk() can't find " + nickname + " in " + _name);
+			return false;
+		}
+		if (it->second.status.chop || it->second.status.creator || it->second.status.voice)
+			return true;
 		return false;
 	}
-	if (it->second.status.chop || it->second.status.creator || it->second.status.voice)
-		return true;
-	return false;
+	return true;
 }
 
 // To be a guest, user must be in guests AND musn't be in bans
