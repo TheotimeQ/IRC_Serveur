@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/18 08:54:39 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/18 09:52:17 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -274,7 +274,6 @@ void	ChannelManager::allChannelSend(std::string const &msg_1, std::string const 
 		channelSend(clientStatus.begin()->first, it->first, msg, true);
 	}
 }
-
 
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ join checks ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
@@ -546,7 +545,19 @@ std::string	ChannelManager::howManyIn(std::string const &channelName) const {
 	return I_To_S(it->second.countUsers());
 }
 
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ getter setters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ INVITE ~ KICK ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+void	ChannelManager::rmFromGuests(std::string const &channelName, std::string const &user) {
+	t_mapChannel::iterator	it;
+
+	it = _chanList.find(channelName);
+	if (it == _chanList.end()) {
+		log("rmFromGuests() error");
+		return ;
+	}
+	rmFromVectString(it->second.guests, user);
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ getter setters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 t_mapChannel const	&ChannelManager::getChanList() const { return _chanList; }
 

@@ -65,11 +65,10 @@ int main(int argc, char **argv)
 
 //LOUP 
 
-
-// - KICK doit enlever de la guestlist et INVITE enlever de la banlist
 // - JOIN bug -> rejoindre un channel +m  impossible
-// - canTalk() ---> voir comment gerer le +n de la meme facon
+// - canTalk() ---> voir comment gerer le +n de la meme facon cantalkFromOut()
 
+// - un OPERATOR qui join un channel proc un WHO de tous les users ? => update pastille
 //    If a JOIN is successful, the user is then sent the channel's topic
 //    (using RPL_TOPIC)
 

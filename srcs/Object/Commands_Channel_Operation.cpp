@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/18 09:09:45 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/18 09:36:50 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -267,11 +267,6 @@ std::vector<std::pair<std::string, std::string> >	LIST_Command::getChanToList(Cl
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.7
 void  INVITE_Command::Execute(Client *client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
-    // (void )Args;
-    // (void )Channel_Manager;
-    // (void )Client_Manager;
-    // (void )client;
-
 	if (!Guard(client, Args, "INVITE"))
 		return ;
 	
@@ -384,6 +379,7 @@ void KICK_Command::KICK_userList(Client *client, ChannelManager &Channel_Manager
 	if (target == NULL)
 		return;
 	Channel_Manager.channelSend(client->NickName, channelName, BuildRep_CmdEvent(*target, "PART", channelName + " " + comment + " - by " + client->NickName) , true);
+	Channel_Manager.rmFromGuests(channelName, *it);
 	Channel_Manager.rmClientToChannel(*target, channelName);
 	}
 }
