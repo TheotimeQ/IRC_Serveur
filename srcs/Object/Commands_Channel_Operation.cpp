@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/18 11:26:15 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/18 12:18:15 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,12 @@ void  JOIN_Command::Execute(Client *client, std::vector<std::string> Args, Chann
 	
 			Log("JOIN",client->NickName + " join " + Args[1]);
 
-			// [+] update hexchat users pannel if the joinning client is an Oper
+			// [+] donner le topic s'il y en a un ==> [!] fonction a part ?
+			if (Channel_Manager.getTopicOf(Args[1]).compare("") != 0) {
+				Send_Cmd(client->Socket, BuildRep_Basic(332, client->NickName, Args[1], Channel_Manager.getTopicOf(Args[1])));
+			}
+
+			// [+] update hexchat users pannel if the joinning client is an Oper  [!] ==> fonction a part
 			if (client->Oper) {
 				std::vector<std::string> userList = Channel_Manager.makeUserListOf(Args[1]);
 				std::vector<std::string>::iterator it;

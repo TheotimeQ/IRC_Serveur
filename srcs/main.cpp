@@ -65,8 +65,6 @@ int main(int argc, char **argv)
 
 //LOUP 
 
-// - le mode user est prevu dans le sens ==> MODE #channel +o Pignouf
-// -					  pour le moment ==> MODE #channel Pignouf +o
 //    If a JOIN is successful, the user is then sent the channel's topic
 //    (using RPL_TOPIC)
 
