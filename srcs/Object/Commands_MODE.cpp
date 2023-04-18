@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:10:23 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/17 13:45:27 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/17 14:31:51 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,7 @@ void	MODE_Command::Hub(Client *client, std::vector<std::string> Args, ChannelMan
 
 // when user prompt is /mode #channelName -- user must be operator to get info from outside
 void	MODE_Command::Exe_Channel_Info(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) const {
-	// Log("MODE", "censure");
 	Log("MODE", "get mode info from channel : " + Args[1]);
-	
 	if (Client->Oper) {
 		Send_Solo_RPL_CHANNELMODEIS(Client, Args, Channel_Manager, Client_Manager);
 		return ;

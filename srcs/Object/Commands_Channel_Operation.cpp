@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/17 14:19:21 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/17 14:55:45 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,12 @@ void  JOIN_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 	}
 	// [2] Le channel existe (Args[1]), on veut le rejoindre
 	else {
-		std::cout << "Log :" << Client->NickName << " want to join channel : " << Args[1] << std::endl; // checking
+		// std::cout << "Log :" << Client->NickName << " want to join channel : " << Args[1] << std::endl; // checking
 
 		// DEBUG
 			// std::cout << "chan_list : " << Channel_Manager.getChanList() << std::endl; //checking
-			// std::cout << "usersList :" << Channel_Manager.getUsersOf(Args[1]) << std::endl; //checking
-			// std::cout << "[wtf]" << std::endl;
-			// Channel_Manager.getChannel(Args[1]).showUsers();
+			std::cout << "usersList :" << Channel_Manager.getUsersOf(Args[1]) << std::endl; //checking
+			Channel_Manager.getChannel(Args[1]).showUsers();
 		// DEBUG
 
 		// [2]-[1] passer les differents checks -> build msgs
@@ -417,7 +416,7 @@ void  WHO_Command::Execute(Client *Client, std::vector<std::string> Args, Channe
 		return ;
 	if (Channel_Manager.isChannelExists(Args[1]) && Channel_Manager.isClientIn(Client->NickName, Args[1])) {
 		std::string addon = Channel_Manager.makeUserStringList(Args[1]);
-		std::string symbol = "="; // [+] fction getSymbol en fonction du type de channel
+		std::string symbol = "=";
 		Send_Cmd(Client->Socket, BuildRep_Basic(353, Client->NickName, symbol + " " + Args[1], addon));
 		Send_Cmd(Client->Socket, BuildRep_Basic(366, Client->NickName, Args[1], ":END of who"));
 	}
