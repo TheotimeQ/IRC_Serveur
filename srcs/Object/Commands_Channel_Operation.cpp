@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/18 09:36:50 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/18 10:47:10 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -283,10 +283,13 @@ void  INVITE_Command::Execute(Client *client, std::vector<std::string> Args, Cha
 			return ;
 	}
 
-	// [3] Checking that Args[1] is a valid user
+	// [3] Checking that Args[1] is a valid user and not away
 	Client *target = Client_Manager.Get_Client(Args[1]);
 	if (target == NULL) {
 		Send_Cmd(client->Socket, BuildRep_Basic(401, client->NickName, Args[2], Args[1] + " : " + SERR_NOSUCHNICK));
+		return;
+	} else if (target->Away) {
+		Send_Cmd(client->Socket, BuildRep_Basic(301, client->NickName, "", Args[1] + " : " + target->Away_Str));
 		return;
 	}
 

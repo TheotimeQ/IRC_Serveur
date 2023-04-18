@@ -65,13 +65,14 @@ int main(int argc, char **argv)
 
 //LOUP 
 
+// - INVITE -> away si on veut (peaufinage)
 // - un OPERATOR qui join un channel proc un WHO de tous les users ? => update pastille
 //    If a JOIN is successful, the user is then sent the channel's topic
 //    (using RPL_TOPIC)
 
 // - regler le : #gogo They aren't on that channel --> message a mieux formater
-// - nettoyer
-// - INVITE -> away si on veut (peaufinage)
+// - decouper le code ~> le wallcheck de JOIN
+// - nettoyer ~> comments, les  //debug et //checking
 
 
 // ---------------------------------------------------------------
