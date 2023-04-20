@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:10:11 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/18 11:09:48 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/20 11:10:13 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ class ChannelManager {
 	// INVITE ~ KICK
 	void	rmFromGuests(std::string const &channelName, std::string const &user);
 
-	//Ajout pour fonction theotime <@_@') [!]
+	// THEOTIME
 	Channel		*Get_Channel(std::string &Channel_Name);
 };
 

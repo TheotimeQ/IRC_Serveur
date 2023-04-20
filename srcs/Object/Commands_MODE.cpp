@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:10:23 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/18 11:59:52 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/20 11:03:21 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,7 @@
 //==================================== Channel operations =====================================
 /* =========================================> MODE <======================================== */
 
-//. https://stackoverflow.com/questions/12886573/implementing-irc-rfc-how-to-respond-to-mode
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.2.3
-// Note that there is a maximum limit of three (3) changes per command for modes that take a parameter
 void  MODE_Command::Execute(Client *Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
 	/* MODE PROCESS */
@@ -44,7 +42,7 @@ void  MODE_Command::Execute(Client *Client, std::vector<std::string> Args, Chann
 		return ;
 	}
 
-	//[5] now, we can dispatch into our three kind of MODE_SUBCOMANDE : CHANNEL or USER
+	//[5] now, we can dispatch into 2 kind of MODE_SUBCOMANDE : CHANNEL or USER
 	Hub(Client, Args, Channel_Manager, Client_Manager);
 }
 
@@ -92,9 +90,8 @@ void	MODE_Command::Exe_Channel_Info(Client *Client, std::vector<std::string> Arg
 }
 
 // CHANNEL MODE - Basic
-// when user prompt is /mode #channelName <[+-][ntmsipNTMSIP]>
+// user prompt : /mode #channelName <[+-][ntmsipNTMSIP]>
 void	MODE_Command::Exe_Basic_Settings(Client *Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager) const {
-	(void)Client_Manager;
 	bool	isPlus = (Args[2][0] == '+' ? true : false);
 
 	Log("MODE", "basic channel mode setting : " + Args[2]);
@@ -103,12 +100,11 @@ void	MODE_Command::Exe_Basic_Settings(Client *Client, std::vector<std::string> A
 }
 
 // CHANNEL MODE - Advanced
-// when user prompt is /mode #nomChannel <[+-][lkLK]> *<Unsigned/key> (not needed if '-')
+// user prompt : /mode #nomChannel <[+-][lkLK]> *<Unsigned/key> (not needed if '-')
 void	MODE_Command::Exe_Advanced_Settings(Client *Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager) const {
-	(void)Client_Manager;
-	
 	bool	isPlus = (Args[2][0] == '+' ? true : false);
 	std::string option = (Args.size() == 4 ? Args[3] : "");
+
 	Log("MODE", "advanced channel mode setting : " + Args[2]);
 	if (toupper(Args[2][1]) == 'L') {
 		Channel_Manager.setLimitModeOfAsWith(Args[1], isPlus, option);
@@ -145,7 +141,7 @@ void	MODE_Command::Exe_user_MODE(Client *Client, std::vector<std::string> Args, 
 		return ;
 	}
 
-	// [1] same
+	// [1+] same
 	if (Args.size() == 4 && !Channel_Manager.isClientIn(Args[2], Args[1]) && !Channel_Manager.isClientIn(Args[3], Args[1])) {
 		Send_Cmd(Client->Socket, BuildRep_Basic(441, Client->NickName, Args[1], SERR_USERNOTINCHANNEL));
 		return ;
@@ -180,13 +176,19 @@ void	MODE_Command::Exe_user_SET_MODE(Client *client, std::vector<std::string> Ar
 	Log("MODE", "user mode setting : " + Args[3] + " to " + Args[2]);
 	isPlus = (Args[3][0] == '+' ? true : false);
 	Channel_Manager.setUserModesOfAs(Args[1], Args[2], isPlus, Args[3]);
-	
-	// case b or B (ban) -> sending back info to client
 	if (findSetInString("bB", Args[3]) && isPlus) {
 		Client *target = Client_Manager.Get_Client(Args[2]);
 		if (target == NULL)
 			return;
 		Channel_Manager.channelSend(client->NickName, Args[1], BuildRep_CmdEvent(*target, "PART", Args[1] + " " + "BAN" + " - by " + client->NickName) , true);
 		Channel_Manager.rmClientToChannel(*target, Args[1]);
+	} else {
+		std::string umode;
+		if (Client_Manager.Is_Client_Oper(Args[2]))
+			umode = "operator";
+		else
+			umode = Channel_Manager.getUserModeAsString(Args[2], Args[1]);
+		Send_Cmd(client->Socket, BuildRep_Basic(221, client->NickName, Args[1], Args[2] + " modes : " + umode));
+		return ;
 	}
 }

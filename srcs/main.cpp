@@ -63,17 +63,18 @@ int main(int argc, char **argv)
 
 // ---------------------------------------------------------------
 
+// [!] SEGFAULT [!]
+// - cas bizzarre :: si on ne compile PAS avec -fsanitize=address join puis quit un channel ==> SEGFAULT (QUIT seulement pas PART)
+
+
 //LOUP 
-
-// - decouper le code ~> le wallcheck de JOIN
-// - nettoyer ~> comments, les  //debug et //checking
-
-// - regler le : #gogo They aren't on that channel --> message a mieux formater : HUm /U_U/
+// - regler le : #gogo They aren't on that channel --> message a mieux formater : HUm /'U_U'/
 
 
 // ---------------------------------------------------------------
 
 //Theo
+// - [+] le pb segfault avec QUIT sans fsanitize (voir au dessus)
 // - [+]Client->Oper >> prioritaire par rapport a >> canTalk() || tu peux gerer comme ca ? (pas acces au clientManager dans channel simplement)
 // - [+]si on utilise AWAY avec netcat (sans arguments, le comportement est pas bon, il lui manque la raison d'afk par defaut) J'utilise la fonction Guard() contre ca dans mes cmdes
 // - USER ajout recuperation hostname ?
@@ -85,8 +86,16 @@ int main(int argc, char **argv)
     // 		leavingMsg = leavingMsg.substr(0, 200);
 
 // - Enlever les commentaire et clean les fichier pour le rendu 
-// - Demander a un stud de nous le casser 
+
+// ---------------------------------------------------------------
+
+//Nous deux quand on se verra avant de push
+// - ajouter un slot Operator pour le correcteur (genre nickname : Outstanding - pass : giveme) ~> (")^_^'(")
+// - Demander a un stud de nous le casser => on fait bosser un peu notre parain ? 
+// - Enlever les commentaire ([!][?] debug checking) et clean les fichiers pour le rendu 
 // - Rendre
+
+
 
 // ---------------------------------------------------------------
 
@@ -98,7 +107,7 @@ int main(int argc, char **argv)
 // ---------------------------------------------------------------
 
 //Implementation fontionnelles
-// JE ferais ce doc sur papier pour les correcteurs
+// \O-O) JE ferais ce doc sur papier pour les correcteurs \O-O)
 
 
 // - USER

@@ -6,13 +6,12 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 10:18:15 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/18 11:17:44 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/20 10:32:10 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../incs/Object/Channel.hpp"
 
-// public pour faire une liste de map
 Channel::Channel()
 : _name("#default")
 {
@@ -23,9 +22,8 @@ Channel::~Channel() {
 	log(" is destroyed");
 }
 
-// Utiliser un try-catch pour creer un channel -> throw exceptions
 Channel::Channel(std::string const &name, Client &chop) 
-: _name(name), _topic(""), _key("")
+: _name(name), _topic(NOTOPIC), _key("")
 {
 	log("creation in progress");
 	initChannel();
@@ -55,7 +53,6 @@ void		Channel::setKey(std::string const &newKey) {
 
 t_chanmode const	&Channel::getChanmode() const { return mode; }
 
-// check if channel users is empty or only with ban clients
 bool				Channel::isEmpty()	const {
 	return (_users.size() < 1 ? true : false);
 }
@@ -184,7 +181,6 @@ void	Channel::dealUsersStatus(Client &chop) {
 	_users[chop.NickName] = clientData;
 }
 
-// can't use memset or bzero because there is a std::map<> in t_chanmode struct
 void				Channel::initChannel() {
 	bzero(&mode, sizeof(t_chanmode));
 	_users.clear();
@@ -274,7 +270,7 @@ std::ostream	&operator<<(std::ostream &o, t_mapClientStatus const &users) {
 
 	while (it != users.end()) {
 		if (it->second.status.creator == true) {
-			o << "!"; // channel creator tag (maybe it should be ~ instead)
+			o << "!"; // channel creator tag
 		} else if (it->second.status.chop == true) {
 			o << "@"; // channel operator tag
 		}

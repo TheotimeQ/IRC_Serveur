@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:12:57 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/17 14:59:16 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/20 09:55:16 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,17 @@ class OPER_Command : public A_Command {
 
 class JOIN_Command : public A_Command { 
     public:
-        virtual void Execute(Client *Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager); };
+        virtual void Execute(Client *Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager); 
+	private:
+				void	joinningNewChannel(Client *client, std::vector<std::string> Args, ChannelManager &Channel_Manager) const;
+				bool	passAllChecks(Client *client, std::vector<std::string> Args, ChannelManager &Channel_Manager) const;
+				void	operJoinning(std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) const;
+};
 
 class PART_Command : public A_Command 
 { 
     public:
         virtual void    Execute(Client *Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager);
-        
 	private:
 		void		    leavingProcess(Client *Client, std::string const &channelName, ChannelManager &Channel_Manager, std::string &leavingMsg);
 };

@@ -30,7 +30,6 @@ class Command_Manager
 		~Command_Manager();
 		
 		int		Interpret_Data(Client *Client, ChannelManager &Channel_Manager, Client_Manager &Client_Manager);
-
 };
 
 #endif

@@ -42,8 +42,6 @@ class Client_Manager
 		void			log(std::string const &logMsg) const;
 
 		std::string* 	Get_Oper_Pass(std::string NickName);
-
-		// std::vector<Client> const &Get_All_Clients()	const; // [!] piste, a enlever ! //checking
 };
 
 #endif

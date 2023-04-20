@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/18 11:13:05 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/20 10:53:38 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ ChannelManager	&ChannelManager::operator=(ChannelManager const &righty) {
 	return *this;
 }
 
-
-
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ BASIC MANAGEMENT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 // channel's name is [200]length prefixed by &, #, +, !
@@ -42,7 +40,6 @@ int		ChannelManager::checkChanName(std::string const &name) const {
 		log("name too short : " + name);
 		return CM_WRONGNAMEFORMAT;
 	}
-		
 	else if ((name[0] != '#' && name[0] != '!' && name[0] != '+' && name[0] != '&')) {
 		log("wrong name prefix : " + name);
 		return CM_WRONGNAMEFORMAT;
@@ -77,14 +74,11 @@ void	ChannelManager::rmClientToChannel(Client &user, std::string const &channelN
 		log("rmClientToChannel() error");
 		return;
 	}
-	
-	_chanList[channelName].delUser(user); //[!] segfault ?
-
+	_chanList[channelName].delUser(user);
 	if (_chanList[channelName].isEmpty())
 		rmChannel(channelName);
 }
 
-// option 
 void	ChannelManager::rmClientFromAll(Client &user, std::string Msg) {
 	t_mapChannel::const_iterator	it;
 
@@ -128,27 +122,18 @@ t_status const &ChannelManager::getStatusOfIn(Client const &user, std::string co
 // try to set a topic, return values : 0 on success | > 0 if errors
 int			ChannelManager::setTopicOf(std::string const &channelName, std::string const &newTopic, Client const &user) {
 	t_mapChannel::iterator	it;
-	// int	ret;
-	(void) user;
 
 	it = _chanList.find(channelName);
 	if (it != _chanList.end()) {
-
-		// Si le channel a le mode +t --> topic settable by channel operator only flag
-		if (it->second.mode.t == true) {
+		if (it->second.mode.t == true && !user.Oper) {
 			t_status status = getStatusOfIn(user, channelName);
 			if (status.creator == false && status.chop == false) {
 				log(user.NickName + LOGCHAN_NOTOPICPERM + channelName);
 				return CM_NOTOPICPERM;
 			}
 		}
-		
-		// si le mode autorise changement de topic () // +si le client a les droits
 		it->second.setTopic(newTopic);
-		return 0; //GOOD
-		// constinuer ici (...)
-		
-		// sinon retour err CM_TOPICLOCK
+		return 0;
 	} else {
 		log(ERRCHAN_WRONGNAME + channelName);
 		return CM_NOCHANNEL;
@@ -218,7 +203,6 @@ bool	ChannelManager::isClientSomewhere(std::string const &nickname)	const {
 
 	for (it = _chanList.begin(); it != _chanList.end(); ++it) {
 		if (it->second.isClientIn(nickname)) {
-			//log("Client " + nickname + " found in channel : " + it->second.getName());
 			return true;
 		}
 	}
@@ -249,17 +233,10 @@ void	ChannelManager::channelSend(std::string const &user, std::string const &cha
 		log("channelSend() error");
 		return ;
 	}
-	// if (!it->second.canTalk(user)) // [!] ------> probleme peut pas joindre +m ne pas gerer ca ici mais dans privmsg
-	// 	return ;
 	usersStats = getUsersOf(channelName);
 	for (its = usersStats.begin(); its != usersStats.end(); ++its) {
-		// [?] secu pour par s'envoyer a lui meme ? (voir apres) // booleen a penser si besoin ok
 		if (!self && its->first.compare(user) == 0)
 			continue ;
-
-		//log("client : " + its->second.him.NickName + "socket : " + I_To_S(its->second.him.Socket));
-		
-		//std::string nameFull = ":" + its->second.him.NickName + "!" + its->second.him.UserName + "@" + its->second.him.HostName + " "; 
 		Send_Cmd(its->second.him.Socket, msg + "\n");
 	}
 }
@@ -526,7 +503,7 @@ std::string	ChannelManager::makeUserStringList(std::string const &channelName)	c
 std::vector<std::pair<std::string, std::string> >	ChannelManager::makeChannelList(Client *client) const {
 	std::vector<std::pair<std::string, std::string> > list;
 	t_mapChannel::const_iterator	it;
-	std::string						topic; // stamp-topic
+	std::string						topic;
 
 	it = _chanList.begin();
 	while (it != _chanList.end()) {
@@ -542,7 +519,6 @@ std::vector<std::pair<std::string, std::string> >	ChannelManager::makeChannelLis
 		list.push_back(pair);
 		++it;
 	}
-	showVectStringPair(list); //checking - debug
 	return list;
 }
 
@@ -599,6 +575,20 @@ t_mapClientStatus const	&ChannelManager::getUsersOf(std::string const &channelNa
 	}
 }
 
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Theotime needs ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+Channel	*ChannelManager::Get_Channel(std::string &Channel_Name)
+{
+	std::map<std::string, Channel>::iterator	it;
+
+	it = _chanList.find(Channel_Name);
+
+	if (it != _chanList.end()) 
+		return &(it->second);
+
+	else 
+		return NULL;
+}
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ private methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
