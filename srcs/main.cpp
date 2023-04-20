@@ -87,7 +87,7 @@ int main(int argc, char **argv)
 
 //Theo
 // - USER ajout recuperation hostname ?
-// - Away message pas bon  + /back pour remetter le away a false
+// - On peut msg des gens qui sont pas log  -> fixe ? 
 // - Ameliorer le bot
 // - Test avec big commande
 
