@@ -3,7 +3,7 @@
 NAME					=	ircserv
 
 CMP						=	c++
-FLG						=	-Wall -Wextra -Werror -std=c++98 -fsanitize=address
+FLG						=	-Wall -Wextra -Werror -std=c++98 #-fsanitize=address
 RM						=	rm -rf
 BUILD_DIR				= 	build/
 
@@ -21,7 +21,7 @@ OBJ_INC					=  	$(addprefix $(OBJ_DIR)/, $(OBJ_FILE))
 INC						= 	$(addsuffix .hpp, $(addprefix $(INC_DIR)/, $(INC_FILE)))
 
 SRCS_DIR				=	srcs
-SRCS_FILE				=	$(OBJ_SRC) $(MANAGER_SRC) main utils Object/Commands_Channel_Operation Object/Commands_MODE Object/Commands_Registration Object/Commands_Message
+SRCS_FILE				=	$(OBJ_SRC) $(MANAGER_SRC) main utils Object/Commands_Channel_Operation Object/Commands_MODE Object/Commands_JOIN Object/Commands_Registration Object/Commands_Message
 
 MANAGER_SRC				=  	$(addprefix $(MANAGER_DIR)/, $(MANAGER_FILE))
 OBJ_SRC					=  	$(addprefix $(OBJ_DIR)/, $(OBJ_FILE))
@@ -29,7 +29,7 @@ SRCS					=  	$(addsuffix .cpp, $(addprefix $(SRCS_DIR)/, $(SRCS_FILE)))
 
 OBJS			    	= 	$(SRCS:%.cpp=$(BUILD_DIR)%.o)
 
-$(BUILD_DIR)%.o:		%.cpp $(INC)
+$(BUILD_DIR)%.o:		%.cpp $(INC) Makefile
 						@echo -n .
 						@mkdir -p $(@D)
 						@$(CMP) $(FLG) -I$(INC_DIR) -c $< -o $@

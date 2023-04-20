@@ -38,33 +38,9 @@ class A_Command
 		void			Log(std::string const &cmde, std::string const &msg) const;
 
 		/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Build reponse mehod-tool ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-
-			//     [Basic REP] -> ":IRC 332 Zel #test :This is my cool channel! \n"
-			//     [Basic REP] -> ":<server> <code> <user> <channel> :<msg_to_send> \n"
-			// [BasicChan REP] -> ":<server> <code> <user> <channel> :<channel : msg_to_send> \n"
 		std::string	BuildRep_Basic(int code, std::string const &nick, std::string const &channel, std::string const &addon) const;
 		std::string	BuildRep_BasicChan(int code, std::string const &nick, std::string const &channel, std::string const &addon) const;
-
-
-			//     [Home REP] -> there is no channel to answer -> send message to 'home' with 000 code
-			//     [Home REP] -> ":<server> <000> <user> <msg_to_send> \n"
-			// [HomeChan REP] -> ":<server> <000> <user> <channel : msg_to_send> \n"
-		std::string	BuildRep_Home(std::string const &nick, std::string const &addon) const;
-		std::string	BuildRep_HomeChan(std::string const &nick, std::string const &channel, std::string const &addon) const;
-
-
-	/* (a ameliorer remplacer)*/
-
-			// [Cmde REP] -> ":IRC 461 <command> :Not enough parameters"
-			// [Cmde REP] -> ":<server> <code> <cmde> :<msg_to_send> \n"
 		std::string	BuildRep_Cmde(int code, std::string const &cmde, std::string const &addon) const;
-
-			// [Chan REP ] -> ":IRC 442 <channel> :You're not on that channel"
-			// [Chan REP ] -> ":<server> <code> <channel> :<msg_to_send> \n"
-		std::string	BuildRep_Chan(int code, std::string const &channel, std::string const &addon) const;
-		// Au final Chan et Cmde sont identiques a part le nom des arguments
-
-			// [Command Event REP] -> ":Zel!~a@localhost JOIN #test \n"
 		std::string	BuildRep_CmdEvent(Client const &user, std::string const &cmde, std::string const &channel) const;
 
 

@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:10:11 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/17 14:21:30 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/20 11:10:13 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,11 +75,13 @@ class ChannelManager {
 	std::string	getTopicOf(std::string const &channelName) const;
 	int			setTopicOf(std::string const &channelName, std::string const &newTopic, Client const &user);
 
-	//JOIN CHECK
+	//JOIN
 	bool	joinCheck_l(std::string const &channelName)								const;
 	bool	joinCheck_k(std::string const &channelName, std::string const &key)		const;
-	bool	joinCheck_i(std::string const &channelName)								const;
+	bool	joinCheck_i(std::string const &channelName, std::string const &user)	const;
 	bool	joinCheck_bans(std::string const &user, std::string const &channelName)	const;
+
+	std::vector<std::string> makeUserListOf(std::string const &channelName)			const;
 
 	//MODE
 	std::string	getUserModeAsString(std::string const &user, std::string const &channelName)	const;
@@ -96,7 +98,10 @@ class ChannelManager {
 	std::vector<std::pair<std::string, std::string> >	makeChannelList(Client *client) const;
 	std::string	howManyIn(std::string const &channelName) const;
 
-	//Ajout pour fonction theotime <@_@') [!]
+	// INVITE ~ KICK
+	void	rmFromGuests(std::string const &channelName, std::string const &user);
+
+	// THEOTIME
 	Channel		*Get_Channel(std::string &Channel_Name);
 };
 

@@ -63,29 +63,20 @@ int main(int argc, char **argv)
 
 // ---------------------------------------------------------------
 
-//LOUP 
-// - WHO -> + symbol des channels prive secret
-// - MODE -> gerer /mode + #chan + nickname
-// - KICK -> je prend en charge ? c'est lie aux droit des op / halfop
-// - INVITE -> la commande ? + GuestList dans la channel
-// - Finir les commandes sur le channel
-// - regler le : #gogo They aren't on that channel --> message a mieux formater
+// [!] SEGFAULT [!]
+// - cas bizzarre :: si on ne compile PAS avec -fsanitize=address join puis quit un channel ==> SEGFAULT (QUIT seulement pas PART)
 
-// - nettoyer les commandes :
-//    . decouper en petites parties (surtout MODE !)
-//    . nettoyer les build reponse : hom et homechan ne doivent plus servir
-// - notice all user in channel on : MODE KICK PART
-//    If a JOIN is successful, the user is then sent the channel's topic
-//    (using RPL_TOPIC)
-//kick
-//mode
-//invite +i
-//tout les modes (voice , invite , +n )
+
+//LOUP 
+// - regler le : #gogo They aren't on that channel --> message a mieux formater : HUm /'U_U'/
 
 
 // ---------------------------------------------------------------
 
 //Theo
+// - [+] le pb segfault avec QUIT sans fsanitize (voir au dessus)
+// - [+]Client->Oper >> prioritaire par rapport a >> canTalk() || tu peux gerer comme ca ? (pas acces au clientManager dans channel simplement)
+// - [+]si on utilise AWAY avec netcat (sans arguments, le comportement est pas bon, il lui manque la raison d'afk par defaut) J'utilise la fonction Guard() contre ca dans mes cmdes
 // - USER ajout recuperation hostname ?
 // - On peut msg des gens qui sont pas log  -> fixe ? 
 // - Ameliorer le bot
@@ -95,12 +86,28 @@ int main(int argc, char **argv)
     // 		leavingMsg = leavingMsg.substr(0, 200);
 
 // - Enlever les commentaire et clean les fichier pour le rendu 
-// - Demander a un stud de nous le casser 
+
+// ---------------------------------------------------------------
+
+//Nous deux quand on se verra avant de push
+// - ajouter un slot Operator pour le correcteur (genre nickname : Outstanding - pass : giveme) ~> (")^_^'(")
+// - Demander a un stud de nous le casser => on fait bosser un peu notre parain ? 
+// - Enlever les commentaire ([!][?] debug checking) et clean les fichiers pour le rendu 
 // - Rendre
+
+
+
+// ---------------------------------------------------------------
+
+// *** petits bugs ~ Anomalies ~ a reparer ou assumer ***
+// Dans un channel +m (modere), hexchat permet d'ecrire mais ce n'est pas envoye aux autres users du channel
+// HexChat choppe des sauts de ligne dans le 'home' 
+
 
 // ---------------------------------------------------------------
 
 //Implementation fontionnelles
+// \O-O) JE ferais ce doc sur papier pour les correcteurs \O-O)
 
 
 // - USER
@@ -125,10 +132,13 @@ int main(int argc, char **argv)
 
 // - TOPIC
 //         TOPIC <channel> [<topic>]
-// - WHO
-//         WHO [<mask>[,<mask>...]]         Mask ??
+// - WHO || NAMES
+//         WHO [<mask>[,<mask>...]]         Mask ?? c'est #channelName
+//         On fait pas un vrai WHO, on utilise les RPL NAMES c'est hybride-custom-hexchat
+//         
 // - JOIN
-//         JOIN <channel>{,<channel>} [<key>{,<key>}]    Key ??
+//         JOIN <channel> <*key>    Key ?? --> oui si le chan est en mode +k
+//         mon join ne fais qu'un seul channel a la fois en argt
 // - MODE
 //         MODE <channel/user> <mode> [<mode parameters>]
 // - PART
@@ -136,7 +146,7 @@ int main(int argc, char **argv)
 // - KICK
 //         KICK <channel>{,<channel>} <user>{,<user>} [<comment>]
 // - LIST 
-//        LIST [<channel>{,<channel>}] [<target>]
+//        LIST          ---> pas d'args [<channel>{,<channel>}] [<target>]
 
 // Mode implémentés
 

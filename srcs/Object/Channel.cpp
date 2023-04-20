@@ -6,13 +6,12 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 10:18:15 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/17 14:10:32 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/20 10:32:10 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../incs/Object/Channel.hpp"
 
-// public pour faire une liste de map
 Channel::Channel()
 : _name("#default")
 {
@@ -23,9 +22,8 @@ Channel::~Channel() {
 	log(" is destroyed");
 }
 
-// Utiliser un try-catch pour creer un channel -> throw exceptions
 Channel::Channel(std::string const &name, Client &chop) 
-: _name(name), _topic(""), _key("")
+: _name(name), _topic(NOTOPIC), _key("")
 {
 	log("creation in progress");
 	initChannel();
@@ -55,7 +53,6 @@ void		Channel::setKey(std::string const &newKey) {
 
 t_chanmode const	&Channel::getChanmode() const { return mode; }
 
-// check if channel users is empty or only with ban clients
 bool				Channel::isEmpty()	const {
 	return (_users.size() < 1 ? true : false);
 }
@@ -138,16 +135,32 @@ void	Channel::rmOpPrivilege(std::string const &username) {
 bool	Channel::canTalk(std::string const &nickname)	const {
 	t_mapClientStatus::const_iterator	it;
 	
-	if (mode.m == false)
+	if (mode.m == false && mode.n == false)
 		return true;
-	it = _users.find(nickname);
-	if (it == _users.end()) {
-		log("canTalk() error");
+	if (mode.n == true && _users.find(nickname) == _users.end())
+		return false;
+	if (mode.m == true) {
+		it = _users.find(nickname);
+		if (it == _users.end()) {
+			log("canTalk() can't find " + nickname + " in " + _name);
+			return false;
+		}
+		if (it->second.status.chop || it->second.status.creator || it->second.status.voice)
+			return true;
 		return false;
 	}
-	if (it->second.status.chop || it->second.status.creator || it->second.status.voice)
-		return true;
-	return false;
+	return true;
+}
+
+// To be a guest, user must be in guests AND musn't be in bans
+bool	Channel::isAGuest(std::string const &username)	const {
+	std::vector<std::string>::const_iterator itgb;
+
+	itgb = std::find(bans.begin(), bans.end(), username);
+	if (itgb != bans.end())
+		return false;
+	itgb = std::find(guests.begin(), guests.end(), username);
+	return (itgb != guests.end() ? true : false);
 }
 
 
@@ -168,7 +181,6 @@ void	Channel::dealUsersStatus(Client &chop) {
 	_users[chop.NickName] = clientData;
 }
 
-// can't use memset or bzero because there is a std::map<> in t_chanmode struct
 void				Channel::initChannel() {
 	bzero(&mode, sizeof(t_chanmode));
 	_users.clear();
@@ -228,6 +240,15 @@ std::string		Channel::makePrefix(t_clientData const &data)	const {
 	return "";
 }
 
+std::vector<std::string>	Channel::makeUserList()	const {
+	t_mapClientStatus::const_iterator	it;
+	std::vector<std::string> userList;
+
+	for (it = _users.begin(); it != _users.end(); ++it)
+		userList.push_back(it->first);
+	return userList;
+}
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~Debug~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 void	Channel::showUsers()	const {
@@ -249,7 +270,7 @@ std::ostream	&operator<<(std::ostream &o, t_mapClientStatus const &users) {
 
 	while (it != users.end()) {
 		if (it->second.status.creator == true) {
-			o << "!"; // channel creator tag (maybe it should be ~ instead)
+			o << "!"; // channel creator tag
 		} else if (it->second.status.chop == true) {
 			o << "@"; // channel operator tag
 		}
