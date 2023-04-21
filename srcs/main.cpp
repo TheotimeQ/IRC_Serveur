@@ -71,12 +71,13 @@ int main(int argc, char **argv)
 // - regler le : #gogo They aren't on that channel --> message a mieux formater : HUm /'U_U'/
 
 
+// INVITE -> pb chanop chopOf() error
+// NOTICE -> test avec netcat marchait pas + canTalk() valgrind error -> unitialazed values
+
+
 // ---------------------------------------------------------------
 
 //Theo
-// - [+] le pb segfault avec QUIT sans fsanitize (voir au dessus)
-// - [+]Client->Oper >> prioritaire par rapport a >> canTalk() || tu peux gerer comme ca ? (pas acces au clientManager dans channel simplement)
-// - [+]si on utilise AWAY avec netcat (sans arguments, le comportement est pas bon, il lui manque la raison d'afk par defaut) J'utilise la fonction Guard() contre ca dans mes cmdes
 // - USER ajout recuperation hostname ?
 // - Away message pas bon  + /back pour remetter le away a false
 // - Ameliorer le bot
@@ -90,8 +91,9 @@ int main(int argc, char **argv)
 // ---------------------------------------------------------------
 
 //Nous deux quand on se verra avant de push
+// - [+]Client->Oper >> prioritaire par rapport a >> canTalk() : ajouter condition canTalk() (on verra ensemble ca devrait etre rapide)
 // - ajouter un slot Operator pour le correcteur (genre nickname : Outstanding - pass : giveme) ~> (")^_^'(")
-// - Demander a un stud de nous le casser => on fait bosser un peu notre parain ? 
+// - Demander a un stud de nous le casser => on fait bosser un peu notre parain ? Aurel est ok avec nos Commandes
 // - Enlever les commentaire ([!][?] debug checking) et clean les fichiers pour le rendu 
 // - Rendre
 
