@@ -6,7 +6,7 @@
 /*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:32:08 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/17 14:59:09 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/25 10:00:25 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ Command_Manager::~Command_Manager()
     
     for (it = Cmd_List.begin(); it != Cmd_List.end(); ++it) {
         delete it->second;
+        // it = Cmd_List.erase(it);
     }
 	return;
 }

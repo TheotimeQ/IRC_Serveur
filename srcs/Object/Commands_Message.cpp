@@ -6,7 +6,7 @@
 /*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:09:32 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/17 14:59:04 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/20 12:23:59 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,13 @@ void  PRIVMSG_Command::Execute(Client *From_Client, std::vector<std::string> Arg
                 continue;
             }
 
+            if (From_Client->Oper)
+            {
+                std::string Msg = ":" + From_Client->NickName + "!" + From_Client->UserName + "@" + From_Client->HostName + " PRIVMSG " + Target + " :" + Message_to_send + "\n";
+                Channel_Manager.channelSend(From_Client->NickName ,Target, Msg, false);
+                continue;
+            }
+
             if (!Chn->canTalk(From_Client->NickName))
             {
                 std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_CANNOTSENDTOCHAN) + " " + From_Client->NickName + " :Cannot send to channel" + "\n";
@@ -70,7 +77,6 @@ void  PRIVMSG_Command::Execute(Client *From_Client, std::vector<std::string> Arg
             //Announce de la channel
             std::string Msg = ":" + From_Client->NickName + "!" + From_Client->UserName + "@" + From_Client->HostName + " PRIVMSG " + Target + " :" + Message_to_send + "\n";
             Channel_Manager.channelSend(From_Client->NickName ,Target, Msg, false);
-            
             continue;
         }
 

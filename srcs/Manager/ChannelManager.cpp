@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelManager.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/20 10:53:38 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/20 12:06:16 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,8 +170,8 @@ void	ChannelManager::rmChannel(std::string const &name) {
 	
 	it = _chanList.find(name);
 	if (it != _chanList.end()) {
-		log("Deleting channel : " + name);
-		_chanList.erase(it);
+		// log("Deleting channel : " + name);
+		_chanList.erase(it);    //[!] PROBLEME AVEC CE ERASE
 	}
 }
 

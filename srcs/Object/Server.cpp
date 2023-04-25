@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
+/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:50:43 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/14 15:02:58 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/20 12:22:24 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,6 @@ int Server::Setup_Client(const Client& Client)
 
 void Server::Deconnect_Client(Client &Clt, int index)
 {
-    log(EVENT_DECONNECTED + Clt.NickName + "  " + I_To_S(_CltMng.Nb_Clients - 2) + "/" + I_To_S(MAX_CLIENTS));
 
     std::string Msg = ":" + Clt.NickName + " QUIT";
     if (Clt.Quit_Msg != "")
@@ -142,15 +141,19 @@ void Server::Deconnect_Client(Client &Clt, int index)
 	std::cout << "\033[38;5;49m";
 	std::cout << Clt.NickName + " has quit because : " + Clt.Quit_Msg << std::endl;
 	std::cout << "\033[m";
+    
+    log(EVENT_DECONNECTED + Clt.NickName + "  " + I_To_S(_CltMng.Nb_Clients - 2) + "/" + I_To_S(MAX_CLIENTS));
         
     _ChnMng.rmClientFromAll(Clt, Msg);
 
-    close(Clt.Socket);
+    (void)index;
 
-    _Poll_Set[index] = _Poll_Set[_CltMng.Nb_Clients - 1];
-    memset(&_Poll_Set[_CltMng.Nb_Clients - 1], 0, sizeof(_Poll_Set[_CltMng.Nb_Clients - 1]));
+    // close(Clt.Socket);
 
-    _CltMng.Remove_Client(Clt);
+    // _Poll_Set[index] = _Poll_Set[_CltMng.Nb_Clients - 1];
+    // memset(&_Poll_Set[_CltMng.Nb_Clients - 1], 0, sizeof(_Poll_Set[_CltMng.Nb_Clients - 1]));
+
+    // _CltMng.Remove_Client(Clt);
 }
 
 int Server::Get_Data(Client *Client) 
