@@ -72,10 +72,13 @@ int main(int argc, char **argv)
 // - [+] le pb segfault avec QUIT sans fsanitize (voir au dessus)
 
 
+// INVITE -> pb chanop chopOf() error
+// NOTICE -> test avec netcat marchait pas + canTalk() valgrind error -> unitialazed values
+
+
 // ---------------------------------------------------------------
 
 //Theo
-
 // - USER ajout recuperation hostname ?
 // - Ameliorer le bot
 // - Test avec big commande
@@ -92,8 +95,9 @@ int main(int argc, char **argv)
 // ---------------------------------------------------------------
 
 //Nous deux quand on se verra avant de push
+// - [+]Client->Oper >> prioritaire par rapport a >> canTalk() : ajouter condition canTalk() (on verra ensemble ca devrait etre rapide)
 // - ajouter un slot Operator pour le correcteur (genre nickname : Outstanding - pass : giveme) ~> (")^_^'(")
-// - Demander a un stud de nous le casser => on fait bosser un peu notre parain ? 
+// - Demander a un stud de nous le casser => on fait bosser un peu notre parain ? Aurel est ok avec nos Commandes
 // - Enlever les commentaire ([!][?] debug checking) et clean les fichiers pour le rendu 
 // - Rendre
 

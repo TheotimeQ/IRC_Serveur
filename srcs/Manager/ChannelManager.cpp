@@ -6,7 +6,7 @@
 /*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/20 12:06:16 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/25 10:02:01 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,8 @@ void	ChannelManager::rmClientFromAll(Client &user, std::string Msg) {
 		if (isClientIn(user.NickName, it->first)) 
 		{
 			channelSend(user.NickName, it->first, Msg, false);
-			rmClientToChannel(user, it->first);
+			if (it->second.countUsers() != 1)
+				rmClientToChannel(user, it->first);
 		}
 	}
 }
@@ -194,7 +195,15 @@ bool	ChannelManager::isChannelEmpty(std::string const &channelName) const {
 }
 
 bool	ChannelManager::isClientIn(std::string const &nickname, std::string const &channelName) const {
-	return (getChannel(channelName).isClientIn(nickname));
+	Channel *chan;
+	
+	chan = getChan(channelName);
+	if (chan == NULL) {
+		log("isClientIn() -> channel don't exists");
+		return false;
+	} else {
+		return (chan->isClientIn(nickname));
+	}
 }
 
 // True if client is into at least one channel
@@ -570,7 +579,7 @@ t_mapClientStatus const	&ChannelManager::getUsersOf(std::string const &channelNa
 	if (it != _chanList.end()) {
 		return it->second.getUsers();
 	} else {
-		log("[!] getChannel() : error, channel not found");
+		log("[!] getUsersOf() : error, channel not found");
 		return _chanList.begin()->second.getUsers();
 	}
 }
@@ -586,6 +595,17 @@ Channel	*ChannelManager::Get_Channel(std::string &Channel_Name)
 	if (it != _chanList.end()) 
 		return &(it->second);
 
+	else 
+		return NULL;
+}
+
+Channel	*ChannelManager::getChan(std::string const &Channel_Name) const
+{
+	std::map<std::string, Channel>::const_iterator	it;
+	it = _chanList.find(Channel_Name);
+
+	if (it != _chanList.end()) 
+		return const_cast<Channel *>(&(it->second));
 	else 
 		return NULL;
 }

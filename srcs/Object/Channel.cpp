@@ -6,7 +6,7 @@
 /*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 10:18:15 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/20 12:01:22 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/25 10:02:20 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,8 @@ void	Channel::delUser(Client const &userToDel) {
 bool	Channel::isClientIn(std::string const &nickname) const {
 	t_mapClientStatus::const_iterator	it;
 
+	if (_users.empty())
+		return false;
 	it = _users.find(nickname);
 	return (it != _users.end() ? true : false);
 }
@@ -199,6 +201,8 @@ std::string		Channel::makeUserStringList()	const {
 	t_mapClientStatus::const_iterator	it;
 	std::string list = "";
 
+	if (_users.empty())
+		return list;
 	for (it = _users.begin(); it != _users.end(); ++it) {
 		if (it != _users.begin())
 			list += " ";
@@ -231,13 +235,8 @@ std::string	Channel::makeUserStatusList(std::string const &username)	const {
 std::string		Channel::makePrefix(t_clientData const &data)	const {
 	if (data.him.Oper)
 		return "@";
-	if (data.status.creator) // '!' not interpreted by HexChat
-		return ""; 
-	if (data.status.chop)
-		return "%";
-	if (data.status.voice)
-		return "+";
-	return "";
+	else
+		return "";
 }
 
 std::vector<std::string>	Channel::makeUserList()	const {

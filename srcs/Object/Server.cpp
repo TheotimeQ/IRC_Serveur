@@ -6,7 +6,7 @@
 /*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:50:43 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/20 12:22:24 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/25 16:24:08 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,9 @@ int	Server::Run()
                         ret = this->_CmdMng.Interpret_Data(Cur_Client, _ChnMng, _CltMng);
                         
                     if (ret == QUIT)
+                    {
                         this->Deconnect_Client((*Cur_Client), i);
+                    }
                 }
             }
         }
@@ -148,12 +150,12 @@ void Server::Deconnect_Client(Client &Clt, int index)
 
     (void)index;
 
-    // close(Clt.Socket);
+    close(Clt.Socket);
 
-    // _Poll_Set[index] = _Poll_Set[_CltMng.Nb_Clients - 1];
-    // memset(&_Poll_Set[_CltMng.Nb_Clients - 1], 0, sizeof(_Poll_Set[_CltMng.Nb_Clients - 1]));
+    _Poll_Set[index] = _Poll_Set[_CltMng.Nb_Clients - 1];
+    memset(&_Poll_Set[_CltMng.Nb_Clients - 1], 0, sizeof(_Poll_Set[_CltMng.Nb_Clients - 1]));
 
-    // _CltMng.Remove_Client(Clt);
+    _CltMng.Remove_Client(Clt);
 }
 
 int Server::Get_Data(Client *Client) 
