@@ -78,14 +78,17 @@ int main(int argc, char **argv)
 
 //Theo
 // - USER ajout recuperation hostname ?
-// - Away message pas bon  + /back pour remetter le away a false
 // - Ameliorer le bot
 // - Test avec big commande
 
     //   if (leavingMsg.size() > 200)
     // 		leavingMsg = leavingMsg.substr(0, 200);
 
-// - Enlever les commentaire et clean les fichier pour le rendu 
+//Fait :
+// - [+]Client->Oper >> prioritaire par rapport a >> canTalk() || tu peux gerer comme ca ? (pas acces au clientManager dans channel simplement)
+// - [+]si on utilise AWAY avec netcat (sans arguments, le comportement est pas bon, il lui manque la raison d'afk par defaut) J'utilise la fonction Guard() contre ca dans mes cmdes
+// - On peut msg des gens qui sont pas log  -> fixe -> non pas fixe, c'est normal, on peut msg des gens qui sont log
+
 
 // ---------------------------------------------------------------
 
@@ -103,6 +106,8 @@ int main(int argc, char **argv)
 // *** petits bugs ~ Anomalies ~ a reparer ou assumer ***
 // Dans un channel +m (modere), hexchat permet d'ecrire mais ce n'est pas envoye aux autres users du channel
 // HexChat choppe des sauts de ligne dans le 'home' 
+// Privmsg ajoute un : , mais pas notice
+// On peut envoyer des message à des gens pas log, ils ne peuvent pas reponbdre
 
 
 // ---------------------------------------------------------------

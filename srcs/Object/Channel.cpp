@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 10:18:15 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/26 09:46:52 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/26 09:58:21 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ Channel::Channel()
 }
 
 Channel::~Channel() {
-	log(" is destroyed");
+	//log(" is destroyed");
 }
 
 Channel::Channel(std::string const &name, Client &chop) 

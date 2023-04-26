@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client_Manager.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
+/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:32:08 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/14 14:01:01 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/25 16:19:32 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,11 @@ Client_Manager::Client_Manager():
 
 Client_Manager::~Client_Manager()
 {
-
+    for (std::vector<Client>::iterator it = _All_Clients.begin(); it != _All_Clients.end(); ++it)
+    {
+        close((*it).Socket);
+        it = _All_Clients.erase(it);
+    }
 	return;
 }
 

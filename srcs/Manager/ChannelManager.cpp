@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/26 09:46:25 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/26 09:58:11 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,8 +171,8 @@ void	ChannelManager::rmChannel(std::string const &name) {
 	
 	it = _chanList.find(name);
 	if (it != _chanList.end()) {
-		log("Deleting channel : " + name);
-		_chanList.erase(it);
+		// log("Deleting channel : " + name);
+		_chanList.erase(it);    //[!] PROBLEME AVEC CE ERASE
 	}
 }
 
