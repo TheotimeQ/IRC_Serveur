@@ -8,3 +8,5 @@
 **/irc_test_loup
 
 **/*.DS_STORE
+
+.vscode/*
