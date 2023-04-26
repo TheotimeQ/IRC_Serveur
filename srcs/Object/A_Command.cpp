@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 09:03:06 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/20 11:09:03 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/26 09:20:07 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,10 @@ std::string	A_Command::BuildRep_Cmde(int code, std::string const &cmde, std::str
 	std::ostringstream oss;
 	oss << code;
 	return (":" + std::string(SERVER_NAME) + " " + oss.str() + " " + cmde + " :" + addon + " \n");
+}
+
+std::string	A_Command::BuildRep_RawCmde(std::string const &user, std::string const &cmde) const {
+	return (":" + user + " " + cmde + "\n");
 }
 
 std::string	A_Command::BuildRep_CmdEvent(Client const &user, std::string const &cmde, std::string const &channel) const {

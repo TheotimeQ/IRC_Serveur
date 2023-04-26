@@ -69,10 +69,9 @@ int main(int argc, char **argv)
 
 //LOUP 
 // - regler le : #gogo They aren't on that channel --> message a mieux formater : HUm /'U_U'/
-
-
-// INVITE -> pb chanop chopOf() error
-// NOTICE -> test avec netcat marchait pas + canTalk() valgrind error -> unitialazed values
+// - bonne reponse aux changement de mode user (-+o +-v)
+// - Coplien la channel pour y poser les logs et verifier ce qui se passe ?
+// - les log de crea / destruc de channel ?
 
 
 // ---------------------------------------------------------------

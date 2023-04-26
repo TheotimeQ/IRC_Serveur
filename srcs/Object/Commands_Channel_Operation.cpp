@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 08:38:09 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/04/20 11:14:34 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/26 09:45:43 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,7 @@ void INVITE_Command::INVITE_user(Client *client, std::vector<std::string> Args, 
 	Client *target = Client_Manager.Get_Client(Args[1]);
 	if (target == NULL)
 		return;
-	Send_Cmd(target->Socket, BuildRep_Basic(341, Args[1], Args[1], Args[2])); // [!] display not perfect on HexChat
+	Send_Cmd(target->Socket, BuildRep_RawCmde(client->NickName, "INVITE " + Args[1] + " " + Args[2]));
 }
 
 /* ==> KICK <== */

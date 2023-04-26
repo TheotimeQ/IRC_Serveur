@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/20 14:04:49 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/26 09:46:25 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -567,7 +567,7 @@ Channel const		&ChannelManager::getChannel(std::string const &channelName)	const
 	if (it != _chanList.end()) {
 		return it->second;
 	} else {
-		log("[!] getChannel() : error, channel not found");
+		log("getChannel() : error, channel not found");
 		return _chanList.begin()->second;
 	}
 }
@@ -579,7 +579,7 @@ t_mapClientStatus const	&ChannelManager::getUsersOf(std::string const &channelNa
 	if (it != _chanList.end()) {
 		return it->second.getUsers();
 	} else {
-		log("[!] getUsersOf() : error, channel not found");
+		log("getUsersOf() : error, channel not found");
 		return _chanList.begin()->second.getUsers();
 	}
 }

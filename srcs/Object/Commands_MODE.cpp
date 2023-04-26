@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:10:23 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/20 11:03:21 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/26 09:25:07 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,7 +188,7 @@ void	MODE_Command::Exe_user_SET_MODE(Client *client, std::vector<std::string> Ar
 			umode = "operator";
 		else
 			umode = Channel_Manager.getUserModeAsString(Args[2], Args[1]);
-		Send_Cmd(client->Socket, BuildRep_Basic(221, client->NickName, Args[1], Args[2] + " modes : " + umode));
+		Channel_Manager.channelSend(client->NickName, Args[1], BuildRep_RawCmde(client->NickName, "MODE " + Args[1] + " " + Args[3] + " " + Args[2]), true);
 		return ;
 	}
 }
