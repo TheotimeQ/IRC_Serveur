@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 10:18:15 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/26 09:58:21 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/26 11:05:40 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,11 +239,6 @@ std::string		Channel::makePrefix(t_clientData const &data)	const {
 
 	if (data.him.Oper)
 		return "@";
-
-	// [!] ici avec valgrind prb d'acces a des valeurs non initialisee
-	// --> ca doit venir d'un probleme plus en amont
-	// --> lors de la creation des channel 2crea + 2 destruc :: pb a gerer !
-	//  bizzarre ca marche bien maintenant ??
 	if (data.status.chop)
 		return "@";
 	else if (data.status.voice)
