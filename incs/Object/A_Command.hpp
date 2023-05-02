@@ -41,6 +41,7 @@ class A_Command
 		std::string	BuildRep_Basic(int code, std::string const &nick, std::string const &channel, std::string const &addon) const;
 		std::string	BuildRep_BasicChan(int code, std::string const &nick, std::string const &channel, std::string const &addon) const;
 		std::string	BuildRep_Cmde(int code, std::string const &cmde, std::string const &addon) const;
+		std::string	BuildRep_RawCmde(std::string const &user, std::string const &cmde) const;
 		std::string	BuildRep_CmdEvent(Client const &user, std::string const &cmde, std::string const &channel) const;
 
 

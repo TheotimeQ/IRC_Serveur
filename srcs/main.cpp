@@ -69,12 +69,9 @@ int main(int argc, char **argv)
 
 //LOUP 
 // - regler le : #gogo They aren't on that channel --> message a mieux formater : HUm /'U_U'/
-// - [+] le pb segfault avec QUIT sans fsanitize (voir au dessus)
-
-
-// INVITE -> pb chanop chopOf() error
-// NOTICE -> test avec netcat marchait pas + canTalk() valgrind error -> unitialazed values
-// Pas de @Oper dans WHO 
+// - bonne reponse aux changement de mode user (-+o +-v)
+// - Coplien la channel pour y poser les logs et verifier ce qui se passe ?
+// - les log de crea / destruc de channel ?
 
 
 // ---------------------------------------------------------------

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 10:18:15 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/25 10:02:20 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/26 11:05:40 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,10 @@ void	Channel::addUser(Client const &newUser) {
 	clientData.him = newUser;
 	clientData.status.chop = false;
 	clientData.status.creator = false;
-	clientData.status.voice = false;
+	if (mode.m)
+		clientData.status.voice = false;
+	else
+		clientData.status.voice = true;
 	_users[newUser.NickName] = clientData;
 }
 
@@ -233,8 +236,13 @@ std::string	Channel::makeUserStatusList(std::string const &username)	const {
 }
 
 std::string		Channel::makePrefix(t_clientData const &data)	const {
+
 	if (data.him.Oper)
 		return "@";
+	if (data.status.chop)
+		return "@";
+	else if (data.status.voice)
+		return "+";
 	else
 		return "";
 }

@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:10:23 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/20 11:03:21 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/26 10:47:31 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,27 +91,39 @@ void	MODE_Command::Exe_Channel_Info(Client *Client, std::vector<std::string> Arg
 
 // CHANNEL MODE - Basic
 // user prompt : /mode #channelName <[+-][ntmsipNTMSIP]>
-void	MODE_Command::Exe_Basic_Settings(Client *Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager) const {
+void	MODE_Command::Exe_Basic_Settings(Client *client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager) const {
 	bool	isPlus = (Args[2][0] == '+' ? true : false);
+	(void)Client_Manager;
 
 	Log("MODE", "basic channel mode setting : " + Args[2]);
 	Channel_Manager.setModesOfAs(Args[1], isPlus, Args[2]);
-	Send_RPL_CHANNELMODEIS(Client, Args, Channel_Manager, Client_Manager);
+	Channel_Manager.channelSend(client->NickName, Args[1], BuildRep_RawCmde(client->NickName, "MODE " + Args[1] + " " + Args[2]),true);
 }
 
 // CHANNEL MODE - Advanced
 // user prompt : /mode #nomChannel <[+-][lkLK]> *<Unsigned/key> (not needed if '-')
-void	MODE_Command::Exe_Advanced_Settings(Client *Client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager) const {
+void	MODE_Command::Exe_Advanced_Settings(Client *client, std::vector<std::string> Args,  ChannelManager &Channel_Manager, Client_Manager &Client_Manager) const {
 	bool	isPlus = (Args[2][0] == '+' ? true : false);
 	std::string option = (Args.size() == 4 ? Args[3] : "");
+	int limit = -1;
+	(void)Client_Manager;
 
 	Log("MODE", "advanced channel mode setting : " + Args[2]);
 	if (toupper(Args[2][1]) == 'L') {
-		Channel_Manager.setLimitModeOfAsWith(Args[1], isPlus, option);
+		limit = Channel_Manager.setLimitModeOfAsWith(Args[1], isPlus, option);
 	} else {
 		Channel_Manager.setKeyModeOfAsWith(Args[1], isPlus, option);
 	}
-	Send_RPL_CHANNELMODEIS(Client, Args, Channel_Manager, Client_Manager);
+	if (Args.size() > 3) {
+		if (limit > 0)
+			Channel_Manager.channelSend(client->NickName, Args[1], BuildRep_RawCmde(client->NickName, "MODE " + Args[1] + " " + Args[2] + " " + I_To_S(limit)), true);
+		else if (limit == 0)
+			Channel_Manager.channelSend(client->NickName, Args[1], BuildRep_RawCmde(client->NickName, "MODE " + Args[1] + " " + Args[2] + " no-limit"), true);
+		else
+			Channel_Manager.channelSend(client->NickName, Args[1], BuildRep_RawCmde(client->NickName, "MODE " + Args[1] + " " + Args[2] + " " + Args[3]), true);
+	}
+	else
+		Send_Solo_RPL_CHANNELMODEIS(client, Args, Channel_Manager, Client_Manager);
 }
 
 // 324    RPL_CHANNELMODEIS "<channel> <mode> <mode params>" send to all channel after a mode setting
@@ -188,7 +200,7 @@ void	MODE_Command::Exe_user_SET_MODE(Client *client, std::vector<std::string> Ar
 			umode = "operator";
 		else
 			umode = Channel_Manager.getUserModeAsString(Args[2], Args[1]);
-		Send_Cmd(client->Socket, BuildRep_Basic(221, client->NickName, Args[1], Args[2] + " modes : " + umode));
+		Channel_Manager.channelSend(client->NickName, Args[1], BuildRep_RawCmde(client->NickName, "MODE " + Args[1] + " " + Args[3] + " " + Args[2]), true);
 		return ;
 	}
 }

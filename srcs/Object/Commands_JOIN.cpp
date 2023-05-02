@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 09:51:34 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/20 10:16:57 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/04/26 09:47:47 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,7 @@ void  JOIN_Command::Execute(Client *client, std::vector<std::string> Args, Chann
 		if (Channel_Manager.getTopicOf(Args[1]).compare(NOTOPIC) != 0) {
 			Send_Cmd(client->Socket, BuildRep_Basic(332, client->NickName, Args[1], Channel_Manager.getTopicOf(Args[1])));
 		}
-		if (client->Oper) {
-			operJoinning(Args, Channel_Manager, Client_Manager);
-		}
+		someoneJoinning(Args, Channel_Manager, Client_Manager);
 	}
 }
 
@@ -89,7 +87,7 @@ bool JOIN_Command::passAllChecks(Client *client, std::vector<std::string> Args, 
 	return true;
 }
 
-void	JOIN_Command::operJoinning(std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) const {
+void	JOIN_Command::someoneJoinning(std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) const {
 	std::vector<std::string>::iterator it;
 	std::vector<std::string> userList = Channel_Manager.makeUserListOf(Args[1]);
 

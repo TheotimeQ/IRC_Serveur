@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelManager.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
+/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/25 10:02:01 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/04/26 10:37:41 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -456,7 +456,7 @@ void		ChannelManager::setUserModesOfAs(std::string const &channelName, std::stri
 	}
 }
 
-void	ChannelManager::setLimitModeOfAsWith(std::string const &channelName, bool isPlus, std::string const &option) {
+int	ChannelManager::setLimitModeOfAsWith(std::string const &channelName, bool isPlus, std::string const &option) {
 	t_mapChannel::iterator	it;
 	long	lvalue;
 	int		value;
@@ -464,7 +464,7 @@ void	ChannelManager::setLimitModeOfAsWith(std::string const &channelName, bool i
 	it = _chanList.find(channelName);
 	if (it == _chanList.end()) {
 		log("setLimitModeOfAsWith() error");
-		return ;
+		return 0;
 	}
 	errno = 0;
 	lvalue = strtol(option.c_str(), NULL, 10);
@@ -477,6 +477,7 @@ void	ChannelManager::setLimitModeOfAsWith(std::string const &channelName, bool i
 		it->second.mode.l = 0;
 	else
 		it->second.mode.l = value;
+	return it->second.mode.l;
 }
 
 void	ChannelManager::setKeyModeOfAsWith(std::string const &channelName, bool isPlus, std::string const &option) {
@@ -567,7 +568,7 @@ Channel const		&ChannelManager::getChannel(std::string const &channelName)	const
 	if (it != _chanList.end()) {
 		return it->second;
 	} else {
-		log("[!] getChannel() : error, channel not found");
+		log("getChannel() : error, channel not found");
 		return _chanList.begin()->second;
 	}
 }
@@ -579,7 +580,7 @@ t_mapClientStatus const	&ChannelManager::getUsersOf(std::string const &channelNa
 	if (it != _chanList.end()) {
 		return it->second.getUsers();
 	} else {
-		log("[!] getUsersOf() : error, channel not found");
+		log("getUsersOf() : error, channel not found");
 		return _chanList.begin()->second.getUsers();
 	}
 }
