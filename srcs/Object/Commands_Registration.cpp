@@ -6,7 +6,7 @@
 /*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:09:32 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/25 22:26:20 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/05/02 10:23:36 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,8 +110,6 @@ void  USER_Command::Execute(Client *Clt, std::vector<std::string> Args, ChannelM
         Send_Cmd(Clt->Socket, Msg);
         return ;
     }
-
-    //ADD Hostname and Servername?
        
     Log("USER","Changing username from " + Clt->UserName + " to " + Args[1]);
     Clt->UserName = Args[1];
@@ -176,9 +174,7 @@ void  OPER_Command::Execute(Client *Clt, std::vector<std::string> Args, ChannelM
         Send_Cmd(Clt->Socket, Msg);
         Clt->Oper = 1;
 
-        // Msg = ":IRC MODE #test1 " +o " + Clt->NickName + "\n";
         Channel_Manager.allChannelSend(":IRC MODE ", " +o " + Clt->NickName + "\n");
-        // Client_Manager.Send_To_All_Channel(Msg);
         return ;
     }
 }

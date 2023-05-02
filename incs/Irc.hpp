@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Irc.hpp                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/02 11:22:13 by zelinsta          #+#    #+#             */
+/*   Updated: 2023/05/02 11:26:42 by loumarti         ###   ########lyon.fr   */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef IRC_HPP
 # define IRC_HPP
 
@@ -6,11 +18,12 @@
 #define QUIT  2
 
 //Quelques variable de configuration du serveur
-#define SERVER_NAME "IRC"
+
+#define SERVER_NAME             "IRC"
 #define MSG_BIENVENU 		    "Wellcoooommmeee on 'Y AIR C' by Loumarti & Tquere"
 
 const int MAX_CLIENTS = 10;
-const int BUFFER_SIZE = 1024;
+const int BUFFER_SIZE = 4096;
 
 //Code numeric associé à la doc IRC
 #define RPL_WELCOME             001
@@ -79,6 +92,7 @@ const int BUFFER_SIZE = 1024;
 #define ERROR_NICKNAME_ALREADY_USED	"Error: Can't change nickname , already used"
 #define ERROR_CMDNOTFOUND 	        "Error: Command not found : "
 #define ERROR_OPER_UNKOW            "Error: Operator unkown : "
+#define ERROR_SEND_MSG 		        "Error: Can't send message : \n"
 
 //Channel error
 # define CHERR_FORMAT			    "channel name format : <#name>"
@@ -95,10 +109,15 @@ const int BUFFER_SIZE = 1024;
 #define EVENT_NEW_DATA 		        "Data received : \n"
 #define EVENT_LOGGED				"Client logged : "
 #define EVENT_CMDFOUND		        "Executing : "
+#define EVENT_NEW_MSG 		        "Message sent : "
 
 // Channel errors
 # define ERRCHAN_CREATION	        "channel creation error : "
 # define ERRCHAN_WRONGNAME	        "[!] Channel Manager can't find : "
 # define LOGCHAN_NOTOPICPERM	    " : has no topic set permission in channel : "
+
+
+
+
 
 #endif

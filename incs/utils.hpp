@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.hpp                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/02 11:22:17 by zelinsta          #+#    #+#             */
+/*   Updated: 2023/05/02 11:22:18 by zelinsta         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef UTILS_HPP
 # define UTILS_HPP
 
@@ -22,9 +34,6 @@
 
 #include "../incs/Irc.hpp"
 #include "../incs/Object/Client.hpp"
-
-#define ERROR_SEND_MSG 		"Error: Can't send message : \n"
-#define EVENT_NEW_MSG 		"Message sent : "
 
 int				Send_Cmd(int client_sock, const std::string& message) ;
 std::string		catVectString(std::vector<std::string> const &args, unsigned offset, std::string const &delim);

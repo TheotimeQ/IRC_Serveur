@@ -6,7 +6,7 @@
 /*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:09:32 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/20 12:23:59 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/05/02 10:22:53 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 // https://www.rfc-editor.org/rfc/rfc1459#section-4.4.1
 void  PRIVMSG_Command::Execute(Client *From_Client, std::vector<std::string> Args, ChannelManager &Channel_Manager, Client_Manager &Client_Manager) 
 {
-    //Pas de destinataire
     if (Args.size() == 1)
     {
         std::string Msg = ":" + std::string(SERVER_NAME) + " "  + I_To_S(ERR_NORECIPIENT) + " " + From_Client->NickName + " " + ":No recipient given " + Args[0] + "\n";
@@ -25,7 +24,6 @@ void  PRIVMSG_Command::Execute(Client *From_Client, std::vector<std::string> Arg
         return ;
     }
     
-    //Pas de message
     if (Args.size() == 2)
     {
         std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_NOTEXTTOSEND) + " " + From_Client->NickName + " " + ":No text to send" + "\n";
@@ -33,7 +31,6 @@ void  PRIVMSG_Command::Execute(Client *From_Client, std::vector<std::string> Arg
         return ;
     }
 
-    //Concataine les args pour former le message
     std::string Message_to_send = Join_End(2, Args);
 
     std::stringstream Targets(Args[1]); 
@@ -41,7 +38,6 @@ void  PRIVMSG_Command::Execute(Client *From_Client, std::vector<std::string> Arg
 
     while (std::getline(Targets, Target, ',')) 
     { 
-        //Si Target en double
         if (Check_Double(Target, Args[1]))
         {
             std::string Msg = ":" + std::string(SERVER_NAME) + " " + I_To_S(ERR_TOOMANYTARGETS) + " " + From_Client->NickName + " :Duplicate recipients. No message delivered" + "\n";
@@ -49,7 +45,6 @@ void  PRIVMSG_Command::Execute(Client *From_Client, std::vector<std::string> Arg
             continue;
         }
 
-        //Si c'est une channel
         if (Target[0] == '#')
         {  
             Channel *Chn = Channel_Manager.Get_Channel(Target);
@@ -74,16 +69,13 @@ void  PRIVMSG_Command::Execute(Client *From_Client, std::vector<std::string> Arg
                 continue ;
             }
 
-            //Announce de la channel
             std::string Msg = ":" + From_Client->NickName + "!" + From_Client->UserName + "@" + From_Client->HostName + " PRIVMSG " + Target + " :" + Message_to_send + "\n";
             Channel_Manager.channelSend(From_Client->NickName ,Target, Msg, false);
             continue;
         }
 
-        //Si c'est un client
         else
         {
-            //Si pas de client avec ce nickname
             Client *To_Client = Client_Manager.Get_Client(Target);
             if (To_Client == NULL)
             {
@@ -92,7 +84,6 @@ void  PRIVMSG_Command::Execute(Client *From_Client, std::vector<std::string> Arg
                 continue;
             }
 
-            //Si le client est away
             if (To_Client->Away)
             {
                 std::string Msg = ":" + std::string(To_Client->NickName) + " " + I_To_S(RPL_AWAY)  + " " + From_Client->NickName + " " + To_Client->NickName + " :" + To_Client->Away_Str + "\n";
@@ -100,7 +91,6 @@ void  PRIVMSG_Command::Execute(Client *From_Client, std::vector<std::string> Arg
                 continue;
             }
 
-            //Envoi le message
             std::string Msg = ":" + From_Client->NickName + "!" + From_Client->UserName + "@" + From_Client->HostName + " PRIVMSG " + To_Client->NickName + " :" + Message_to_send + "\n";
             Send_Cmd(To_Client->Socket, Msg);
         }
@@ -127,13 +117,11 @@ void  NOTICE_Command::Execute(Client *From_Client, std::vector<std::string> Args
 
     while (std::getline(Targets, Target, ',')) 
     { 
-        //Si Target en double
         if (Check_Double(Target, Args[1]))
         {
             continue;
         }
 
-        //Si c'est une channel
         if (Target[0] == '#')
         {  
             Channel *Chn = Channel_Manager.Get_Channel(Target);
@@ -142,12 +130,18 @@ void  NOTICE_Command::Execute(Client *From_Client, std::vector<std::string> Args
                 continue;
             }
 
+            if (From_Client->Oper)
+            {
+                std::string Msg = ":" + From_Client->NickName + "!" + From_Client->UserName + "@" + From_Client->HostName + " NOTICE " + Target + " :" + Message_to_send + "\n";
+                Channel_Manager.channelSend(From_Client->NickName ,Target, Msg, false);
+                continue;
+            }
+
             if (!Chn->canTalk(From_Client->NickName))
             {
                 continue ;
             }
 
-            //Announce de la channel
             std::string Msg = ":" + From_Client->NickName + "!" + From_Client->UserName + "@" + From_Client->HostName + " NOTICE " + Target + " :" + Message_to_send + "\n";
             Channel_Manager.channelSend(From_Client->NickName ,Target, Msg, false);
             

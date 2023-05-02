@@ -6,7 +6,7 @@
 /*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:32:08 by tquere            #+#    #+#             */
-/*   Updated: 2023/05/02 10:04:47 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/05/02 10:45:41 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,7 @@
 
 Command_Manager::Command_Manager()
 {
-    //TEST
-    Cmd_List["DEBUG"]   = new DEBUG_Command();
+    // Cmd_List["DEBUG"]   = new DEBUG_Command();
     
     //Connection Registration
     Cmd_List["PASS"]    = new PASS_Command();
@@ -49,7 +48,6 @@ Command_Manager::~Command_Manager()
     
     for (it = Cmd_List.begin(); it != Cmd_List.end(); ++it) {
         delete it->second;
-        Cmd_List.erase(it);
     }
 	return;
 }
@@ -92,11 +90,9 @@ int Command_Manager::Interpret_Data(Client *Clt, ChannelManager &Channel_Manager
         std::vector<std::string> Args;
         Tokenize(*it, ' ', Args); 
         
-        //DEBUG
 		std::cout << "\033[38;5;180m";
         std::cout << "          -> " << Clt->Socket << " Recv : " << *it << std::endl;
 		std::cout << "\033[m";
-		//DEBUG
 
         if (Args.size() == 0 || Args[0] == "")
         {
