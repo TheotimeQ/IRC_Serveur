@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 13:12:23 by tquere            #+#    #+#             */
-/*   Updated: 2023/05/02 13:12:25 by tquere           ###   ########.fr       */
+/*   Updated: 2023/05/02 13:17:19 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int check_port(const char *port)
 
 void signal_callback_handler(int signum) {
     std::cout << "Caught signal " << signum << std::endl;
-    std::cout << " ----STOPPING SERVER---- " << signum << std::endl;
+    std::cout << " ----STOPPING SERVER---- " <<  std::endl;
     Stop = 1;
 }
 

@@ -1,9 +1,21 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: tquere <tquere@student.42.fr>              +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2023/05/02 13:28:27 by tquere            #+#    #+#              #
+#    Updated: 2023/05/02 13:28:28 by tquere           ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 .PHONY:		fclean, all, clear, re, clean
 
 NAME					=	ircserv
 
 CMP						=	c++
-FLG						=	-Wall -Wextra -Werror -std=c++98 -g #-fsanitize=address
+FLG						=	-Wall -Wextra -Werror -std=c++98 #-fsanitize=address
 RM						=	rm -rf
 BUILD_DIR				= 	build/
 
