@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelManager.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
+/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/05/02 11:42:19 by tquere           ###   ########.fr       */
+/*   Updated: 2023/05/02 13:56:06 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ ChannelManager	&ChannelManager::operator=(ChannelManager const &righty) {
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ BASIC MANAGEMENT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 // channel's name is [200]length prefixed by &, #, +, !
+// only # will be accepted
 // forbidden characters : space, comma, semi-colon
 // To update check too -> A_Command.Is_Channel_Name_Arg() method
 int		ChannelManager::checkChanName(std::string const &name) const {
@@ -40,7 +41,7 @@ int		ChannelManager::checkChanName(std::string const &name) const {
 		log("name too short : " + name);
 		return CM_WRONGNAMEFORMAT;
 	}
-	else if ((name[0] != '#' && name[0] != '!' && name[0] != '+' && name[0] != '&')) {
+	else if (name[0] != '#') {
 		log("wrong name prefix : " + name);
 		return CM_WRONGNAMEFORMAT;
 	}
