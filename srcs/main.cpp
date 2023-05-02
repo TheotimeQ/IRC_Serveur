@@ -6,7 +6,7 @@
 /*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 11:22:50 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/05/02 11:37:15 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/05/02 13:02:54 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,17 @@ int check_port(const char *port)
     return GOOD;
 }
 
+void signal_callback_handler(int signum) {
+    std::cout << "Caught signal " << signum << std::endl;
+    std::cout << " ----STOPPING SERVER---- " << signum << std::endl;
+    Stop = 1;
+}
+
 int main(int argc, char **argv)
 {
+    Stop = 0;
+    signal(SIGINT, signal_callback_handler);
+    
     if (argc != 3) {
         std::cerr << ERROR_SERVER_PARAM <<  std::endl;
         return 1;

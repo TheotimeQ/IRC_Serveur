@@ -6,7 +6,7 @@
 /*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:32:08 by tquere            #+#    #+#             */
-/*   Updated: 2023/05/02 10:45:41 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/05/02 13:11:11 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,30 +14,36 @@
 
 Command_Manager::Command_Manager()
 {
-    // Cmd_List["DEBUG"]   = new DEBUG_Command();
-    
-    //Connection Registration
-    Cmd_List["PASS"]    = new PASS_Command();
-    Cmd_List["NICK"]    = new NICK_Command(); 
-    Cmd_List["USER"]    = new USER_Command();
-    Cmd_List["OPER"]    = new OPER_Command();
-    Cmd_List["CAP"]     = new CAP_Command();
 
-    //Channel operations
-    Cmd_List["JOIN"]    = new JOIN_Command();
-    Cmd_List["PART"]    = new PART_Command(); 
-    Cmd_List["MODE"]    = new MODE_Command(); 
-    Cmd_List["TOPIC"]   = new TOPIC_Command(); 
-    Cmd_List["NAMES"]   = new NAMES_Command(); 
-    Cmd_List["LIST"]    = new LIST_Command(); 
-    Cmd_List["INVITE"]  = new INVITE_Command(); 
-    Cmd_List["KICK"]    = new KICK_Command();
-    Cmd_List["WHO"]     = new WHO_Command(); 
+    try {
 
-    //Sending messages
-    Cmd_List["PRIVMSG"]   = new PRIVMSG_Command(); 
-    Cmd_List["NOTICE"]    = new NOTICE_Command();
-    Cmd_List["AWAY"]      = new AWAY_Command();
+        //Connection Registration
+        Cmd_List["PASS"]    = new PASS_Command();
+        Cmd_List["NICK"]    = new NICK_Command(); 
+        Cmd_List["USER"]    = new USER_Command();
+        Cmd_List["OPER"]    = new OPER_Command();
+        Cmd_List["CAP"]     = new CAP_Command();
+
+        //Channel operations
+        Cmd_List["JOIN"]    = new JOIN_Command();
+        Cmd_List["PART"]    = new PART_Command(); 
+        Cmd_List["MODE"]    = new MODE_Command(); 
+        Cmd_List["TOPIC"]   = new TOPIC_Command(); 
+        Cmd_List["NAMES"]   = new NAMES_Command(); 
+        Cmd_List["LIST"]    = new LIST_Command(); 
+        Cmd_List["INVITE"]  = new INVITE_Command(); 
+        Cmd_List["KICK"]    = new KICK_Command();
+        Cmd_List["WHO"]     = new WHO_Command(); 
+
+        //Sending messages
+        Cmd_List["PRIVMSG"]   = new PRIVMSG_Command(); 
+        Cmd_List["NOTICE"]    = new NOTICE_Command();
+        Cmd_List["AWAY"]      = new AWAY_Command();
+        
+    } catch (std::exception &e) {
+
+        std::cerr << "Erreur lors de l'allocation de mémoire " << e.what() << std::endl;
+    }
 
     return;
 }

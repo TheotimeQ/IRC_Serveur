@@ -6,7 +6,7 @@
 /*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 11:22:22 by zelinsta          #+#    #+#             */
-/*   Updated: 2023/05/02 11:22:23 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/05/02 13:03:30 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,15 @@
 #include <vector>
 #include <map>
 #include <sstream>
+#include <signal.h>
 
 #include "../Object/Client.hpp"
 #include "../Object/Channel.hpp"
 #include "../Manager/ChannelManager.hpp"
 #include "../Manager/Command_Manager.hpp"
 #include "../Manager/Client_Manager.hpp"
+
+static int Stop;
 
 class Server
 {
