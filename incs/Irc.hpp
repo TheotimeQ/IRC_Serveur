@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Irc.hpp                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/02 11:22:13 by zelinsta          #+#    #+#             */
+/*   Updated: 2023/05/02 11:22:14 by zelinsta         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef IRC_HPP
 # define IRC_HPP
 
@@ -7,11 +19,11 @@
 
 //Quelques variable de configuration du serveur
 
-#define SERVER_NAME "IRC"
+#define SERVER_NAME             "IRC"
 #define MSG_BIENVENU 		    "Wellcoooommmeee on 'Y AIR C' by Loumarti & Tquere"
 
 const int MAX_CLIENTS = 10;
-const int BUFFER_SIZE = 1024;
+const int BUFFER_SIZE = 4096;
 
 //Code numeric associé à la doc IRC
 #define RPL_WELCOME             001
