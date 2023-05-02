@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:32:08 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/14 13:37:52 by tquere           ###   ########.fr       */
+/*   Updated: 2023/05/02 11:51:35 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,7 @@
 
 Command_Manager::Command_Manager()
 {
-    //TEST
-    Cmd_List["DEBUG"]   = new DEBUG_Command();
+    // Cmd_List["DEBUG"]   = new DEBUG_Command();
     
     //Connection Registration
     Cmd_List["PASS"]    = new PASS_Command();
@@ -91,11 +90,9 @@ int Command_Manager::Interpret_Data(Client *Clt, ChannelManager &Channel_Manager
         std::vector<std::string> Args;
         Tokenize(*it, ' ', Args); 
         
-        //DEBUG
 		std::cout << "\033[38;5;180m";
         std::cout << "          -> " << Clt->Socket << " Recv : " << *it << std::endl;
 		std::cout << "\033[m";
-		//DEBUG
 
         if (Args.size() == 0 || Args[0] == "")
         {

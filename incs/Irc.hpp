@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Irc.hpp                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/02 11:22:13 by tquere            #+#    #+#             */
+/*   Updated: 2023/05/02 11:51:35 by tquere           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef IRC_HPP
 # define IRC_HPP
 
@@ -7,11 +19,11 @@
 
 //Quelques variable de configuration du serveur
 
-#define SERVER_NAME "IRC"
+#define SERVER_NAME             "IRC"
 #define MSG_BIENVENU 		    "Wellcoooommmeee on 'Y AIR C' by Loumarti & Tquere"
 
 const int MAX_CLIENTS = 10;
-const int BUFFER_SIZE = 1024;
+const int BUFFER_SIZE = 4096;
 
 //Code numeric associé à la doc IRC
 #define RPL_WELCOME             001
@@ -40,6 +52,8 @@ const int BUFFER_SIZE = 1024;
 #define ERR_NOOPERHOST          491
 
 //Message d'erreur à envoyer au client ( issue de la doc )
+#define SRPL_LISTEND				":End of LIST"					// 323
+#define SERR_NOSUCHNICK 			"No such nickname"				// 401
 #define SERR_NOSUCHCHANNEL			"No such channel"				// 403
 #define SERR_USERNOTINCHANNEL		"They aren't on that channel"	// 441
 #define SERR_USERONCHANNEL			"Is already on channel"			// 443
@@ -50,6 +64,9 @@ const int BUFFER_SIZE = 1024;
 #define SERR_BANNEDFROMCHAN			"Cannot join channel (+b)"		// 474
 #define SERR_BADCHANNELKEY			"Cannot join channel (+k)"		// 475
 #define SERR_CHANOPRIVSNEEDED		"You're not channel operator"	// 482
+
+//Message d'erreur à envoyer au client ( custom )
+#define SERR_NOSUCHCHANNEL_KC		"No such channel, kicking process canceled"
 
 //Message d'erreur sur le serveur
 #define ERROR_SERVER_PARAM 	        "Usage: ircserv <port> <password>"
@@ -75,6 +92,7 @@ const int BUFFER_SIZE = 1024;
 #define ERROR_NICKNAME_ALREADY_USED	"Error: Can't change nickname , already used"
 #define ERROR_CMDNOTFOUND 	        "Error: Command not found : "
 #define ERROR_OPER_UNKOW            "Error: Operator unkown : "
+#define ERROR_SEND_MSG 		        "Error: Can't send message : \n"
 
 //Channel error
 # define CHERR_FORMAT			    "channel name format : <#name>"
@@ -91,12 +109,13 @@ const int BUFFER_SIZE = 1024;
 #define EVENT_NEW_DATA 		        "Data received : \n"
 #define EVENT_LOGGED				"Client logged : "
 #define EVENT_CMDFOUND		        "Executing : "
+#define EVENT_NEW_MSG 		        "Message sent : "
 
-// A ranger 
+// Channel errors
 # define ERRCHAN_CREATION	        "channel creation error : "
 # define ERRCHAN_WRONGNAME	        "[!] Channel Manager can't find : "
-
 # define LOGCHAN_NOTOPICPERM	    " : has no topic set permission in channel : "
+
 
 
 

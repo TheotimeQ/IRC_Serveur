@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   A_Command.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
+/*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 09:03:06 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/14 11:20:17 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/26 09:20:07 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,51 +42,28 @@ void	A_Command::Log(std::string const &cmde, std::string const &msg) const {
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Build REP ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-	// [Basic REP] -> ":IRC 332 Zel #test :This is my cool channel! \n"
 std::string	A_Command::BuildRep_Basic(int code, std::string const &nick, std::string const &channel, std::string const &addon) const {
 	std::ostringstream oss;
 	oss << code;
-	return (":" + std::string(SERVER_NAME) + " " + oss.str() + " " + nick + " " + channel + " " + addon + " \n");
+	return (":" + std::string(SERVER_NAME) + " " + oss.str() + " " + nick + " " + channel + " " + addon + "\n");
 }
-
-	// [BasicChan REP] -> ":<server> <code> <user> <channel> :<channel : msg_to_send> \n"
 
 std::string	A_Command::BuildRep_BasicChan(int code, std::string const &nick, std::string const &channel, std::string const &addon) const {
 	std::ostringstream oss;
 	oss << code;
-	return (":" + std::string(SERVER_NAME) + " " + oss.str() + " " + nick + " " + channel + " " + channel + " : " + addon + " \n");
+	return (":" + std::string(SERVER_NAME) + " " + oss.str() + " " + nick + " " + channel + " " + channel + " : " + addon + "\n");
 }
 
-	// [Home REP] -> there is no channel to answer -> send message to 'home' with 000 code
-	// [Home REP] -> ":<server> <000> <user> <msg_to_send> \n"
-std::string	A_Command::BuildRep_Home(std::string const &nick, std::string const &addon) const {
-	return (":" + std::string(SERVER_NAME) + " 000 " + nick + " " + addon + " \n");
-}
-
-std::string	A_Command::BuildRep_HomeChan(std::string const &nick, std::string const &channel, std::string const &addon) const {
-	return (":" + std::string(SERVER_NAME) + " 000 " + nick + " " + channel + " : " + addon + " \n");
-}
-
-
-/* (a ameliorer remplacer) */
-
-	// [Cmde REP] -> ":IRC 461 <command> :Not enough parameters"
-	// [Cmde REP] -> ":<server> <code> <user> <channel> :<msg_to_send> \n"
 std::string	A_Command::BuildRep_Cmde(int code, std::string const &cmde, std::string const &addon) const {
 	std::ostringstream oss;
 	oss << code;
 	return (":" + std::string(SERVER_NAME) + " " + oss.str() + " " + cmde + " :" + addon + " \n");
 }
 
-	// [Chan REP ] -> ":IRC 442 <channel> :You're not on that channel"
-	// [Chan REP ] -> ":<server> <code> <channel> :<msg_to_send> \n"
-std::string	A_Command::BuildRep_Chan(int code, std::string const &channel, std::string const &addon) const {
-	std::ostringstream oss;
-	oss << code;
-	return (":" + std::string(SERVER_NAME) + " " + oss.str() + " " + channel + " :" + addon + " \n");
+std::string	A_Command::BuildRep_RawCmde(std::string const &user, std::string const &cmde) const {
+	return (":" + user + " " + cmde + "\n");
 }
 
-// [Command Event REP] -> ":Zel!~a@localhost JOIN #test \n"
 std::string	A_Command::BuildRep_CmdEvent(Client const &user, std::string const &cmde, std::string const &channel) const {
 	return (":" + user.makeFullName() + " " + cmde + " " + channel + "\n");
 }
@@ -133,6 +110,20 @@ bool	A_Command::Is_Channel_Mode_AArgs(std::string const &args) const {
 	return true;
 }
 
+//  checking if valid user mode Arguments : <[+-][ov]> (only one flag at once)
+bool	A_Command::Is_Channel_Mode_UArgs(std::string const &args) const {
+	if (args.size() < 2)
+		return false;
+	if (args[0] != '+' && args[0] != '-')
+		return false;
+	for (unsigned i = 1; i < args.size(); ++i) {
+		if (std::string(MODE_USER_ARGS).find_first_of(args[i]) == std::string::npos)
+			return false;
+	}
+	return true;
+}
+
+// prevent from receiving commands without enough arguments (i.e. using netcat)
 bool	A_Command::Guard(Client *Client, std::vector<std::string> const &Args, std::string const &Cmde) const {
 	if (Args.size() == 1 || (Args.size() == 2 && Args[1].compare("") == 0)) {
 		Send_Cmd(Client->Socket, BuildRep_Cmde(461, Cmde, "Not enough parameters"));

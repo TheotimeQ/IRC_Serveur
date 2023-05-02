@@ -88,4 +88,4 @@ CLASSES :
 
 // Données reçues : 
 // NICK Zel
-// USER Zelinsta_User 0 * :realname
+// USER tquere  _User 0 * :realname

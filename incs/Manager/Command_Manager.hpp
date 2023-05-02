@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Command_Manager.hpp                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/02 11:21:40 by tquere            #+#    #+#             */
+/*   Updated: 2023/05/02 11:51:35 by tquere           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef COMMAND_MANAGER_HPP
 #define COMMAND_MANAGER_HPP
 
@@ -30,7 +42,6 @@ class Command_Manager
 		~Command_Manager();
 		
 		int		Interpret_Data(Client *Client, ChannelManager &Channel_Manager, Client_Manager &Client_Manager);
-
 };
 
 #endif

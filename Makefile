@@ -1,9 +1,9 @@
-.PHONY:		fclean, all, clear, re
+.PHONY:		fclean, all, clear, re, clean
 
 NAME					=	ircserv
 
 CMP						=	c++
-FLG						=	-Wall -Wextra -Werror -std=c++98 -fsanitize=address
+FLG						=	-Wall -Wextra -Werror -std=c++98 -g #-fsanitize=address
 RM						=	rm -rf
 BUILD_DIR				= 	build/
 
@@ -21,7 +21,7 @@ OBJ_INC					=  	$(addprefix $(OBJ_DIR)/, $(OBJ_FILE))
 INC						= 	$(addsuffix .hpp, $(addprefix $(INC_DIR)/, $(INC_FILE)))
 
 SRCS_DIR				=	srcs
-SRCS_FILE				=	$(OBJ_SRC) $(MANAGER_SRC) main utils Object/Commands_Channel_Operation Object/Commands_Registration Object/Commands_Message
+SRCS_FILE				=	$(OBJ_SRC) $(MANAGER_SRC) main utils Object/Commands_Channel_Operation Object/Commands_MODE Object/Commands_JOIN Object/Commands_Registration Object/Commands_Message
 
 MANAGER_SRC				=  	$(addprefix $(MANAGER_DIR)/, $(MANAGER_FILE))
 OBJ_SRC					=  	$(addprefix $(OBJ_DIR)/, $(OBJ_FILE))
@@ -29,7 +29,7 @@ SRCS					=  	$(addsuffix .cpp, $(addprefix $(SRCS_DIR)/, $(SRCS_FILE)))
 
 OBJS			    	= 	$(SRCS:%.cpp=$(BUILD_DIR)%.o)
 
-$(BUILD_DIR)%.o:		%.cpp $(INC)
+$(BUILD_DIR)%.o:		%.cpp $(INC) Makefile
 						@echo -n .
 						@mkdir -p $(@D)
 						@$(CMP) $(FLG) -I$(INC_DIR) -c $< -o $@
@@ -42,6 +42,9 @@ clear:
 $(NAME):	$(INC) $(OBJS)
 			@$(CMP) $(FLG) $(OBJS) -I$(INC_DIR) -o $(NAME)
 			@echo "\033[32m\n-- Done compiling $(NAME)--\033[0m"
+
+clean:
+			$(RM) $(BUILD_DIR)
 
 fclean:
 			$(RM) $(NAME)

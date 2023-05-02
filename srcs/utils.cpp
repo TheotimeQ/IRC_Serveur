@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.cpp                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/02 11:22:55 by tquere            #+#    #+#             */
+/*   Updated: 2023/05/02 11:51:35 by tquere           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../incs/utils.hpp"
 
 int Send_Cmd(int client_sock, const std::string& message) 
@@ -98,3 +110,46 @@ std::string catVectString(std::vector<std::string> const &args, unsigned offset,
 		}
 	return cat;
 }
+
+// removes all occurences of the string target into a vector of strings
+void			rmFromVectString(std::vector<std::string> &vs, std::string const &target) {
+	std::vector<std::string>::iterator	it;
+
+	it = std::find(vs.begin(), vs.end(), target);
+	while (it != vs.end()) {
+		vs.erase(it);
+		it = std::find(vs.begin(), vs.end(), target);
+	}
+}
+
+// add the sring target into a vector of strings, if target pattern is not already into it.
+void			addInVectString(std::vector<std::string> &vs, std::string const &target) {
+	std::vector<std::string>::iterator	it;
+
+	it = std::find(vs.begin(), vs.end(), target);
+	if (it == vs.end())
+		vs.push_back(target);
+}
+
+// returns true if one or more character of set is present in string 
+bool			findSetInString(std::string const &set, std::string const &string) {
+	for (std::string::const_iterator it = set.begin(); it != set.end(); ++it) {
+		if (string.find(*it) != std::string::npos)
+			return true;
+	}
+	return false;
+}
+
+// to log the content of a std::vector<std::pair<std::string, std::string> > (list channels with topics)
+void	showVectStringPair(std::vector<std::pair<std::string, std::string> > const &list) {
+	std::vector<std::pair<std::string, std::string> >::const_iterator it;
+	
+	std::cout << "\033[38;5;199m";
+	std::cout << "== Channel List ==" << std::endl;
+	std::cout << "\033[38;5;240m";
+	for (it = list.begin(); it != list.end(); ++it) {
+		std::cout << it->first << "  |  " << it->second << std::endl; 
+	}
+	std::cout << "\033[m";
+}
+

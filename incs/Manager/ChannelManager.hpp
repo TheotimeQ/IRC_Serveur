@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:10:11 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/14 15:15:31 by tquere           ###   ########.fr       */
+/*   Updated: 2023/05/02 11:44:07 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ class ChannelManager {
 
 	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ getter setters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 	t_mapChannel const		&getChanList()								const;
+	t_mapChannel			&getChanListNC();
 	Channel const 			&getChannel(std::string const &channelName)	const;
 	t_mapClientStatus const	&getUsersOf(std::string const &channelName)	const;
 
@@ -74,24 +75,35 @@ class ChannelManager {
 	std::string	getTopicOf(std::string const &channelName) const;
 	int			setTopicOf(std::string const &channelName, std::string const &newTopic, Client const &user);
 
-	//JOIN CHECK
+	//JOIN
 	bool	joinCheck_l(std::string const &channelName)								const;
 	bool	joinCheck_k(std::string const &channelName, std::string const &key)		const;
-	bool	joinCheck_i(std::string const &channelName)								const;
+	bool	joinCheck_i(std::string const &channelName, std::string const &user)	const;
 	bool	joinCheck_bans(std::string const &user, std::string const &channelName)	const;
+
+	std::vector<std::string> makeUserListOf(std::string const &channelName)			const;
 
 	//MODE
 	std::string	getUserModeAsString(std::string const &user, std::string const &channelName)	const;
 	std::string	getModeAsString(std::string const &channelName)							const;
 	void		setModesOfAs(std::string const &channelName, bool isPlus, std::string const &flags);
-	void		setLimitModeOfAsWith(std::string const &channelName, bool isPlus, std::string const &option);
+	void		setUserModesOfAs(std::string const &channelName, std::string const &username, bool isPlus, std::string const &flags);
+	int			setLimitModeOfAsWith(std::string const &channelName, bool isPlus, std::string const &option);
 	void		setKeyModeOfAsWith(std::string const &channelName, bool isPlus, std::string const &option);
 
 	// WHO ~ NAMES
 	std::string	makeUserStringList(std::string const &channelName)	const;
 
-	//Ajout pour fonction theotime <@_@') [!]
+	// LIST
+	std::vector<std::pair<std::string, std::string> >	makeChannelList(Client *client) const;
+	std::string	howManyIn(std::string const &channelName) const;
+
+	// INVITE ~ KICK
+	void	rmFromGuests(std::string const &channelName, std::string const &user);
+
+	// THEOTIME
 	Channel		*Get_Channel(std::string &Channel_Name);
+	Channel		*getChan(std::string const &Channel_Name) const;
 };
 
 std::ostream& operator<<(std::ostream	&o, t_mapChannel const &ChanList);

@@ -6,7 +6,7 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:33:48 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/14 15:18:37 by tquere           ###   ########.fr       */
+/*   Updated: 2023/05/02 11:42:19 by tquere           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ ChannelManager	&ChannelManager::operator=(ChannelManager const &righty) {
 	return *this;
 }
 
-
-
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ BASIC MANAGEMENT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 // channel's name is [200]length prefixed by &, #, +, !
@@ -42,7 +40,6 @@ int		ChannelManager::checkChanName(std::string const &name) const {
 		log("name too short : " + name);
 		return CM_WRONGNAMEFORMAT;
 	}
-		
 	else if ((name[0] != '#' && name[0] != '!' && name[0] != '+' && name[0] != '&')) {
 		log("wrong name prefix : " + name);
 		return CM_WRONGNAMEFORMAT;
@@ -77,14 +74,11 @@ void	ChannelManager::rmClientToChannel(Client &user, std::string const &channelN
 		log("rmClientToChannel() error");
 		return;
 	}
-	
-	_chanList[channelName].delUser(user); //[!] segfault ?
-
+	_chanList[channelName].delUser(user);
 	if (_chanList[channelName].isEmpty())
 		rmChannel(channelName);
 }
 
-// option 
 void	ChannelManager::rmClientFromAll(Client &user, std::string Msg) {
 	t_mapChannel::const_iterator	it;
 
@@ -92,7 +86,8 @@ void	ChannelManager::rmClientFromAll(Client &user, std::string Msg) {
 		if (isClientIn(user.NickName, it->first)) 
 		{
 			channelSend(user.NickName, it->first, Msg, false);
-			rmClientToChannel(user, it->first);
+			if (it->second.countUsers() != 1)
+				rmClientToChannel(user, it->first);
 		}
 	}
 }
@@ -128,27 +123,18 @@ t_status const &ChannelManager::getStatusOfIn(Client const &user, std::string co
 // try to set a topic, return values : 0 on success | > 0 if errors
 int			ChannelManager::setTopicOf(std::string const &channelName, std::string const &newTopic, Client const &user) {
 	t_mapChannel::iterator	it;
-	// int	ret;
-	(void) user;
 
 	it = _chanList.find(channelName);
 	if (it != _chanList.end()) {
-
-		// Si le channel a le mode +t --> topic settable by channel operator only flag
-		if (it->second.mode.t == true) {
+		if (it->second.mode.t == true && !user.Oper) {
 			t_status status = getStatusOfIn(user, channelName);
 			if (status.creator == false && status.chop == false) {
 				log(user.NickName + LOGCHAN_NOTOPICPERM + channelName);
 				return CM_NOTOPICPERM;
 			}
 		}
-		
-		// si le mode autorise changement de topic () // +si le client a les droits
 		it->second.setTopic(newTopic);
-		return 0; //GOOD
-		// constinuer ici (...)
-		
-		// sinon retour err CM_TOPICLOCK
+		return 0;
 	} else {
 		log(ERRCHAN_WRONGNAME + channelName);
 		return CM_NOCHANNEL;
@@ -185,7 +171,7 @@ void	ChannelManager::rmChannel(std::string const &name) {
 	
 	it = _chanList.find(name);
 	if (it != _chanList.end()) {
-		log("Deleting channel : " + name);
+		// log("Deleting channel : " + name);
 		_chanList.erase(it);
 	}
 }
@@ -209,7 +195,15 @@ bool	ChannelManager::isChannelEmpty(std::string const &channelName) const {
 }
 
 bool	ChannelManager::isClientIn(std::string const &nickname, std::string const &channelName) const {
-	return (getChannel(channelName).isClientIn(nickname));
+	Channel *chan;
+	
+	chan = getChan(channelName);
+	if (chan == NULL) {
+		log("isClientIn() -> channel don't exists");
+		return false;
+	} else {
+		return (chan->isClientIn(nickname));
+	}
 }
 
 // True if client is into at least one channel
@@ -218,7 +212,6 @@ bool	ChannelManager::isClientSomewhere(std::string const &nickname)	const {
 
 	for (it = _chanList.begin(); it != _chanList.end(); ++it) {
 		if (it->second.isClientIn(nickname)) {
-			//log("Client " + nickname + " found in channel : " + it->second.getName());
 			return true;
 		}
 	}
@@ -249,17 +242,10 @@ void	ChannelManager::channelSend(std::string const &user, std::string const &cha
 		log("channelSend() error");
 		return ;
 	}
-	if (!it->second.canTalk(user))
-		return ;
 	usersStats = getUsersOf(channelName);
 	for (its = usersStats.begin(); its != usersStats.end(); ++its) {
-		// [?] secu pour par s'envoyer a lui meme ? (voir apres) // booleen a penser si besoin ok
 		if (!self && its->first.compare(user) == 0)
 			continue ;
-
-		//log("client : " + its->second.him.NickName + "socket : " + I_To_S(its->second.him.Socket));
-		
-		//std::string nameFull = ":" + its->second.him.NickName + "!" + its->second.him.UserName + "@" + its->second.him.HostName + " "; 
 		Send_Cmd(its->second.him.Socket, msg + "\n");
 	}
 }
@@ -276,9 +262,7 @@ void	ChannelManager::allChannelSend(std::string const &msg_1, std::string const 
 }
 
 
-
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ join checks ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-/* ~~~~~~~~~~~~~~~~~~~~ [true] if check is ok [false] if not ~~~~~~~~~~~~~~~~~~ */
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ JOIN ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 bool	ChannelManager::joinCheck_l(std::string const &channelName) const {
 	t_mapChannel::const_iterator	it;
@@ -312,32 +296,48 @@ bool	ChannelManager::joinCheck_k(std::string const &channelName, std::string con
 		return (it->second.getKey().compare(key) == 0 ? true : false);
 }
 
-bool	ChannelManager::joinCheck_i(std::string const &channelName) const {
+bool	ChannelManager::joinCheck_i(std::string const &channelName, std::string const &user) const {
 	t_mapChannel::const_iterator	it;
-	t_chanmode						mode;
 
 	it = _chanList.find(channelName);
 	if (it == _chanList.end()) {
 		log("joinCheck_i() error");
 		return false;
 	}
-	mode = it->second.getChanmode();
-	return !mode.i;
+	if (it->second.mode.i == false)
+		return true;
+	else {
+		return (it->second.isAGuest(user));
+	}
 }
 
 bool	ChannelManager::joinCheck_bans(std::string const &user, std::string const &channelName)	const {
 	t_mapChannel::const_iterator	it;
-	t_mapClient						banList;
-	t_mapClient::const_iterator		itb;
+	std::vector<std::string>::const_iterator		itb;
 
 	it = _chanList.find(channelName);
 	if (it == _chanList.end()) {
 		log("joinCheck_bans() error");
 		return false;
 	}
-	banList = it->second.getBans();
-	itb = banList.find(user);
-	return (itb == banList.end() ? true : false);
+	for (itb = it->second.bans.begin(); itb != it->second.bans.end(); ++itb) {
+		if (itb->compare(user) == 0)
+			return false;
+	}
+	return true;
+}
+
+std::vector<std::string> ChannelManager::makeUserListOf(std::string const &channelName)	const {
+	std::vector<std::string> userList;
+	t_mapChannel::const_iterator	it;
+
+	it = _chanList.find(channelName);
+	if (it == _chanList.end()) {
+		log("makeUserListOf() error");
+	} else {
+		userList = it->second.makeUserList();
+	}
+	return userList;
 }
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MODE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
@@ -419,7 +419,44 @@ void	ChannelManager::setModesOfAs(std::string const &channelName, bool isPlus, s
 	}
 }
 
-void	ChannelManager::setLimitModeOfAsWith(std::string const &channelName, bool isPlus, std::string const &option) {
+void		ChannelManager::setUserModesOfAs(std::string const &channelName, std::string const &username, bool isPlus, std::string const &flags) {
+	t_mapChannel::iterator	it;
+	t_mapClientStatus::iterator itc;
+
+	it = _chanList.find(channelName);
+	if (it == _chanList.end()) {
+		log("setUserModesOfAs() [1] error");
+		return ;
+	}
+	itc = it->second.getUsersNC().find(username);
+	if (itc == it->second.getUsersNC().end()) {
+		log("setUserModesOfAs() [2] error");
+		return ;
+	}
+	for (unsigned i = 1; i < flags.size(); ++i) { 
+		char f = toupper(flags[i]);
+		switch (f) {
+			case 'O' :
+					itc->second.status.chop = isPlus;
+					break;
+			case 'V' :
+					itc->second.status.voice = isPlus;
+					break;
+			case 'B' :
+					if (isPlus) {
+						addInVectString(it->second.bans, username);
+						rmFromVectString(it->second.guests, username);
+					} else {
+						rmFromVectString(it->second.bans, username);
+					}
+					break;
+			default :
+					log("setUserModesOfAs() default case reached");
+		}
+	}
+}
+
+int	ChannelManager::setLimitModeOfAsWith(std::string const &channelName, bool isPlus, std::string const &option) {
 	t_mapChannel::iterator	it;
 	long	lvalue;
 	int		value;
@@ -427,7 +464,7 @@ void	ChannelManager::setLimitModeOfAsWith(std::string const &channelName, bool i
 	it = _chanList.find(channelName);
 	if (it == _chanList.end()) {
 		log("setLimitModeOfAsWith() error");
-		return ;
+		return 0;
 	}
 	errno = 0;
 	lvalue = strtol(option.c_str(), NULL, 10);
@@ -440,6 +477,7 @@ void	ChannelManager::setLimitModeOfAsWith(std::string const &channelName, bool i
 		it->second.mode.l = 0;
 	else
 		it->second.mode.l = value;
+	return it->second.mode.l;
 }
 
 void	ChannelManager::setKeyModeOfAsWith(std::string const &channelName, bool isPlus, std::string const &option) {
@@ -470,10 +508,58 @@ std::string	ChannelManager::makeUserStringList(std::string const &channelName)	c
 	return it->second.makeUserStringList();
 }
 
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ LIST ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+// List all channel wich are not secret for the client in a vector<pair<#channelName, topic>>
+std::vector<std::pair<std::string, std::string> >	ChannelManager::makeChannelList(Client *client) const {
+	std::vector<std::pair<std::string, std::string> > list;
+	t_mapChannel::const_iterator	it;
+	std::string						topic;
 
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ getter setters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+	it = _chanList.begin();
+	while (it != _chanList.end()) {
+		if (it->second.mode.s && !isClientIn(client->NickName, it->first) && !client->Oper) {
+			++it;
+			continue;
+		}
+		if (it->second.mode.p && !isClientIn(client->NickName, it->first) && !client->Oper)
+			topic = ":private topic";
+		else
+			topic = it->second.getTopic();
+		std::pair<std::string, std::string>	pair(it->first, topic);
+		list.push_back(pair);
+		++it;
+	}
+	return list;
+}
+
+std::string	ChannelManager::howManyIn(std::string const &channelName) const {
+	t_mapChannel::const_iterator	it;
+
+	it = _chanList.find(channelName);
+	if (it == _chanList.end()) {
+		log("howManyIn() error");
+		return "0";
+	}
+	return I_To_S(it->second.countUsers());
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ INVITE ~ KICK ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+void	ChannelManager::rmFromGuests(std::string const &channelName, std::string const &user) {
+	t_mapChannel::iterator	it;
+
+	it = _chanList.find(channelName);
+	if (it == _chanList.end()) {
+		log("rmFromGuests() error");
+		return ;
+	}
+	rmFromVectString(it->second.guests, user);
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ getter setters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 t_mapChannel const	&ChannelManager::getChanList() const { return _chanList; }
+
+t_mapChannel		&ChannelManager::getChanListNC() { return _chanList; }
 
 Channel const		&ChannelManager::getChannel(std::string const &channelName)	const {
 	t_mapChannel::const_iterator	it;
@@ -482,7 +568,7 @@ Channel const		&ChannelManager::getChannel(std::string const &channelName)	const
 	if (it != _chanList.end()) {
 		return it->second;
 	} else {
-		log("[!] getChannel() : error, channel not found");
+		log("getChannel() : error, channel not found");
 		return _chanList.begin()->second;
 	}
 }
@@ -494,11 +580,36 @@ t_mapClientStatus const	&ChannelManager::getUsersOf(std::string const &channelNa
 	if (it != _chanList.end()) {
 		return it->second.getUsers();
 	} else {
-		log("[!] getChannel() : error, channel not found");
+		log("getUsersOf() : error, channel not found");
 		return _chanList.begin()->second.getUsers();
 	}
 }
 
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Theotime needs ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+Channel	*ChannelManager::Get_Channel(std::string &Channel_Name)
+{
+	std::map<std::string, Channel>::iterator	it;
+
+	it = _chanList.find(Channel_Name);
+
+	if (it != _chanList.end()) 
+		return &(it->second);
+
+	else 
+		return NULL;
+}
+
+Channel	*ChannelManager::getChan(std::string const &Channel_Name) const
+{
+	std::map<std::string, Channel>::const_iterator	it;
+	it = _chanList.find(Channel_Name);
+
+	if (it != _chanList.end()) 
+		return const_cast<Channel *>(&(it->second));
+	else 
+		return NULL;
+}
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ private methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
