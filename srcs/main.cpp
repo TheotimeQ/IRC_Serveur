@@ -64,12 +64,13 @@ int main(int argc, char **argv)
 // ---------------------------------------------------------------
 
 // [!] SEGFAULT [!]
-// - cas bizzarre :: si on ne compile PAS avec -fsanitize=address join puis quit un channel ==> SEGFAULT (QUIT seulement pas PART)
+// - cas bizzarre :: si on ne compile PAS avec -fsanitize=address join puis quit un channel ==> SEGFAULT (QUIT seulement pas PART) => OK
 
 
 //LOUP 
 // - regler le : #gogo They aren't on that channel --> message a mieux formater : HUm /'U_U'/
-// - bonne reponse aux changement de mode user (-+o +-v)
+
+// -------- channel c'est le bordel ? ------------------------------
 // - Coplien la channel pour y poser les logs et verifier ce qui se passe ?
 // - les log de crea / destruc de channel ?
 
