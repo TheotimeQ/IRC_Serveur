@@ -23,9 +23,6 @@
 #include "../incs/Irc.hpp"
 #include "../incs/Object/Client.hpp"
 
-#define ERROR_SEND_MSG 		"Error: Can't send message : \n"
-#define EVENT_NEW_MSG 		"Message sent : "
-
 int				Send_Cmd(int client_sock, const std::string& message) ;
 std::string		catVectString(std::vector<std::string> const &args, unsigned offset, std::string const &delim);
 void			rmFromVectString(std::vector<std::string> &vs, std::string const &target);

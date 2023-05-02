@@ -63,22 +63,12 @@ int main(int argc, char **argv)
 
 // ---------------------------------------------------------------
 
-// [!] SEGFAULT [!]
-// - cas bizzarre :: si on ne compile PAS avec -fsanitize=address join puis quit un channel ==> SEGFAULT (QUIT seulement pas PART) => OK
-
-
 //LOUP 
 // - regler le : #gogo They aren't on that channel --> message a mieux formater : HUm /'U_U'/
 
 // -------- channel c'est le bordel ? ------------------------------
 // - Coplien la channel pour y poser les logs et verifier ce qui se passe ?
 // - les log de crea / destruc de channel ?
-
-
-// ---------------------------------------------------------------
-
-//Theo
-// - USER ajout recuperation hostname ?
 
 // ---------------------------------------------------------------
 
@@ -88,8 +78,6 @@ int main(int argc, char **argv)
 // - Demander a un stud de nous le casser => on fait bosser un peu notre parain ? Aurel est ok avec nos Commandes
 // - Enlever les commentaire ([!][?] debug checking) et clean les fichiers pour le rendu 
 // - Rendre
-
-
 
 // ---------------------------------------------------------------
 

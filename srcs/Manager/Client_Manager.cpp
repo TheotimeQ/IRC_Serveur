@@ -6,7 +6,7 @@
 /*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 08:32:08 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/25 16:19:32 by zelinsta         ###   ########.fr       */
+/*   Updated: 2023/05/02 10:46:13 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@
 Client_Manager::Client_Manager(): 
     Nb_Clients(1)
 {
-    _Creds_Oper["Zel"]     = "0000";
-    _Creds_Oper["Loup"]    = "1234";
-    _Creds_Oper["root"]    = "666";
+    _Creds_Oper["Zel"]              = "0000";
+    _Creds_Oper["Loup"]             = "1234";
+    _Creds_Oper["outstanding"]      = "project";
 
     return;
 }
@@ -30,7 +30,6 @@ Client_Manager::~Client_Manager()
     for (std::vector<Client>::iterator it = _All_Clients.begin(); it != _All_Clients.end(); ++it)
     {
         close((*it).Socket);
-        it = _All_Clients.erase(it);
     }
 	return;
 }

@@ -80,6 +80,7 @@ const int BUFFER_SIZE = 1024;
 #define ERROR_NICKNAME_ALREADY_USED	"Error: Can't change nickname , already used"
 #define ERROR_CMDNOTFOUND 	        "Error: Command not found : "
 #define ERROR_OPER_UNKOW            "Error: Operator unkown : "
+#define ERROR_SEND_MSG 		        "Error: Can't send message : \n"
 
 //Channel error
 # define CHERR_FORMAT			    "channel name format : <#name>"
@@ -96,12 +97,14 @@ const int BUFFER_SIZE = 1024;
 #define EVENT_NEW_DATA 		        "Data received : \n"
 #define EVENT_LOGGED				"Client logged : "
 #define EVENT_CMDFOUND		        "Executing : "
+#define EVENT_NEW_MSG 		        "Message sent : "
 
 // A ranger 
 # define ERRCHAN_CREATION	        "channel creation error : "
 # define ERRCHAN_WRONGNAME	        "[!] Channel Manager can't find : "
 
 # define LOGCHAN_NOTOPICPERM	    " : has no topic set permission in channel : "
+
 
 
 
