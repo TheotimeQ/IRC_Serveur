@@ -6,7 +6,7 @@
 /*   By: loumarti <loumarti@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 10:18:15 by loumarti          #+#    #+#             */
-/*   Updated: 2023/04/26 11:05:40 by loumarti         ###   ########lyon.fr   */
+/*   Updated: 2023/05/02 11:23:04 by loumarti         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,7 @@ Channel::Channel()
 	initChannel();
 }
 
-Channel::~Channel() {
-	//log(" is destroyed");
-}
+Channel::~Channel() {}
 
 Channel::Channel(std::string const &name, Client &chop) 
 : _name(name), _topic(NOTOPIC), _key("")
@@ -176,6 +174,8 @@ void	Channel::dealUsersStatus(Client &chop) {
 
 	if (_name[0] == '!')
 		clientData.status.creator = true;
+	else
+		clientData.status.creator = false;
 	if (_name[0] == '+')
 		mode.t = true;
 	if (_name[0] == '!' || _name[0] == '+' || _name[0] == '&')
@@ -217,7 +217,7 @@ std::string		Channel::makeUserStringList()	const {
 
 std::string	Channel::makeUserStatusList(std::string const &username)	const {
 	t_mapClientStatus::const_iterator	it;
-	std::string							status = "";
+	std::string							str = "";
 
 	it = _users.find(username);
 	if (it == _users.end()) {
@@ -225,14 +225,14 @@ std::string	Channel::makeUserStatusList(std::string const &username)	const {
 		return "";
 	}
 	if (it->second.status.creator)
-		status += "channel creator(!) ";
+		str += "channel creator(!) ";
 	if (it->second.status.chop)
-		status += "channel operator(%) ";
+		str += "channel operator(%) ";
 	if (!it->second.status.creator && !it->second.status.chop && it->second.status.voice)
-		status += "voice(+)";
+		str += "voice(+)";
 	if (!it->second.status.creator && !it->second.status.chop && !it->second.status.voice)
-		status = "regular user";
-	return status;
+		str = "regular user";
+	return str;
 }
 
 std::string		Channel::makePrefix(t_clientData const &data)	const {

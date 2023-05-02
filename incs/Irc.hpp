@@ -6,7 +6,6 @@
 #define QUIT  2
 
 //Quelques variable de configuration du serveur
-
 #define SERVER_NAME "IRC"
 #define MSG_BIENVENU 		    "Wellcoooommmeee on 'Y AIR C' by Loumarti & Tquere"
 
@@ -97,13 +96,9 @@ const int BUFFER_SIZE = 1024;
 #define EVENT_LOGGED				"Client logged : "
 #define EVENT_CMDFOUND		        "Executing : "
 
-// A ranger 
+// Channel errors
 # define ERRCHAN_CREATION	        "channel creation error : "
 # define ERRCHAN_WRONGNAME	        "[!] Channel Manager can't find : "
-
 # define LOGCHAN_NOTOPICPERM	    " : has no topic set permission in channel : "
-
-
-
 
 #endif

@@ -1,9 +1,9 @@
-.PHONY:		fclean, all, clear, re
+.PHONY:		fclean, all, clear, re, clean
 
 NAME					=	ircserv
 
 CMP						=	c++
-FLG						=	-Wall -Wextra -Werror -std=c++98 #-fsanitize=address
+FLG						=	-Wall -Wextra -Werror -std=c++98 -g #-fsanitize=address
 RM						=	rm -rf
 BUILD_DIR				= 	build/
 
@@ -42,6 +42,9 @@ clear:
 $(NAME):	$(INC) $(OBJS)
 			@$(CMP) $(FLG) $(OBJS) -I$(INC_DIR) -o $(NAME)
 			@echo "\033[32m\n-- Done compiling $(NAME)--\033[0m"
+
+clean:
+			$(RM) $(BUILD_DIR)
 
 fclean:
 			$(RM) $(NAME)
