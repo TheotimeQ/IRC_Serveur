@@ -10,8 +10,12 @@
 /*   Updated: 2023/05/02 11:51:35 by tquere           ###   ########.fr       */
 =======
 /*   Created: 2023/05/02 11:22:50 by zelinsta          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2023/05/02 11:37:15 by zelinsta         ###   ########.fr       */
 >>>>>>> 3d7fd407bf79231ca2508ae96fd4e24c11ef3985
+=======
+/*   Updated: 2023/05/02 13:02:54 by zelinsta         ###   ########.fr       */
+>>>>>>> b35a07df25f9b12b899510cd6b3e3ab1f34cde54
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +60,17 @@ int check_port(const char *port)
     return GOOD;
 }
 
+void signal_callback_handler(int signum) {
+    std::cout << "Caught signal " << signum << std::endl;
+    std::cout << " ----STOPPING SERVER---- " << signum << std::endl;
+    Stop = 1;
+}
+
 int main(int argc, char **argv)
 {
+    Stop = 0;
+    signal(SIGINT, signal_callback_handler);
+    
     if (argc != 3) {
         std::cerr << ERROR_SERVER_PARAM <<  std::endl;
         return 1;

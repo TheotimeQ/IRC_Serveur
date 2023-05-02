@@ -6,7 +6,11 @@
 /*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:50:43 by tquere            #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2023/05/02 11:44:09 by tquere           ###   ########.fr       */
+=======
+/*   Updated: 2023/05/02 13:02:14 by zelinsta         ###   ########.fr       */
+>>>>>>> b35a07df25f9b12b899510cd6b3e3ab1f34cde54
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +74,7 @@ int	Server::Run()
 {
     int ret = 0;
 
-    while (true) 
+    while (!Stop) 
     {
         int ret = poll(_Poll_Set, _CltMng.Nb_Clients, -1);
         if (ret < 0) 
