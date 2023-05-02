@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands_Registration.cpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tquere <tquere@student.42.fr>              +#+  +:+       +#+        */
+/*   By: zelinsta <zelinsta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 10:09:32 by tquere            #+#    #+#             */
-/*   Updated: 2023/04/14 15:20:16 by tquere           ###   ########.fr       */
+/*   Updated: 2023/04/25 22:26:20 by zelinsta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,8 +110,10 @@ void  USER_Command::Execute(Client *Clt, std::vector<std::string> Args, ChannelM
         Send_Cmd(Clt->Socket, Msg);
         return ;
     }
-    
-    Log("NICK","Changing username from " + Clt->UserName + " to " + Args[1]);
+
+    //ADD Hostname and Servername?
+       
+    Log("USER","Changing username from " + Clt->UserName + " to " + Args[1]);
     Clt->UserName = Args[1];
 }
 

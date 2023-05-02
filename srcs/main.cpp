@@ -79,17 +79,6 @@ int main(int argc, char **argv)
 
 //Theo
 // - USER ajout recuperation hostname ?
-// - Ameliorer le bot
-// - Test avec big commande
-
-    //   if (leavingMsg.size() > 200)
-    // 		leavingMsg = leavingMsg.substr(0, 200);
-
-//Fait :
-// - [+]Client->Oper >> prioritaire par rapport a >> canTalk() || tu peux gerer comme ca ? (pas acces au clientManager dans channel simplement)
-// - [+]si on utilise AWAY avec netcat (sans arguments, le comportement est pas bon, il lui manque la raison d'afk par defaut) J'utilise la fonction Guard() contre ca dans mes cmdes
-// - On peut msg des gens qui sont pas log  -> fixe -> non pas fixe, c'est normal, on peut msg des gens qui sont log
-
 
 // ---------------------------------------------------------------
 
